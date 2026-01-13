@@ -1,0 +1,26 @@
+import {object, string, number, array, type InferOutput,  } from "valibot"
+
+
+export const DraftServiceSchema = object({
+    service: string(),
+    price: number(),
+    barber: string(),
+    client: string(),
+    phone: number(),
+    // createdAt: string()
+})
+
+export const ServiceSchema = object({
+    id: number(),
+    service: string(),
+    price: number(),
+    barber: string(),
+    client: string(),
+    phone: number(),
+    createdAt: string()
+    
+})
+
+export const ServicesSchema = array(ServiceSchema)
+
+export type Service = InferOutput<typeof ServiceSchema>
