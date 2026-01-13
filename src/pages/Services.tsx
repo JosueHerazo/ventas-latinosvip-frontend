@@ -26,14 +26,14 @@ export default function Services() {
       <table className="min-w-[700px] mt-5  ">
       <thead className="bg-amber-800 text-white font-black shadow">
           <tr className="">
-              <th className="p-2">ID</th>
+              
               <th className="p-2">Servicio</th>
               <th className="p-2">Precio</th>
               <th className="p-2 ">Barbero</th>
               <th className="p-2 ">Cliente</th>
               <th className="p-2 ">Telefono</th>
               <th className="p-2 ">Fecha</th>
-              <th className="p-2 ">Editar</th>
+              {/* <th className="p-2 ">Editar</th> */}
           </tr>
       </thead>
       <tbody>
