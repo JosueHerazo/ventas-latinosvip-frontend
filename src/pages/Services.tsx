@@ -23,7 +23,7 @@ export default function Services() {
         </Link>
     </div>
     <div className="p-2 overflow-x-auto">
-      <table className="min-w-[900px] mt-5  table-auto ">
+      <table className="min-w-[700px] mt-5  ">
       <thead className="bg-amber-800 text-white font-black shadow">
           <tr className="">
               <th className="p-2">ID</th>

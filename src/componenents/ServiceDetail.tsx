@@ -19,7 +19,7 @@ return redirect("/")
 export default function ServiceDetails({service} : ServiceDetailsPro) {
     const navigate = useNavigate()
   return (
-    <tr className="border-b text-white md:table-row block md:flex-row ">
+    <tr className="border-b text-white  ">
             <td className="p-3 text-lg text-white font-bold">
                 {service.id}
             </td>
