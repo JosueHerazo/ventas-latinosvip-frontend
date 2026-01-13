@@ -48,7 +48,7 @@ export default function NewService() {
 
    <Form
    method="POST"
-    className="mt-10 grid  md:grid-cols-2 gap-6 grid-cols-5 "
+    className="mt-10 flex flex-col gap-4 max-w-md mx-auto "
     
     >
     <div className="mb-4 ">
