@@ -9,7 +9,6 @@ export async function loader({params} : LoaderFunctionArgs) {
     console.log(params.id);
     if(params.id !== undefined){
         const service = await getServiceById(+params.id)
-
         if(!service){
            return redirect("/")
         }
