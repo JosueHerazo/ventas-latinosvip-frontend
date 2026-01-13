@@ -10,7 +10,8 @@ export async function loader({params} : LoaderFunctionArgs) {
     if(params.id !== undefined){
         const service = await getServiceById(+params.id)
         if(!service){
-           return redirect("/")
+            return redirect("/")
+            
         }
         return service
     }
@@ -80,34 +81,36 @@ export default function EditService() {
             id="service"
             className="mt-2 block w-full font-bold text-white hover: rounded-2xl  p-3 bg-amber-400 "
             name="service"
-        >
+            defaultValue={service.service}
+            >
             <option>
                 Seleciona un Servicio
             </option>
             { servicios.map((servicio) => 
                 
-            (
-
-                <option key={servicio} >
+                (
+                    
+                    <option key={servicio} >
                     {servicio}
                     </option>
                 
             )
-            )}
+        )}
         </select>
     </div>
     <div className="mb-4">
         <label
             className="text-amber-50 font-bold"
             htmlFor="price"
-        >Precio:</label>
+            >Precio:</label>
         <input 
             id="price"
             type="number"
             className="mt-2 font-bold text-white block w-full rounded-2xl  p-3 bg-amber-400"
             placeholder="Precio Producto. ej. 200, 300"
             name="price"
-        />
+            defaultValue={service.price}
+            />
     </div>
     {/* <div className="mb-4">
         <label
@@ -115,7 +118,7 @@ export default function EditService() {
             htmlFor="date"
         >Fecha:</label>
         <input 
-            id="prifechace"
+        id="prifechace"
             type="date"
             className="mt-2 block w-full p-3 bg-gray-50 font-bold"
             placeholder="Precio Producto. ej. 200, 300"
@@ -127,12 +130,13 @@ export default function EditService() {
         <label
             className="text-amber-50 font-bold"
             htmlFor="price"
-        >Barbero</label>
+            >Barbero</label>
         <select 
             id="barber"
             className="mt-2 block w-full font-bold text-white rounded-2xl  p-3 bg-amber-400"
             name="barber"
-        >
+            defaultValue={service.barber}
+            >
             <option value="">Seleciona Barbero</option>
                 {barberos.map((barbero)=>(
             <option key={barbero} >
@@ -145,13 +149,14 @@ export default function EditService() {
         <label
             className="text-amber-50 font-bold"
             htmlFor="client"
-        >Cliente</label>
+            >Cliente</label>
         <input 
             id="client"
             type="text"
             className="mt-2 block w-full p-3  rounded-2xl font-extrabold text-white bg-amber-400"
             placeholder="Nombre del cliente"
             name="client"
+            defaultValue={service.client}
         />
     </div>
      <div className="mb-4">
@@ -165,6 +170,7 @@ export default function EditService() {
             className="mt-2 block w-full p-3 rounded-2xl  font-bold text-white bg-amber-400"
             placeholder="movil del cliente"
             name="phone"
+            defaultValue={service.phone}
         />
     </div>
      {/* <div className="mb-4">

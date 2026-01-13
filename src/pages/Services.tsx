@@ -22,18 +22,18 @@ export default function Services() {
            Pagar servicio     
         </Link>
     </div>
-    <div className="p-2">
-    <table className="w-full mt-5 table-auto">
+    <div className="p-2 overflow-x-auto">
+      <table className="min-w-[900px] mt-5  table-auto ">
       <thead className="bg-amber-800 text-white font-black shadow">
           <tr className="">
               <th className="p-2">ID</th>
               <th className="p-2">Servicio</th>
               <th className="p-2">Precio</th>
-              <th className="p-2">Barbero</th>
-              <th className="p-2">Cliente</th>
-              <th className="p-2">Telefono</th>
-              <th className="p-2">Fecha</th>
-              <th className="p-2">Editar</th>
+              <th className="p-2 ">Barbero</th>
+              <th className="p-2 ">Cliente</th>
+              <th className="p-2 ">Telefono</th>
+              <th className="p-2 ">Fecha</th>
+              <th className="p-2 ">Editar</th>
           </tr>
       </thead>
       <tbody>
