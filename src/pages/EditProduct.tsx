@@ -43,7 +43,7 @@ export async function action({request, params} : ActionFunctionArgs){
 
 export default function EditService() {
 
-    const service = useLoaderData() as Service
+    
     const error = useActionData() as string
    // const locatio.//
 
