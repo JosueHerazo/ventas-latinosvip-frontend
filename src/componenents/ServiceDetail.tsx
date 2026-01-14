@@ -1,4 +1,4 @@
-import { useNavigate, Form, type ActionFunctionArgs, redirect } from "react-router-dom"
+import { useNavigate, Form, type ActionFunctionArgs, redirect, Link } from "react-router-dom"
 
 import type { Service } from "../types"
 import {formatCurrency, formatDate} from "../utils"
@@ -31,7 +31,10 @@ export default function ServiceDetails({service} : ServiceDetailsPro) {
 
             </td>
             <td className="p-3 text-lg text-white font-bold">
-                {service.barber}
+                <Link 
+                to={`/pago/barberos/${service.barber}`}>
+                    {service.barber}
+                </Link>
     
             </td>
             <td className="p-3 text-lg text-white font-bold">

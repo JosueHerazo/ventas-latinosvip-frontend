@@ -21,6 +21,16 @@ export const ServiceSchema = object({
     
 })
 
+export const BarberSchema  = object({
+  service: string(),
+  price: number(),
+  barber: string(),
+  createdAt: string()
+})
+
+
 export const ServicesSchema = array(ServiceSchema)
+export const  BarbersSummaryType = array(BarberSchema)
+
 
 export type Service = InferOutput<typeof ServiceSchema>
