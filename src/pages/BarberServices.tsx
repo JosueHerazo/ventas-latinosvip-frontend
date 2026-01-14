@@ -1,82 +1,57 @@
 import { useLoaderData, useParams } from "react-router-dom";
-import type { Service } from "../types";
 import { getServices } from "../services/ServiceService";
+import type { Service } from "../types";
+import { formatCurrency, formatDate } from "../utils";
 
-export async function loader(){
-
-  const services = await getServices();
-  // 🔒 seguridad
-  // 1️⃣ Filtrar servicios por barbero
-  return services
+export async function loader() {
+    // Obtenemos todos los servicios
+    const services = await getServices();
+    return services;
 }
 
-
-
 export default function BarberServices() {
-  const services = useLoaderData() as Service[];
-  const filtered = services.filter(
-    (service) => service.barber === service.barber
-  );
-  const barber = services.map(
-    (service) => service.barber === service.barber
-  );
-  
-  // if (!barber) return null;
-  // const services = useLoaderData() as Service[]
-  
-  // 2️⃣ Agrupar por fecha
-  const grouped = filtered.reduce<Record<string, Service[]>>(
-    (acc, service) => {
-      const date = new Date(service.createdAt).toLocaleDateString();
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(service);
-      return acc;
-    },
-    {}
-  );
-  
-  // 3️⃣ Total general del barbero
-  const totalGeneral = filtered.reduce(
-    (sum, s) => sum + s.price,
-    0
-  );
-  return (
-    <div className="max-w-4xl mx-auto p-4 text-white">
-      <h2 className="text-3xl font-bold text-amber-500 mb-4">
-        Barbero: {barber}
-      </h2>
+    const allServices = useLoaderData() as Service[];
+    const { barberName } = useParams(); // Obtenemos el nombre del barbero de la URL
 
-      <p className="mb-6 text-xl">
-        💰 Total General:{" "}
-        <span className="font-bold">${totalGeneral}</span>
-      </p>
+    // Filtramos los servicios por el barbero seleccionado
+    const filteredServices = allServices.filter(
+        (s) => s.barber === barberName
+    );
 
-      {Object.entries(grouped).map(([date, items]) => {
-        const totalDia = items.reduce(
-          (sum, s) => sum + s.price,
-          0
-        );
-
-        return (
-          <div key={date} className="mb-6 bg-amber-700 rounded-lg p-4">
-            <h3 className="text-xl font-bold mb-2">
-              📅 {date} — Total: ${totalDia}
-            </h3>
-
-            <ul className="space-y-2">
-              {items.map((service) => (
-                <li
-                  key={service.id}
-                  className="flex justify-between bg-amber-600 p-2 rounded"
-                >
-                  <span>{service.service}</span>
-                  <span>${service.price}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
-    </div>
-  );
+    return (
+        <div className="max-w-4xl mx-auto p-4">
+            <h2 className="text-3xl font-bold text-amber-600 mb-4">
+                Servicios de: <span className="text-white">{barberName}</span>
+            </h2>
+            
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-amber-700 text-white rounded-lg">
+                    <thead>
+                        <tr className="bg-amber-800">
+                            <th className="p-3 border">Cliente</th>
+                            <th className="p-3 border">Servicio</th>
+                            <th className="p-3 border">Fecha</th>
+                            <th className="p-3 border">Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredServices.map((service) => (
+                            <tr key={service.id} className="text-center border-b border-amber-600">
+                                <td className="p-2">{service.client}</td>
+                                <td className="p-2">{service.service}</td>
+                                <td className="p-2">{formatDate(service.createdAt)}</td>
+                                <td className="p-2 font-bold">{formatCurrency(service.price)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div className="mt-6 text-right">
+                <p className="text-2xl text-white font-bold">
+                    Total Acumulado: {formatCurrency(filteredServices.reduce((acc, cur) => acc + cur.price, 0))}
+                </p>
+            </div>
+        </div>
+    );
 }

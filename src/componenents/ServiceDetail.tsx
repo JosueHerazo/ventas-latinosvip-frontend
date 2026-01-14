@@ -32,7 +32,7 @@ export default function ServiceDetails({service} : ServiceDetailsPro) {
             </td>
             <td className="p-3 text-lg text-white font-bold">
                 <Link 
-                to={`/pago/barberos/`}>
+                to={`/barberos/${service.barber}`}>
                     {service.barber}
                 </Link>
     
