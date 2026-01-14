@@ -7,6 +7,7 @@ export async function loader(){
   const services = await getServices();
   // 🔒 seguridad
   // 1️⃣ Filtrar servicios por barbero
+  return services
 }
 
 
