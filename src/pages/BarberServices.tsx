@@ -10,18 +10,18 @@ export async function loader() {
 }
 
 export default function BarberServices() {
-    const allServices = useLoaderData() as Service[];
-    const { barberName } = useParams(); // Obtenemos el nombre del barbero de la URL
+    const services = useLoaderData() as Service[];
+    const { barber } = useParams(); // Obtenemos el nombre del barbero de la URL
 
     // Filtramos los servicios por el barbero seleccionado
-    const filteredServices = allServices.filter(
-        (s) => s.barber === barberName
+    const filteredServices = services.filter(
+        (s) => s.barber === barber
     );
 
     return (
         <div className="max-w-4xl mx-auto p-4">
             <h2 className="text-3xl font-bold text-amber-600 mb-4">
-                Servicios de: <span className="text-white">{barberName}</span>
+                Servicios de: <span className="text-white">{barber}</span>
             </h2>
             
             <div className="overflow-x-auto">
