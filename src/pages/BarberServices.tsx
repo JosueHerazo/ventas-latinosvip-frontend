@@ -1,4 +1,4 @@
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams,Link } from "react-router-dom";
 import { getServices } from "../services/ServiceService";
 import type { Service } from "../types";
 import { formatCurrency, formatDate } from "../utils";
@@ -14,8 +14,8 @@ export default function BarberServices() {
     const { barber } = useParams(); // Obtenemos el nombre del barbero de la URL
 
     // Filtramos los servicios por el barbero seleccionado
-    const filteredServices = services.filter(
-        (s) => s.barber === barber
+    const servicesbarber = services.filter(
+        (service) => service.barber === barber
     );
 
     return (
@@ -35,12 +35,14 @@ export default function BarberServices() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredServices.map((service) => (
+                        {servicesbarber.map((service) => (
                             <tr key={service.id} className="text-center border-b border-amber-600">
                                 <td className="p-2">{service.client}</td>
                                 <td className="p-2">{service.service}</td>
+                                <Link to={"/pago/barberos"}>
                                 <td className="p-2">{formatDate(service.createdAt)}</td>
                                 <td className="p-2 font-bold">{formatCurrency(service.price)}</td>
+                                </Link>
                             </tr>
                         ))}
                     </tbody>
@@ -49,7 +51,7 @@ export default function BarberServices() {
             
             <div className="mt-6 text-right">
                 <p className="text-2xl text-white font-bold">
-                    Total Acumulado: {formatCurrency(filteredServices.reduce((acc, cur) => acc + cur.price, 0))}
+                    Total Acumulado: {formatCurrency(servicesbarber.reduce((acc, cur) => acc + cur.price, 0))}
                 </p>
             </div>
         </div>
