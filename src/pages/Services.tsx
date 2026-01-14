@@ -14,7 +14,7 @@ export default function Services() {
 
   return (
     <>
-    <div className="flex justify-between">
+    <div className="flex justify-between ">
         <h2 className="text-4xl  hover:text-3xl font-black text-amber-600">Servicios</h2>
         <Link 
         className="rounded-md bg-amber-700 hover:bg-green-400 hover:text-3xl p-3 font-bold text-white shadow-sm " 
@@ -22,11 +22,12 @@ export default function Services() {
            Pagar servicio     
         </Link>
     </div>
-    <div className="p-2 overflow-x-auto">
-      <table className="min-w-[700px] mt-5  ">
+    <div className="p-2 overflow-x-auto shadow-amber-600">
+      <table className="min-w-[700px] mt-5 shadow-amber-600 ">
       <thead className="bg-amber-800 text-white font-black shadow">
           <tr className="">
               
+              <th className="p-2">ID</th>
               <th className="p-2">Servicio</th>
               <th className="p-2">Precio</th>
               <th className="p-2 ">Barbero</th>

@@ -53,6 +53,10 @@ export default function BarberServices() {
                 <p className="text-2xl text-white font-bold">
                     Total Acumulado: {formatCurrency(servicesbarber.reduce((acc, cur) => acc + cur.price, 0))}
                 </p>
+                 <Link className=" bg-amber-600 rounded-4xl p-3 font-bold text-white shadow-sm   hover:bg-indigo-200 " 
+                  to="/">
+                   servicios Vendidos      
+                 </Link>
             </div>
         </div>
     );
