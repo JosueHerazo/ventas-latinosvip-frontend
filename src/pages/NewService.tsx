@@ -4,6 +4,7 @@ import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
 import { getServices } from "../services/ServiceService"
 import type {  Service } from "../types"
+import { array } from "valibot"
 
 
 export async function loader() {
@@ -66,18 +67,22 @@ const error = useLoaderData() as string
      })
 
     // 2. Efecto para buscar clientes mientras escribes
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(async () => {
-            if (searchTerm.length > 2) {
-                const data = services
-                setResults(data)
-            } else {
-                setResults([])
-            }
-        }, 300) // Debounce de 300ms para no saturar la API
-        return () => clearTimeout(delayDebounceFn)
-    }, [searchTerm])
-
+   // --- FILTRO DE BÚSQUEDA CORREGIDO ---
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      // Verificamos que services exista y sea un array antes de filtrar
+      if (searchTerm.trim().length >= 1 && Array.isArray(services)) {
+        const filtered = services.filter(s => 
+          s.client?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+          s.phone?.toString().includes(searchTerm)
+        )
+        setResults(filtered)
+      } else {
+        setResults([])
+      }
+    }, 300)
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchTerm, services])
     // 3. Función al hacer click en un cliente encontrado
     const handleSelectClient = (client: Service) => {
         setSelectedClient({ 
