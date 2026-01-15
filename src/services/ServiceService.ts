@@ -70,26 +70,6 @@ export async function getServices() {
     }
 }
 
-export async function getPays() {
-    try {
-            const url = `${import.meta.env.VITE_API_URL}/api/service`
-            const {data} = await axios(url)
-            const result = safeParse(ServicesSchema, data.data)
-            if(result.success){
-               return result.output
-            }else{
-                throw new Error("Hubo un error...")
-            }
-
-            
-            console.log(result);
-            
-            
-    } catch (error) {
-        return[]
-    }
-}
-
 
 export async function getServiceById(id : Service["id"]) {
     try {
@@ -147,3 +127,14 @@ export async function deleteService(id: Service["id"]) {
     }
     
 }
+// services/ServiceService.ts
+// export async function searchClients() {
+//     try {
+//         const url = `${import.meta.env.VITE_API_URL}/api/service`
+//         const { data } = await axios(url)
+//         return data.data as Client[]
+//     } catch (error) {
+//         console.log(error)
+//         return []
+//     }
+// }

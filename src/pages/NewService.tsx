@@ -1,7 +1,15 @@
 import { Link, Form, useActionData, type ActionFunctionArgs, redirect } from "react-router-dom"
 import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
+import { useState, useEffect } from "react"
+import { getServices } from "../services/ServiceService"
+import type { Client, Service } from "../types"
 
+
+export async function loader() {
+  const services = await getServices()
+  return services
+}
 export async function action({request} : ActionFunctionArgs){
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
@@ -23,6 +31,11 @@ export async function action({request} : ActionFunctionArgs){
 }
 
 export default function NewService() {
+
+const services = useActionData() as Client[]
+
+
+    
     const error = useActionData() as string
 
      const servicios = [
@@ -40,157 +53,126 @@ export default function NewService() {
     "Otros",
   ];
   const barberos = ["Josue", "Vato"];
+ 
+  // 1. Estados para la búsqueda y selección
+    const [searchTerm, setSearchTerm] = useState("")
+    const [results, setResults] = useState<Client[]>([])
+    const [selectedClient, setSelectedClient] = useState({ name: "", phone: "" })
+
+    // 2. Efecto para buscar clientes mientras escribes
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(async () => {
+            if (searchTerm.length > 2) {
+                const data = services
+                setResults(data)
+            } else {
+                setResults([])
+            }
+        }, 300) // Debounce de 300ms para no saturar la API
+        return () => clearTimeout(delayDebounceFn)
+    }, [searchTerm])
+
+    // 3. Función al hacer click en un cliente encontrado
+    const handleSelectClient = (client: Client) => {
+        setSelectedClient({ 
+            name: client.name, 
+            phone: client.phone.toString() 
+        });
+        setSearchTerm(""); 
+        setResults([]);
+    };
   
-  
-  return (
-  <>
-   {error && <ErrorMessaje>{error}</ErrorMessaje>}
+  return  (
+        <>
+            {error && <ErrorMessaje>{error}</ErrorMessaje>}
 
-   <Form
-   method="POST"
-    className="mt-10 flex flex-col gap-4 max-w-md mx-auto "
-    
-    >
-    <div className="mb-4 ">
-        <label
-            className="text-amber-50"
-            htmlFor="service"
-        >servicio</label>
-        <select 
-            id="service"
-            className="mt-2 block w-full font-bold text-white hover:text-black rounded-2xl  p-3 bg-amber-400 "
-            name="service"
-        >
-            <option>
-                Seleciona un Servicio
-            </option>
-            { servicios.map((servicio) => 
-                
-            (
+            <div className="mt-10 max-w-md mx-auto">
+                {/* --- BUSCADOR --- */}
+                <div className="mb-4 relative">
+                    <label className="text-amber-50 font-bold">Buscar Cliente Guardado:</label>
+                    <input 
+                        type="text"
+                        className="mt-2 block w-full p-3 rounded-2xl bg-zinc-800 text-white border-2 border-amber-400"
+                        placeholder="Escribe nombre o teléfono..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    
+                    {results.length > 0 && (
+                        <ul className="absolute z-10 w-full bg-white rounded-xl mt-1 shadow-2xl max-h-40 overflow-y-auto">
+                            {results.map(c => (
+                                <li 
+                                    key={c.id}
+                                    className="p-3 hover:bg-amber-100 cursor-pointer text-black border-b last:border-none"
+                                    onClick={() => handleSelectClient(c)}
+                                >
+                                    <p className="font-bold">{c.name}</p>
+                                    <p className="text-sm text-gray-600">{c.phone}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
-                <option key={servicio} >
-                    {servicio}
-                    </option>
-                
-            )
-            )}
-        </select>
-    </div>
-    <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="price"
-        >Precio:</label>
-        <input 
-            id="price"
-            type="number"
-            className="mt-2 font-bold text-white block w-full rounded-2xl  p-3 bg-amber-400"
-            placeholder="Precio Producto. ej. 200, 300"
-            name="price"
-        />
-    </div>
-    {/* <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="date"
-        >Fecha:</label>
-        <input 
-            id="prifechace"
-            type="date"
-            className="mt-2 block w-full p-3 bg-gray-50"
-            placeholder="Precio Producto. ej. 200, 300"
-            name="date"
-             defaultValue={new Date().toISOString().split("T")[0]}
-        />
-    </div> */}
-    <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="price"
-        >Barbero</label>
-        <select 
-            id="barber"
-            className="mt-2 block w-full font-bold text-white rounded-2xl  p-3 bg-amber-400"
-            name="barber"
-        >
-            <option value="">Seleciona Barbero</option>
-                {barberos.map((barbero)=>(
-            <option key={barbero} >
-                    {barbero}
-            </option>
-                ))}
-         </select>
-    </div>
-    <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="client"
-        >Cliente</label>
-        <input 
-            id="client"
-            type="text"
-            className="mt-2 block w-full p-3  rounded-2xl font-bold text-white  bg-amber-400"
-            placeholder="Nombre del cliente"
-            name="client"
-        />
-    </div>
-     <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="phone"
-        >Telefono:</label>
-        <input 
-            id="phone"
-            type="number"
-            className="mt-2 block w-full p-3 rounded-2xl  font-bold text-white bg-amber-400"
-            placeholder="movil del cliente"
-            name="phone"
-        />
-    </div>
-     {/* <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="createdAt"
-        >Fecha:</label>
-        <input 
-            id="createdAt"
-            type="date"
-            className="mt-2 block w-full p-3 bg-gray-5 0"
-            placeholder="movil del cliente"
-            name="createdAt"
-            defaultValue={new Date().toISOString().split("T")[0]}
-        />
-    </div> */}
-     {/* <div className="mb-4">
-        <label
-            className="text-amber-50"
-            htmlFor="createdAt"
-        >Telefono:</label>
-        <input 
-            id="phone"
-            type="date"
-            className="mt-2 block w-full p-3 bg-gray-50"
-            placeholder="movil del cliente"
-            name="createdAt"
-        />
-    </div> */}
+                <hr className="border-amber-900/30 my-6" />
 
-    <div className=" ">
-    <input
-      type="submit"
-      className="mt-5  bg-amber-400  p-2 text-white font-bold text-lg cursor-pointer rounded-4xl hover:text-black hover:text-4xl"
-      value="Registrar Producto"
-      /> 
-    </div>
-    <br />
- </Form>
- <br />
-    <Link className=" bg-amber-400 rounded-4xl p-3 font-extrabold text-white shadow-sm hover:text-black hover:text-4xl" 
-    to="/">
-           servicios Vendidos      
-    </Link>
-</>
-  )}
+                {/* --- FORMULARIO PRINCIPAL --- */}
+                <Form method="POST" className="flex flex-col gap-4">
+                    <div className="mb-4">
+                        <label className="text-amber-50" htmlFor="service">Servicio</label>
+                        <select id="service" name="service" className="mt-2 block w-full font-bold text-white rounded-2xl p-3 bg-amber-400">
+                            <option value="">Selecciona un Servicio</option>
+                            {servicios.map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                    </div>
 
+                    <div className="mb-4">
+                        <label className="text-amber-50" htmlFor="price">Precio:</label>
+                        <input id="price" name="price" type="number" className="mt-2 font-bold text-white block w-full rounded-2xl p-3 bg-amber-400" placeholder="Ej. 15" />
+                    </div>
 
+                    <div className="mb-4">
+                        <label className="text-amber-50" htmlFor="barber">Barbero</label>
+                        <select id="barber" name="barber" className="mt-2 block w-full font-bold text-white rounded-2xl p-3 bg-amber-400">
+                            <option value="">Selecciona Barbero</option>
+                            {barberos.map(b => <option key={b} value={b}>{b}</option>)}
+                        </select>
+                    </div>
 
+                    {/* INPUTS VINCULADOS AL ESTADO */}
+                    <div className="mb-4">
+                        <label className="text-amber-50" htmlFor="client">Cliente</label>
+                        <input 
+                            id="client"
+                            name="client"
+                            type="text"
+                            className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
+                            value={selectedClient.name} // IMPORTANTE
+                            onChange={(e) => setSelectedClient({...selectedClient, name: e.target.value})}
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="text-amber-50" htmlFor="phone">Teléfono:</label>
+                        <input 
+                            id="phone"
+                            name="phone"
+                            type="number"
+                            className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
+                            value={selectedClient.phone} // IMPORTANTE
+                            onChange={(e) => setSelectedClient({...selectedClient, phone: e.target.value})}
+                        />
+                    </div>
+
+                    <input type="submit" className="mt-5 bg-amber-400 p-2 text-white font-black text-lg cursor-pointer rounded-4xl hover:scale-105 transition-transform" value="Registrar Servicio" />
+                </Form>
+
+                <div className="mt-10">
+                    <Link className="text-amber-400 font-bold hover:underline" to="/">
+                        ← Volver a servicios vendidos
+                    </Link>
+                </div>
+            </div>
+        </>
+    )
+}

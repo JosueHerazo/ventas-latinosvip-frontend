@@ -27,10 +27,17 @@ export const BarberSchema  = object({
   barber: string(),
   createdAt: string()
 })
+export const ClientSchema = object({
+    id: number(),
+    name: string(),
+    phone: number(),
+})
+
 
 
 export const ServicesSchema = array(ServiceSchema)
 export const  BarbersSummaryType = array(BarberSchema)
 
 
+export type Client = InferOutput<typeof ClientSchema>
 export type Service = InferOutput<typeof ServiceSchema>
