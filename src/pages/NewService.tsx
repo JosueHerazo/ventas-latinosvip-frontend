@@ -3,19 +3,12 @@ import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
 import { getServices } from "../services/ServiceService"
-import type {  Service } from "../types"
-
-
-export async function loader() {
-    
-  const services = await getServices()
-  return services || []
-}
+import type {  Service,  } from "../types"
 
 export async function action({request} : ActionFunctionArgs){
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
-
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
+    
     let error = ""
     if(Object.values(data).includes("")){
         error = "Todos los campos son obligatorios"
@@ -23,13 +16,15 @@ export async function action({request} : ActionFunctionArgs){
     if(error.length){
         return error
     }
-
-   
-   
     await addProduct(data)
-    
-    
     return redirect("/")
+}
+
+
+export async function loader() {
+    
+  const services = await getServices()
+  return services || []
 }
 
 export default function NewService() {
