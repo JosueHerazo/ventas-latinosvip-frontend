@@ -58,13 +58,13 @@ const services = useActionData() as Service[]
     const [searchTerm, setSearchTerm] = useState("")
     const [results, setResults] = useState<Service[]>([])
     const [selectedClient, setSelectedClient] = useState({ 
-        id: "",
+        id: 0,
         client: "",
-        phone: "",
+        phone: 0,
         service: "",
         barber: "",
         createdAt: "",
-        price: ""
+        price: 0,
 
      })
 
@@ -85,10 +85,10 @@ const services = useActionData() as Service[]
     const handleSelectClient = (client: Service) => {
         setSelectedClient({ 
             client: client.client,
-            phone: client.phone.toString(),
-            id: client.id.toString(),
+            phone: client.phone,
+            id: client.id,
             service: client.service,
-            price: client.price.toString(),
+            price: client.price,
             barber: client.barber,
             createdAt: client.createdAt
         });
@@ -174,7 +174,7 @@ const services = useActionData() as Service[]
                             type="number"
                             className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
                             value={selectedClient.phone} // IMPORTANTE
-                            onChange={(e) => setSelectedClient({...selectedClient, phone: e.target.value})}
+                            onChange={(e) => setSelectedClient({...selectedClient, phone: Number(e.target.value)})}
                         />
                     </div>
 
