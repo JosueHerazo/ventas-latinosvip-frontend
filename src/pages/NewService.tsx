@@ -1,4 +1,4 @@
-import { Link, Form, useActionData, type ActionFunctionArgs, redirect } from "react-router-dom"
+import { Link, Form, type ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom"
 import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
@@ -32,11 +32,11 @@ export async function action({request} : ActionFunctionArgs){
 
 export default function NewService() {
 
-const services = useActionData() as Service[]
+const services = useLoaderData() as Service[]
 
 
     
-    const error = useActionData() as string
+    const error = useLoaderData() as string
 
      const servicios = [
     "Corte",
