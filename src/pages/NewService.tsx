@@ -33,10 +33,7 @@ export async function action({request} : ActionFunctionArgs){
 export default function NewService() {
 
 const services = useLoaderData() as Service[]
-
-
-    
-    const error = useLoaderData() as string
+const error = useLoaderData() as string
 
      const servicios = [
     "Corte",
@@ -98,7 +95,6 @@ const services = useLoaderData() as Service[]
   
   return  (
         <>
-            {error && <ErrorMessaje>{error}</ErrorMessaje>}
 
             <div className="mt-10 max-w-md mx-auto">
                 {/* --- BUSCADOR --- */}
@@ -110,7 +106,7 @@ const services = useLoaderData() as Service[]
                         placeholder="Escribe nombre o teléfono..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                        />
                     
                     {results.length > 0 && (
                         <ul className="absolute z-10 w-full bg-white rounded-xl mt-1 shadow-2xl max-h-40 overflow-y-auto">
@@ -119,7 +115,7 @@ const services = useLoaderData() as Service[]
                                     key={c.id}
                                     className="p-3 hover:bg-amber-100 cursor-pointer text-black border-b last:border-none"
                                     onClick={() => handleSelectClient(c)}
-                                >
+                                    >
                                     <p className="font-bold">{c.client}</p>
                                     <p className="text-sm text-gray-600">{c.phone}</p>
                                 </li>
@@ -130,6 +126,7 @@ const services = useLoaderData() as Service[]
 
                 <hr className="border-amber-900/30 my-6" />
 
+                    {error && <ErrorMessaje>{error}</ErrorMessaje>}
                 {/* --- FORMULARIO PRINCIPAL --- */}
                 <Form method="POST" className="flex flex-col gap-4">
                     <div className="mb-4">
@@ -168,14 +165,15 @@ const services = useLoaderData() as Service[]
 
                     <div className="mb-4">
                         <label className="text-amber-50" htmlFor="phone">Teléfono:</label>
-                        <input 
-                            id="phone"
-                            name="phone"
-                            type="number"
-                            className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
-                            value={selectedClient.phone} // IMPORTANTE
-                            onChange={(e) => setSelectedClient({...selectedClient, phone: Number(e.target.value)})}
-                        />
+                       <input
+              id="phone"
+              name="phone"
+              type="number"
+              className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
+              // Evitamos que muestre un 0 molesto si está vacío
+              value={selectedClient.phone === 0 ? "" : selectedClient.phone}
+              onChange={(e) => setSelectedClient({ ...selectedClient, phone: Number(e.target.value) })}
+            />
                     </div>
 
                     <input type="submit" className="mt-5 bg-amber-400 p-2 text-white font-black text-lg cursor-pointer rounded-4xl hover:scale-105 transition-transform" value="Registrar Servicio" />
