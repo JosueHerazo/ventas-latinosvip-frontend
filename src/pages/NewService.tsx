@@ -1,13 +1,13 @@
-import { Link, Form, type ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom"
+import { Link, Form, type ActionFunctionArgs, redirect, useLoaderData, useActionData } from "react-router-dom"
 import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
 import { getServices } from "../services/ServiceService"
 import type {  Service } from "../types"
-import { array } from "valibot"
 
 
 export async function loader() {
+    
   const services = await getServices()
   return services
 }
@@ -34,7 +34,7 @@ export async function action({request} : ActionFunctionArgs){
 export default function NewService() {
 
 const services = useLoaderData() as Service[]
-const error = useLoaderData() as string
+const error = useActionData() as string
 
      const servicios = [
     "Corte",
@@ -131,7 +131,6 @@ const error = useLoaderData() as string
 
                 <hr className="border-amber-900/30 my-6" />
 
-                    {error && <ErrorMessaje>{error}</ErrorMessaje>}
                 {/* --- FORMULARIO PRINCIPAL --- */}
                 <Form method="POST" className="flex flex-col gap-4">
                     <div className="mb-4">
@@ -190,6 +189,7 @@ const error = useLoaderData() as string
                     </Link>
                 </div>
             </div>
+            {error && <ErrorMessaje>{error}</ErrorMessaje>}
         </>
     )
 }
