@@ -9,8 +9,9 @@ import type {  Service } from "../types"
 export async function loader() {
     
   const services = await getServices()
-  return services
+  return services || []
 }
+
 export async function action({request} : ActionFunctionArgs){
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
@@ -130,6 +131,7 @@ const error = useActionData() as string
                 </div>
 
                 <hr className="border-amber-900/30 my-6" />
+                        {error && <ErrorMessaje>{error}</ErrorMessaje>}
 
                 {/* --- FORMULARIO PRINCIPAL --- */}
                 <Form method="POST" className="flex flex-col gap-4">
@@ -189,7 +191,6 @@ const error = useActionData() as string
                     </Link>
                 </div>
             </div>
-            {error && <ErrorMessaje>{error}</ErrorMessaje>}
         </>
     )
 }
