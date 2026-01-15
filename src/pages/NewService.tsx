@@ -32,7 +32,7 @@ export async function action({request} : ActionFunctionArgs){
 
 export default function NewService() {
 
-const services = useActionData() as Client[]
+const services = useActionData() as Service[]
 
 
     
@@ -56,8 +56,17 @@ const services = useActionData() as Client[]
  
   // 1. Estados para la búsqueda y selección
     const [searchTerm, setSearchTerm] = useState("")
-    const [results, setResults] = useState<Client[]>([])
-    const [selectedClient, setSelectedClient] = useState({ name: "", phone: "" })
+    const [results, setResults] = useState<Service[]>([])
+    const [selectedClient, setSelectedClient] = useState({ 
+        id: "",
+        client: "",
+        phone: "",
+        service: "",
+        barber: "",
+        createdAt: "",
+        price: ""
+
+     })
 
     // 2. Efecto para buscar clientes mientras escribes
     useEffect(() => {
@@ -73,10 +82,15 @@ const services = useActionData() as Client[]
     }, [searchTerm])
 
     // 3. Función al hacer click en un cliente encontrado
-    const handleSelectClient = (client: Client) => {
+    const handleSelectClient = (client: Service) => {
         setSelectedClient({ 
-            name: client.name, 
-            phone: client.phone.toString() 
+            client: client.client,
+            phone: client.phone.toString(),
+            id: client.id.toString(),
+            service: client.service,
+            price: client.price.toString(),
+            barber: client.barber,
+            createdAt: client.createdAt
         });
         setSearchTerm(""); 
         setResults([]);
@@ -106,7 +120,7 @@ const services = useActionData() as Client[]
                                     className="p-3 hover:bg-amber-100 cursor-pointer text-black border-b last:border-none"
                                     onClick={() => handleSelectClient(c)}
                                 >
-                                    <p className="font-bold">{c.name}</p>
+                                    <p className="font-bold">{c.client}</p>
                                     <p className="text-sm text-gray-600">{c.phone}</p>
                                 </li>
                             ))}
@@ -147,8 +161,8 @@ const services = useActionData() as Client[]
                             name="client"
                             type="text"
                             className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
-                            value={selectedClient.name} // IMPORTANTE
-                            onChange={(e) => setSelectedClient({...selectedClient, name: e.target.value})}
+                            value={selectedClient.client} // IMPORTANTE
+                            onChange={(e) => setSelectedClient({...selectedClient, client: e.target.value})}
                         />
                     </div>
 
