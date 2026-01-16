@@ -24,13 +24,14 @@ export async function action({request} : ActionFunctionArgs){
 export async function loader() {
     
   const services = await getServices()
-  return services || []
+  return services
 }
 
 export default function NewService() {
     const services = useLoaderData() as Service[]
     const error = useActionData() as string
-
+    console.log(services);
+    
      const servicios = [
     "Corte",
     "Corte de Niño",
