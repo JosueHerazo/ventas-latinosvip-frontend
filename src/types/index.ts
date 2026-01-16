@@ -18,25 +18,25 @@ export const ServiceSchema = object({
     client: string(),
     phone: number(),
     createdAt: string(),
-    clientId: number()
     
 })
 
 export const BarberSchema  = object({
-  service: string(),
-  price: number(),
-  barber: string(),
-  createdAt: string()
+    service: string(),
+    price: number(),
+    barber: string(),
+    createdAt: string()
 })
 export const ClientSchema = object({
-    id: number(),
+    clientId: number(),
     name: string(),
     phone: number(),
 })
 
 
-
 export const ServicesSchema = array(ServiceSchema)
+export type clientsSchema = array(ClientSchema)
+
 export const  BarbersSummaryType = array(BarberSchema)
 
 

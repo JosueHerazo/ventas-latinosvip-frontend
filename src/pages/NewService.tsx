@@ -3,7 +3,7 @@ import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
 import { getServices } from "../services/ServiceService"
-import type {   Service,    } from "../types"
+import type {   Client, Service,    } from "../types"
 
 export async function action({request} : ActionFunctionArgs){
     const formData = await request.formData()
@@ -53,7 +53,7 @@ export default function NewService() {
     const [results, setResults] = useState<Service[]>([])
     const [selectedClient, setSelectedClient] = useState(
         { 
-    id: 0, // Este ID es clave para el modelo Client
+    clientId: 0, // Este ID es clave para el modelo Client
     name: "",
     phone: ""
 }
@@ -78,7 +78,7 @@ export default function NewService() {
    // 3. Función al hacer click en un cliente encontrado
    const handleSelectClient = (item: Service) => {
        setSelectedClient({  
-           id: item.clientId || 0,
+           clientId: item.id,
            phone: item.phone.toString(),
            name: item.client
        });
@@ -138,7 +138,7 @@ export default function NewService() {
 
       {/* --- FORMULARIO PRINCIPAL --- */}
       <Form method="POST" className="flex flex-col gap-4">
-        <input type="hidden" name="clientId" value={selectedClient.id} />
+        <input type="hidden" name="clientId" value={selectedClient.clientId} />
 
         <div className="mb-4">
           <label className="text-amber-50" htmlFor="service">Servicio</label>
@@ -169,7 +169,7 @@ export default function NewService() {
             type="text"
             className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
             value={selectedClient.name}
-            onChange={(e) => setSelectedClient({ ...selectedClient, name: e.target.value, id: 0 })}
+            onChange={(e) => setSelectedClient({ ...selectedClient, name: e.target.value, clientId: 0 })}
           />
         </div>
 
@@ -181,7 +181,7 @@ export default function NewService() {
             type="text"
             className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-amber-400"
             value={selectedClient.phone}
-            onChange={(e) => setSelectedClient({ ...selectedClient, phone: e.target.value, id: 0 })}
+            onChange={(e) => setSelectedClient({ ...selectedClient, phone: e.target.value, clientId: 0 })}
           />
         </div>
 
