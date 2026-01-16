@@ -3,7 +3,7 @@ import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
 import { getServices } from "../services/ServiceService"
-import type {   Service,  } from "../types"
+import type {   Service,    } from "../types"
 
 export async function action({request} : ActionFunctionArgs){
     const formData = await request.formData()
@@ -71,6 +71,20 @@ export default function NewService() {
     
     // 2. Efecto para buscar clientes mientras escribes
    // --- FILTRO DE BÚSQUEDA CORREGIDO ---
+   // service: client.service,
+   // price: client.price,
+   // barber: client.barber,
+   // createdAt: client.createdAt
+   // 3. Función al hacer click en un cliente encontrado
+   const handleSelectClient = (item: Service) => {
+       setSelectedClient({  
+           id: item.clientId || 0,
+           phone: item.phone.toString(),
+           name: item.client
+       });
+       setSearchTerm(""); 
+       setResults([]);
+   };
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       // Verificamos que services exista y sea un array antes de filtrar
@@ -86,21 +100,6 @@ export default function NewService() {
     }, 300)
     return () => clearTimeout(delayDebounceFn)
   }, [searchTerm, services])
-    // 3. Función al hacer click en un cliente encontrado
-    const handleSelectClient = (client: Service) => {
-        setSelectedClient({ 
-            
-            id: client.id || 0,
-            phone: client.phone.toString() || "",
-            name: client.client
-            // service: client.service,
-            // price: client.price,
-            // barber: client.barber,
-            // createdAt: client.createdAt
-        });
-        setSearchTerm(""); 
-        setResults([]);
-    };
   
   return  (
         <>

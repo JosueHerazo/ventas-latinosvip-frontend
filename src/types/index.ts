@@ -17,7 +17,8 @@ export const ServiceSchema = object({
     barber: string(),
     client: string(),
     phone: number(),
-    createdAt: string()
+    createdAt: string(),
+    clientId: number()
     
 })
 
