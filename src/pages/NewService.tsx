@@ -3,7 +3,7 @@ import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
 import { useState, useEffect } from "react"
 import { getServices } from "../services/ServiceService"
-import type {   Client, Service,    } from "../types"
+import type {    Service,    } from "../types"
 
 export async function action({request} : ActionFunctionArgs){
     const formData = await request.formData()
