@@ -1,6 +1,8 @@
 import { Link, Form, type ActionFunctionArgs, redirect, useActionData } from "react-router-dom"
 import ErrorMessaje from "../componenents/ErrorMessaje"
 import { addProduct } from "../services/ServiceService"
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData()
@@ -20,7 +22,19 @@ export default function NewService() {
     
     const servicios = ["Corte", "Corte con cejas", "Corte con barba", "Corte Vip", "Corte de Niño", "Barba", "Barba VIP", "Cejas", "Mechas", "Tinte", "Trenzas", "Mask Carbon", "Limpieza Facial", "Diseño", "Lavado de Cabello", "Otros"];
     const barberos = ["Josue", "Vato"];
+    
+    const [searchParams] = useSearchParams();
+    
+    // Estados para los campos que queremos auto-completar
+    const [clientName, setClientName] = useState("");
+    const [clientPhone, setClientPhone] = useState("");
 
+    useEffect(() => {
+        const name = searchParams.get("client");
+        const phone = searchParams.get("phone");
+        if (name) setClientName(name);
+        if (phone) setClientPhone(phone);
+    }, [searchParams]);
     return (
         <div className="mt-10 max-w-md mx-auto">
             <h2 className="text-2xl font-black text-amber-50 mb-5">Registrar Nuevo Servicio</h2>
@@ -51,12 +65,16 @@ export default function NewService() {
 
                 <div className="mb-4">
                     <label className="text-amber-50" htmlFor="client">Nombre del Cliente</label>
-                    <input id="client" name="client" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Nombre completo" />
+                    <input id="client" name="client" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Nombre completo"
+                    value={clientName}
+                    />
                 </div>
 
                 <div className="mb-4">
                     <label className="text-amber-50" htmlFor="phone">Teléfono:</label>
-                    <input id="phone" name="phone" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Número de contacto" />
+                    <input id="phone" name="phone" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Número de contacto" 
+                    value={clientPhone}/>
+
                 </div>
 
                 <input type="submit" className="mt-5 bg-amber-400 p-3 text-black font-black text-lg cursor-pointer rounded-2xl hover:bg-amber-500 transition-colors" value="Registrar Servicio" />
