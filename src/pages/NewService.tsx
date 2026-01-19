@@ -66,14 +66,14 @@ export default function NewService() {
                 <div className="mb-4">
                     <label className="text-amber-50" htmlFor="client">Nombre del Cliente</label>
                     <input id="client" name="client" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Nombre completo"
-                    value={clientName}
+                    defaultValue={clientName}
                     />
                 </div>
 
                 <div className="mb-4">
                     <label className="text-amber-50" htmlFor="phone">Teléfono:</label>
                     <input id="phone" name="phone" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Número de contacto" 
-                    value={clientPhone}/>
+                    defaultValue={clientPhone}/>
 
                 </div>
 

@@ -1,4 +1,4 @@
-import { useLoaderData, Link, useParams} from "react-router-dom";
+import { useLoaderData, Link, } from "react-router-dom";
 import { getServices } from "../services/ServiceService";
 import type { Service } from "../types";
 import { formatCurrency } from "../utils";
@@ -10,7 +10,7 @@ export async function loader() {
 
 export default function BarberSummary() {
   const services = useLoaderData() as Service[];
-    const { barber } = useParams();
+    // const { barber } = useParams();
   // Agrupar por barbero y luego por fecha
   const grouped = services.reduce<Record<string, Record<string, number>>>((acc, cur) => {
     // Usamos una fecha simplificada para agrupar mejor
@@ -20,9 +20,7 @@ export default function BarberSummary() {
     acc[cur.barber][date] += cur.price;
     return acc;
   }, {});
-   const servicesbarber = services.filter(
-        (service) => service.barber === barber
-    );
+  
 
 
   return (
@@ -67,9 +65,7 @@ export default function BarberSummary() {
               ))}
             </tbody>
           </table>
-          <p className="text-2xl text-white font-bold">
-                              Total Acumulado: {formatCurrency(servicesbarber.reduce((acc, cur) => acc + cur.price, 0))}
-                          </p>
+         
         </div>
       ))}
     </div>
