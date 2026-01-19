@@ -6,7 +6,7 @@ import EditService , {loader as editServiceLoader, action as editServiceAction }
 import { action as DeleteServiceAction } from "./componenents/ServiceDetail"
 import BarberSummary, {loader as barberPagoLoader} from "./pages/BarberSummary"
 import BarberServices, {loader as barberServicesLoader} from "./pages/BarberServices"
-import SearchClients, {loader as searchClintsLoader}from "./pages/SearchClients"
+import SearchClients, {loader as searchClintsLoader} from "./pages/SearchClients"
 
 
 export const router = createBrowserRouter([
@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
                 loader: barberServicesLoader,
             },
             {
-                path: "/barberos/Clients",
+                path: "/buscar/clientes",
                 element: <SearchClients/>,
                 loader: searchClintsLoader,
             }

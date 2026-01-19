@@ -1,11 +1,19 @@
-import { useLoaderData, Link } from "react-router-dom"
+import { useLoaderData, Link, redirect, type LoaderFunctionArgs } from "react-router-dom"
 import { useState, useMemo } from "react"
-import { getServices } from "../services/ServiceService"
+import { getServiceById } from "../services/ServiceService"
 import { type Service } from "../types"
 
-export async function loader() {
-    const clientes  = await getServices()
-    return clientes
+export async function loader({params} : LoaderFunctionArgs) {
+    console.log(params.id);
+    if(params.id !== undefined){
+        const service = await getServiceById(+params.id)
+        if(!service){
+            return redirect("/")
+            
+        }
+        return service
+    }
+    
 }
 
 export default function SearchClients() {
