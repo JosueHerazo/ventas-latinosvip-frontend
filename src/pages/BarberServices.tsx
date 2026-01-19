@@ -13,10 +13,25 @@ export default function BarberServices() {
     const services = useLoaderData() as Service[];
     const { barber } = useParams(); // Obtenemos el nombre del barbero de la URL
 
-    // Filtramos los servicios por el barbero seleccionado
-    const servicesbarber = services.filter(
-        (service) => service.barber === barber
-    );
+    // // Filtramos los servicios por el barbero seleccionado
+    // const servicesbarber = services.filter(
+    //     (service) => service.barber === barber
+    // );
+    // Lógica para obtener el lunes de la semana actual
+    const getStartOfWeek = () => {
+        const now = new Date();
+        const day = now.getDay(); // 0 (Dom) a 6 (Sab)
+        const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Ajuste para que el Lunes sea el día 1
+        const monday = new Date(now.setDate(diff));
+        monday.setHours(0, 0, 0, 0); // Resetear a medianoche
+        return monday;
+    };
+    const startOfWeek = getStartOfWeek();
+    // Filtramos: 1. Por Barbero, 2. Por Fecha (Posterior al Lunes 00:00)
+    const servicesbarber = services.filter((service) => {
+        const serviceDate = new Date(service.createdAt);
+        return service.barber === barber && serviceDate >= startOfWeek;
+    });
 
     return (
         <div className="max-w-4xl mx-auto p-4">
@@ -25,38 +40,41 @@ export default function BarberServices() {
             </h2>
             
             <div className="overflow-x-auto">
-                <table className="min-w-full bg-amber-700 text-white rounded-lg">
+                <table className="min-w-full bg-zinc-900 text-white rounded-lg overflow-hidden border border-amber-600/30">
                     <thead>
-                        <tr className="bg-amber-800">
-                            <th className="p-3 border">Cliente</th>
-                            <th className="p-3 border">Servicio</th>
-                            <th className="p-3 border">Fecha</th>
-                            <th className="p-3 border">Precio</th>
+                        <tr className="bg-amber-700">
+                            <th className="p-3 border-b border-amber-600">Cliente</th>
+                            <th className="p-3 border-b border-amber-600">Servicio</th>
+                            <th className="p-3 border-b border-amber-600">Fecha</th>
+                            <th className="p-3 border-b border-amber-600">Precio</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {servicesbarber.map((service) => (
-                            <tr key={service.id} className="text-center border-b border-amber-600">
-                                <td className="p-2">{service.client}</td>
-                                <td className="p-2">{service.service}</td>
-                                <Link to={"/pago/barberos"}>
-                                <td className="p-2">{formatDate(service.createdAt)}</td>
-                                <td className="p-2 font-bold">{formatCurrency(service.price)}</td>
-                                </Link>
+                        {servicesbarber.length > 0 ? (
+                            servicesbarber.map((service) => (
+                                <tr key={service.id} className="text-center border-b border-zinc-800 hover:bg-zinc-800">
+                                    <td className="p-3">{service.client}</td>
+                                    <td className="p-3">{service.service}</td>
+                                    <td className="p-3">{formatDate(service.createdAt)}</td>
+                                    <td className="p-3 font-bold text-green-400">{formatCurrency(service.price)}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={4} className="p-10 text-center text-gray-500">No hay servicios registrados esta semana.</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
             
-            <div className="mt-6 text-right">
-                <p className="text-2xl text-white font-bold">
-                    Total Acumulado: {formatCurrency(servicesbarber.reduce((acc, cur) => acc + cur.price, 0))}
+          <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <Link className="bg-zinc-700 hover:bg-zinc-600 rounded-xl p-3 font-bold text-white transition-colors" to="/pago/barberos">
+                    ← Volver al Resumen
+                </Link>
+                <p className="text-2xl text-white font-bold bg-amber-600/20 p-4 rounded-xl border border-amber-600">
+                    Total Semana: <span className="text-amber-500">{formatCurrency(servicesbarber.reduce((acc, cur) => acc + cur.price, 0))}</span>
                 </p>
-                 <Link className=" bg-amber-600 rounded-4xl p-3 font-bold text-white shadow-sm   hover:bg-indigo-200 " 
-                  to="/">
-                   servicios Vendidos      
-                 </Link>
             </div>
         </div>
     );
