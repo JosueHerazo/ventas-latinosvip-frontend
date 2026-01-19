@@ -61,6 +61,9 @@ export default function ServiceDetails({service} : ServiceDetailsPro) {
                     )}>
                         Editar
                     </button>
+                    </div>
+            </td>
+            <td>
                     <Form 
                     className=""
                     method="POST"
@@ -71,13 +74,13 @@ export default function ServiceDetails({service} : ServiceDetailsPro) {
                         }
                     }}
                     >
+
                         <input type="submit" 
                         value="Eliminar"
                         className="mt-5  bg-red-600 p-2 text-white w-full font-bold text-lg cursor-pointer rounded"
                         />
                     </Form>
-                </div>
-        </td>
+                </td>
     </tr> 
   )
 }
