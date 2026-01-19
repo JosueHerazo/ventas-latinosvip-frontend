@@ -37,8 +37,12 @@ export default function ServiceDetails({service} : ServiceDetailsPro) {
                 </Link>
     
             </td>
+
             <td className="p-3 text-lg text-white font-bold">
+              <Link to={"/buscar/clientes"}>
                 {service.client}
+              
+              </Link>
     
             </td>
             <td className="p-3 text-lg text-white font-bold ">
