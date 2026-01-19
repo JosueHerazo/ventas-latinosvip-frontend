@@ -32,6 +32,9 @@ export default function BarberServices() {
         const serviceDate = new Date(service.createdAt);
         return service.barber === barber && serviceDate >= startOfWeek;
     });
+    // --- CÁLCULOS DE TOTALES ---
+    const totalSemana = servicesbarber.reduce((acc, cur) => acc + cur.price, 0);
+    const comisionBarbero = totalSemana * 0.50; // El 50% solicitado
 
     return (
         <div className="max-w-4xl mx-auto p-4">
@@ -66,6 +69,22 @@ export default function BarberServices() {
                         )}
                     </tbody>
                 </table>
+            </div>
+            {/* SECCIÓN DE RESULTADOS FINALES */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-700 text-center">
+                    <p className="text-gray-400 uppercase text-xs font-bold tracking-widest">Total Bruto</p>
+                    <p className="text-3xl text-white font-black">
+                        {formatCurrency(totalSemana)}
+                    </p>
+                </div>
+
+                <div className="bg-amber-600/20 p-4 rounded-xl border border-amber-600 text-center">
+                    <p className="text-amber-500 uppercase text-xs font-bold tracking-widest">Ganancia (50%)</p>
+                    <p className="text-3xl text-green-400 font-black">
+                        {formatCurrency(comisionBarbero)}
+                    </p>
+                </div>
             </div>
             
           <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
