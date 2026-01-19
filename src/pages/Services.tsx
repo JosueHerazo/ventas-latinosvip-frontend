@@ -21,11 +21,7 @@ export default function Services() {
         to="nuevo/servicio">
            Pagar servicio     
         </Link>
-        <Link 
-        className="rounded-md bg-amber-700 hover:bg-green-400 hover:text-3xl p-3 font-bold text-white shadow-sm " 
-        to="/buscar/clientes">
-              Buscar Clientes
-        </Link>
+     
     </div>
     <div className="p-2 overflow-x-auto shadow-amber-600">
       <table className="min-w-[700px] mt-5 shadow-amber-600 ">
@@ -39,6 +35,8 @@ export default function Services() {
               <th className="p-2 ">Cliente</th>
               <th className="p-2 ">Telefono</th>
               <th className="p-2 ">Fecha</th>
+              <th className="p-2 ">Editar</th>
+              <th className="p-2 ">Eliminar</th>
               {/* <th className="p-2 ">Editar</th> */}
           </tr>
       </thead>
