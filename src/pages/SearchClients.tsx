@@ -17,18 +17,18 @@ export async function loader({params} : LoaderFunctionArgs) {
 }
 
 export default function SearchClients() {
-    const allServices = useLoaderData() as Service[]
+    const service = useLoaderData() as Service[]
     const [query, setQuery] = useState("")
 
     // Filtramos los servicios basados en la búsqueda
     const filteredResults = useMemo(() => {
         if (!query) return []
-        return allServices.filter(s => 
+        return service.filter(s => 
             s.client.toLowerCase().includes(query.toLowerCase()) || 
             s.phone.toString().includes(query)
             
         )
-    }, [query, allServices])
+    }, [query, service])
 
     return (
         <div className="max-w-4xl mx-auto p-5">
