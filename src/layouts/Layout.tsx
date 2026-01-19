@@ -18,14 +18,14 @@ export default function Layout() {
                 </Link>
             </div>
             <div>      
-                <h1 className="text-uppercase font-extrabold text-white animate-pulse">
+                <h2 className="text-uppercase font-extrabold text-white animate-pulse">
                     Bienvenidos a LatinosVip
-                </h1>
+                </h2>
             </div>
-            <div className='  my-2 mr-10 text-white uppercase text-2xl font-extrabold pt-40'>
-                <h1 className="ml-20  hover:text-yellow-200 shadow-xl  ">
+            <div className=' justify-end my-2 mr-10 text-white uppercase text-2xl font-extrabold pt-40'>
+                <h2 className="ml-20  hover:text-yellow-200 shadow-xl  ">
                     <FontAwesomeIcon icon={faInstagram} /> LatinosVip1
-                </h1>
+                </h2>
             </div>
         </header>
         <main className="mx-auto  max-w-6xl py-10 bg-black shadow">
