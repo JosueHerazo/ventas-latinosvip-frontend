@@ -8,26 +8,33 @@ export default function Layout() {
   return (
     <>
        
-        <header className=" Header flex  justify-between flex-col content-center items-center h-50
-         sm:flex-row  mb-5 mx-1  hover:text-yellow-200 shadow-xl bg-black shadow-amber-600
-         ">
-            <div>
+      <header className="flex flex-col md:flex-row justify-between items-center min-h-[12rem] md:h-40 mb-5 mx-1 bg-black shadow-xl shadow-amber-600 p-4">
+    {/* Contenedor del Logo */}
+    <div className="flex-1 flex justify-center md:justify-start">
+        <Link to="/">
+            <img 
+                src={latinosvip} 
+                alt="Logo" 
+                className="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover" 
+            />
+        </Link>
+    </div>
 
-                <Link to="/">
-                    <img src={latinosvip} alt="Logo" className='text-3xl size-60 w-30 ml-2 h-30 rounded-2xl' />
-                </Link>
-            </div>
-            <div>      
-                <h2 className="text-uppercase font-extrabold text-white animate-pulse">
-                    Bienvenidos a LatinosVip
-                </h2>
-            </div>
-            <div className=' justify-end my-2 mr-10 text-white uppercase text-2xl font-extrabold pt-40'>
-                <h2 className="ml-20  hover:text-yellow-200 shadow-xl  ">
-                    <FontAwesomeIcon icon={faInstagram} /> LatinosVip1
-                </h2>
-            </div>
-        </header>
+    {/* Contenedor del Título Central */}
+    <div className="flex-1 text-center my-4 md:my-0">
+        <h2 className="text-xl md:text-2xl font-extrabold text-white animate-pulse uppercase">
+            Bienvenidos a LatinosVip
+        </h2>
+    </div>
+
+    {/* Contenedor de Instagram */}
+    <div className="flex-1 flex justify-center md:justify-end text-white uppercase text-xl md:text-2xl font-extrabold">
+        <h2 className="hover:text-yellow-200 transition-colors flex items-center gap-2">
+            <FontAwesomeIcon icon={faInstagram} className="text-amber-500" /> 
+            <span>LatinosVip1</span>
+        </h2>
+    </div>
+</header>
         <main className="mx-auto  max-w-6xl py-10 bg-black shadow">
                     <Outlet/>
         </main>
