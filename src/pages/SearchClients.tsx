@@ -1,34 +1,27 @@
-import { useLoaderData, Link, redirect, type LoaderFunctionArgs } from "react-router-dom"
+import { useLoaderData, Link } from "react-router-dom"
 import { useState, useMemo } from "react"
-import { getServices } from "../services/ServiceService"
+import { getServices } from "../services/ServiceService" // Cambiado a getServices
 import { type Service } from "../types"
 
-export async function loader({params} : LoaderFunctionArgs) {
-    console.log(params.id);
-    if(params.id !== undefined){
-        const service = await getServices()
-        if(!service){
-            return redirect("/")
-            
-        }
-        return service || []
-    }
-    
+export async function loader() {
+    const services = await getServices()
+    return services || [] // Retornamos array vacío si no hay datos
 }
 
 export default function SearchClients() {
-    const service = useLoaderData() as Service[]
+    // Forzamos el tipo a Array para evitar el error de 'undefined'
+    const services = useLoaderData() as Service[]
     const [query, setQuery] = useState("")
 
-    // Filtramos los servicios basados en la búsqueda
     const filteredResults = useMemo(() => {
-        if (!query || !Array.isArray(service)) return []
-        return service.filter(s => 
-            s.client.toLowerCase().includes(query.toLowerCase()) || 
-            s.phone.toString().includes(query)
-            
+        // Validación de seguridad: si services no es un array, no filtramos
+        if (!query || !Array.isArray(services)) return []
+        
+        return services.filter(service => 
+            service.client?.toLowerCase().includes(query.toLowerCase()) || 
+            service.phone?.toString().includes(query)
         )
-    }, [query, service])
+    }, [query, services])
 
     return (
         <div className="max-w-4xl mx-auto p-5">
@@ -56,17 +49,17 @@ export default function SearchClients() {
                     </thead>
                     <tbody className="divide-y divide-zinc-800">
                         {filteredResults.length > 0 ? (
-                            filteredResults.map(s => (
-                                <tr key={s.id} className="hover:bg-zinc-800 text-white">
-                                    <td className="p-4 font-bold">{s.client}</td>
-                                    <td className="p-4">{s.phone}</td>
-                                    <td className="p-4 text-sm text-gray-400">{s.service} ({s.createdAt})</td>
+                            filteredResults.map(service => (
+                                <tr key={service.id} className="hover:bg-zinc-800 text-white">
+                                    <td className="p-4 font-bold">{service.client}</td>
+                                    <td className="p-4">{service.phone}</td>
+                                    <td className="p-4 text-sm text-gray-400">{service.service}</td>
                                     <td className="p-4">
                                         <Link 
-                                            to={`/nuevo/servicio?client=${s.client}&phone=${s.phone}`}
-                                            className="text-amber-500 hover:underline font-bold"
+                                            to={`/nuevo/servicio?client=${encodeURIComponent(service.client)}&phone=${service.phone}`}
+                                            className="bg-amber-500 text-black px-3 py-1 rounded-lg font-bold text-xs hover:bg-amber-400"
                                         >
-                                            Nuevo Servicio
+                                            Seleccionar
                                         </Link>
                                     </td>
                                 </tr>
@@ -74,12 +67,15 @@ export default function SearchClients() {
                         ) : (
                             <tr>
                                 <td colSpan={4} className="p-10 text-center text-gray-500">
-                                    {query ? "No se encontraron clientes" : "Escribe algo para empezar a buscar..."}
+                                    {query ? "No se encontraron coincidencias" : "Ingresa un nombre para buscar"}
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
+            </div>
+            <div className="mt-5">
+                <Link to="/" className="text-amber-500">← Volver</Link>
             </div>
         </div>
     )
