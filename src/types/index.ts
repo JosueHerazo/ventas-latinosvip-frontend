@@ -1,6 +1,6 @@
-import {object, string, number, array, type InferOutput,  } from "valibot"
+import {object, string, number, array, type InferOutput, date,  } from "valibot"
 
-
+// draft de sales
 export const DraftServiceSchema = object({
     service: string(),
     price: number(),
@@ -32,8 +32,19 @@ export const ClientSchema = object({
     name: string(),
     phone: string(),
 })
+// schema de citas
+export const DateSchema = object({
+            id: number(),
+            service: string(),
+            price: number(),
+            barber: string(),
+            list: date(),
+            createdAt: number()
+           
+})
 
 
+export const DatesSchema = array(DateSchema)
 export const ServicesSchema = array(ServiceSchema)
 
 
@@ -42,3 +53,4 @@ export const ServicesSchema = array(ServiceSchema)
 
 export type Client = InferOutput<typeof ClientSchema>
 export type Service = InferOutput<typeof ServiceSchema>
+export type DateList = InferOutput<typeof DateSchema>

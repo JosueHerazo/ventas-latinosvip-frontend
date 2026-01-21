@@ -61,10 +61,6 @@ export async function getServices() {
                 throw new Error("Hubo un error...")
             }
 
-            
-            console.log(result);
-            
-            
     } catch (error) {
         return[]
     }
@@ -127,6 +123,9 @@ export async function deleteService(id: Service["id"]) {
     }
     
 }
+// Dateapp
+
+
 // services/ServiceService.ts
 // export async function searchClients() {
 //     try {

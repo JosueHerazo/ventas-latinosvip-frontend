@@ -31,7 +31,7 @@ export default function Layout() {
     <div className="flex-1 flex justify-center md:justify-end text-white uppercase text-xl md:text-2xl font-extrabold">
         <h2 className="hover:text-yellow-200 transition-colors flex items-center gap-2">
             <FontAwesomeIcon icon={faInstagram} className="text-amber-500" /> 
-            <span>LatinosVip1</span>
+            <span>LatinosVlayouip1</span>
         </h2>
     </div>
 </header>

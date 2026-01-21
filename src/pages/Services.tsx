@@ -16,6 +16,9 @@ export default function Services() {
     <>
     <div className="flex justify-between ">
         <h2 className="text-4xl  hover:text-3xl font-black text-amber-600">Servicios</h2>
+        <Link to={"/lista/citas"}>
+          Lista de Citas
+        </Link>
         <Link 
         className="rounded-md bg-amber-700 hover:bg-green-400 hover:text-3xl p-3 font-bold text-white shadow-sm " 
         to="nuevo/servicio">
