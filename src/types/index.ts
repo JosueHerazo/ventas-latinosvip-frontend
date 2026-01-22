@@ -16,7 +16,7 @@ export const ServiceSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    client: optional(string()), 
+    client: string(), 
     phone: optional(any()), // A veces el número llega como string o number
     createdAt: any()
 })
