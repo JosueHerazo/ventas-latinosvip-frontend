@@ -18,7 +18,6 @@ export const ServiceSchema = object({
     barber: string(),
     client: optional(string()), 
     phone: optional(any()), // A veces el número llega como string o number
-    date: optional(string()), 
     list: optional(any()),  // Cambia date() por any() para evitar el error de parseo
     createdAt: any()
 })
@@ -36,13 +35,15 @@ export const ClientSchema = object({
 })
 // schema de citas
 export const DateSchema = object({
-            id: number(),
-            service: string(),
-            price: number(),
-            barber: string(),
-            list: optional(string()),
-            createdAt: number()
-           
+              id: number(),
+    service: string(),
+    price: number(),
+    barber: string(),
+    client: optional(string()), 
+    phone: optional(any()), // A veces el número llega como string o number
+    date: optional(string()), 
+    list: optional(any()),  // Cambia date() por any() para evitar el error de parseo
+    createdAt: any()
 })
 
 
