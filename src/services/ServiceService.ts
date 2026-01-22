@@ -25,7 +25,7 @@ export async function addProduct(data : serviceData) {
         // LUEGO SI LOS RESULTADOS CON CORECTOS 
 if (result.success) {
     // SE CREA LA RUTA DE DESTINO
-    const url = `${import.meta.env.VITE_API_URL}/cliente/cita`
+    const url = `${import.meta.env.VITE_API_URL}/api/service`
     // LUEGO SE ENVIA LA DATA A LA SERVER CON EL METODO POST Y SE AÑADE LA URL LUEGO LA DATA YA VALIDADA
      await axios.post(url, 
         {
@@ -52,7 +52,7 @@ if (result.success) {
 
 export async function getServices() {
     try {
-            const url = `${import.meta.env.VITE_API_URL}/cliente/cita`
+            const url = `${import.meta.env.VITE_API_URL}/api/service`
             const {data} = await axios(url)
             const result = safeParse(ServicesSchema, data.data)
             if(result.success){
@@ -69,7 +69,7 @@ export async function getServices() {
 
 export async function getServiceById(id : Service["id"]) {
     try {
-            const url = `${import.meta.env.VITE_API_URL}//cliente/cita/${id}`
+            const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
             const {data} = await axios(url)
             const result = safeParse(ServiceSchema, data.data)
             if(result.success){
@@ -104,7 +104,7 @@ export async function updateService (data : serviceData, id : Service["id"]){
         })
         if(result){
 
-            const url = `${import.meta.env.VITE_API_URL}/cliente/cita/${id}`
+            const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
             await axios.put(url, result.output)
         }
     } catch (error) {
@@ -136,4 +136,4 @@ export async function deleteService(id: Service["id"]) {
 //         console.log(error)
 //         return []
 //     }
-// }
+// }S
