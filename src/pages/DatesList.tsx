@@ -1,19 +1,20 @@
 import { useLoaderData, Form } from "react-router-dom";
 import { getDatesList, } from "../services/ServiceService";
 import { formatDate } from "../utils";
+import type { DateList } from "../types";
 
 // Definimos la interfaz basada en tu modelo de Sequelize
-interface DateClientModel {
-    id: number;
-    service: string;
-    price: number;
-    barber: string;
-    date: string;
-    clientId: number;
-    client?: {
-        name: string; // Asumiendo que el modelo Client tiene nombre
-    };
-}
+// interface DateClientModel {
+//     id: number;
+//     service: string;
+//     price: number;
+//     barber: string;
+//     date: string;
+//     clientId: number;
+//     client?: {
+//         name: string; // Asumiendo que el modelo Client tiene nombre
+//     };
+// }
 
 // Función Loader para obtener los datos de tu Backend
 export async function loader(){  
@@ -37,7 +38,7 @@ export async function loader(){
 
 export default function DateClient() {
     // Obtenemos los datos del loader
-    const citas = useLoaderData() as DateClientModel[];
+    const citas = useLoaderData() as DateList[];
 
     return (
         <div className="container mx-auto p-6">
@@ -67,7 +68,7 @@ export default function DateClient() {
                                         {cita.barber}
                                     </td>
                                     <td className="p-4">
-                                        {new Date(cita.date).toLocaleDateString('es-ES', {
+                                        {new Date(cita.list).toLocaleDateString('es-ES', {
                                             day: '2-digit',
                                             month: 'long',
                                             hour: '2-digit',
