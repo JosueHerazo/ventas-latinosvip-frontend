@@ -1,4 +1,4 @@
-import {object, string, number, array, type InferOutput, date,  } from "valibot"
+import {object, string, number, optional, any, array, type InferOutput, date,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -15,10 +15,11 @@ export const ServiceSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    client: string(),
-    phone: number(),
-    createdAt: string(),
-    
+    // Usamos optional para que Valibot no falle si el campo no existe
+    client: optional(string()), 
+    phone: optional(number()),
+    date: optional(string()),
+    createdAt: any()
 })
 
 export const BarberSchema  = object({
