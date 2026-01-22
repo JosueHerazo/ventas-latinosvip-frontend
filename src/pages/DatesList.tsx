@@ -31,7 +31,7 @@ export default function DatesList() {
                                     <div>
                                         <p className="text-white font-bold">{datelist.service}</p>
                                         <p className="text-amber-200 text-sm">Barbero: {datelist.barber}</p>
-                                        <p className="text-gray-400 text-xs">{new Date(datelist.list).toLocaleDateString()}</p>
+                                        <p className="text-gray-400 text-xs">{(datelist.list)}</p>
                                     </div>
                                     <div className="text-right">
                                         <p className="text-white font-black">{datelist.price}€</p>
