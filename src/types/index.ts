@@ -38,8 +38,8 @@ export const DateSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    list: optional(string()), 
-    createdAt: any()
+    list: number(), 
+    createdAt: number()
 })
 
 
