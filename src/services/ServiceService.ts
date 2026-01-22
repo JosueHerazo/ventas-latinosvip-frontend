@@ -128,7 +128,7 @@ export async function deleteService(id: Service["id"]) {
 // services/CitasService.ts
 
 
-export async function getDatesPending() {
+export async function getDatesList() {
     try {
         // Usamos la misma URL del servidor que usaste para registrar
         const url = `${import.meta.env.VITE_API_URL}/api/service`;
