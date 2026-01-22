@@ -10,15 +10,16 @@ export const DraftServiceSchema = object({
     // createdAt: string()
 })
 
+// En types.ts
 export const ServiceSchema = object({
     id: number(),
     service: string(),
     price: number(),
     barber: string(),
-    // Usamos optional para que Valibot no falle si el campo no existe
     client: optional(string()), 
-    phone: optional(number()),
-    date: optional(string()),
+    phone: optional(any()), // A veces el número llega como string o number
+    date: optional(string()), 
+    list: optional(any()),  // Cambia date() por any() para evitar el error de parseo
     createdAt: any()
 })
 
@@ -39,7 +40,7 @@ export const DateSchema = object({
             service: string(),
             price: number(),
             barber: string(),
-            list: date(),
+            list: optional(string()),
             createdAt: number()
            
 })
