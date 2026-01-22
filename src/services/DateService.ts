@@ -6,7 +6,7 @@ import { DatesSchema } from "../types";
 export async function getDatesPending() {
     try {
         // Usamos la misma URL del servidor que usaste para registrar
-        const url = `${import.meta.env.VITE_API_URL}/cita/cliente`;
+        const url = `${import.meta.env.VITE_API_URL}/api/service`;
         const { data } = await axios.get(url);
         const result = safeParse(DatesSchema, data.data)
         if(result.success){
