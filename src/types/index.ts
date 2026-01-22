@@ -17,8 +17,8 @@ export const ServiceSchema = object({
     price: number(),
     barber: string(),
     client: string(), 
-    phone: optional(any()), // A veces el número llega como string o number
-    createdAt: any()
+    phone: number(), // A veces el número llega como string o number
+    createdAt: string()
 })
 
 export const BarberSchema  = object({
