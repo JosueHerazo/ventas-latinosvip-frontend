@@ -23,6 +23,8 @@ export async function addProduct(data : serviceData) {
             // createdAt: data.createdAt
             
         })
+                console.log(result);
+
         // LUEGO SI LOS RESULTADOS CON CORECTOS 
 if (result.success) {
     // SE CREA LA RUTA DE DESTINO
@@ -116,7 +118,7 @@ export async function updateService (data : serviceData, id : Service["id"]){
 
 export async function deleteService(id: Service["id"]) {
     try {
-        const url = `${import.meta.env.VITE_API_URL}/cliente/cita/${id}`
+        const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
         await axios.delete(url)
     } catch (error) {
         console.log(error);
@@ -134,6 +136,8 @@ export async function getDatesList() {
         const url = `${import.meta.env.VITE_API_URL}/api/service`;
         console.log("Enviando a:", url); 
         const { data } = await axios.get(url);
+        console.log(data, "lista de  cetas recibidas");
+        
         const result = safeParse(DatesSchema, data.data)
         if(result.success){
             return result.output
