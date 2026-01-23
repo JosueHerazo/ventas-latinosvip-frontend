@@ -1,4 +1,4 @@
-import { useLoaderData, Form } from "react-router-dom";
+import { useLoaderData,  } from "react-router-dom";
 import { getDatesList, } from "../services/ServiceService";
 import { formatDate } from "../utils";
 import type { DateList } from "../types";
@@ -68,7 +68,7 @@ export default function DateClient() {
                                         {cita.barber}
                                     </td>
                                     <td className="p-4">
-                                        {new Date(cita.list).toLocaleDateString('es-ES', {
+                                        {new Date(cita.date).toLocaleDateString('es-ES', {
                                             day: '2-digit',
                                             month: 'long',
                                             hour: '2-digit',
@@ -97,13 +97,13 @@ export default function DateClient() {
             </div>
 
             {/* Ejemplo de botón para ir al formulario de registro si lo necesitas */}
-            <div className="mt-8">
+            {/* <div className="mt-8">
                 <Form method="post">
                     <button className="bg-transparent border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black font-bold py-3 px-6 rounded-lg transition-all duration-300">
                         Agendar Nueva Cita
                     </button>
                 </Form>
-            </div>
+            </div> */}
         </div>
     );
 }
