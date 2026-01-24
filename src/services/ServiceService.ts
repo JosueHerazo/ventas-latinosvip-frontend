@@ -133,7 +133,7 @@ export async function deleteService(id: Service["id"]) {
 export async function getDatesList() {
     try {
         // Usamos la misma URL del servidor que usaste para registrar
-        const url = `${import.meta.env.VITE_API_URL}/api/service`;
+        const url = `${import.meta.env.VITE_API_URL}/api/date`;
         console.log("Enviando a:", url); 
         const { data } = await axios.get(url);
         console.log(data, "lista de  cetas recibidas");
