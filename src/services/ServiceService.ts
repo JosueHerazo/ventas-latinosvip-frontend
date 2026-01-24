@@ -62,6 +62,7 @@ export async function getServices() {
                return result.output
             }else{
                 throw new Error("Hubo un error...")
+              
             }
 
     } catch (error) {
