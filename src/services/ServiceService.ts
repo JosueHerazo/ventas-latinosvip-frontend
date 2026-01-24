@@ -1,7 +1,7 @@
 import { safeParse} from "valibot"
 import axios from "axios"
 import { DraftServiceSchema, ServiceSchema, ServicesSchema, type Service} from "../types";
-import { DatesSchema } from "../types";
+// import { DatesSchema } from "../types";
 
 
 
@@ -18,8 +18,8 @@ export async function addProduct(data : serviceData) {
             barber: data.barber,
             service: data.service,
             client: data.client,
-            phone: +data.phone,
-            price: +data.price,
+            phone: Number(data.phone),
+            price: Number(data.price),
             // createdAt: data.createdAt
             
         })
