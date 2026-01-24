@@ -68,7 +68,7 @@ export default function DateClient() {
                                         {cita.barber}
                                     </td>
                                     <td className="p-4">
-                                        {new Date(cita.date).toLocaleDateString('es-ES', {
+                                        {new Date(cita.dateList).toLocaleDateString('es-ES', {
                                             day: '2-digit',
                                             month: 'long',
                                             hour: '2-digit',

@@ -39,7 +39,6 @@ export const DateSchema = object({
     price: number(),
     barber: string(),
     date: number(), 
-    createdAt: number()
 })
 
 
