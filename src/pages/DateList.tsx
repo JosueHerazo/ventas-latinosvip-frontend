@@ -1,17 +1,17 @@
 import { useLoaderData } from "react-router-dom";
 import type { DateList } from "../types";
-import { getServices } from "../services/ServiceService";
+import { getDatesList } from "../services/ServiceService";
 import { formatDate } from "../utils";
 
 export async function loader() {
-  const services = await getServices()
-  return services
+  const datelist = await getDatesList()
+  return datelist
 }
 
 
 export default function DateClient() {
     // Obtenemos los datos del loader
-    const citas = useLoaderData() as DateList[];
+    const datelist = useLoaderData() as DateList[];
 
     return (
         <div className="container mx-auto p-6">
@@ -31,8 +31,8 @@ export default function DateClient() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-amber-900/30">
-                        {citas.length > 0 ? (
-                            citas.map((cita) => (
+                        {datelist.length > 0 ? (
+                            datelist.map((cita) => (
                                 <tr key={cita.id} className="hover:bg-amber-500/10 transition-colors">
                                     <td className="p-4 font-semibold text-amber-400">
                                         {cita.service}
