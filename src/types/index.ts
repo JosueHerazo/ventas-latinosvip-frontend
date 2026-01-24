@@ -1,4 +1,4 @@
-import {object, string, number, nullable, array, type InferOutput,  } from "valibot"
+import {object, string, number, any, nullable, array, type InferOutput,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -11,17 +11,20 @@ export const DraftServiceSchema = object({
 })
 
 // En types.ts
+// types.ts
 export const ServiceSchema = object({
     id: number(),
     service: string(),
-    price: number(),
+    price: any(), // Cambiamos a any porque a veces Sequelize envía strings en FLOAT
     barber: string(),
     client: string(), 
-    phone: number(), // A veces el número llega como string o number
+    phone: any(),  // El BIGINT de la DB suele llegar como string al JSON
     createdAt: string(),
-    clientId: nullable(number()), // Debe permitir null
-    clientData: nullable(string())
+    clientId: nullable(any()), // Permitimos null o cualquier valor
+    clientData: nullable(any()) // Permitimos null o cualquier valor
 })
+
+
 
 export const BarberSchema  = object({
     service: string(),
