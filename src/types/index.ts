@@ -1,4 +1,4 @@
-import {object, string, number, array, type InferOutput,  } from "valibot"
+import {object, string, number, nullable, array, type InferOutput,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -18,7 +18,9 @@ export const ServiceSchema = object({
     barber: string(),
     client: string(), 
     phone: number(), // A veces el número llega como string o number
-    createdAt: string()
+    createdAt: string(),
+    clientId: nullable(number()), // Debe permitir null
+    clientData: nullable(string())
 })
 
 export const BarberSchema  = object({
@@ -30,7 +32,7 @@ export const BarberSchema  = object({
 export const ClientSchema = object({
     clientId: number(),
     name: string(),
-    phone: string(),
+    phone: number(),
 })
 // schema de citas
 export const DateSchema = object({
