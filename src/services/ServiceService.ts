@@ -1,6 +1,6 @@
 import { safeParse} from "valibot"
 import axios from "axios"
-import { DraftServiceSchema, ServiceSchema, ServicesSchema, type Service} from "../types";
+import { DatesSchema, DraftServiceSchema, ServiceSchema, ServicesSchema, type Service} from "../types";
 // import { DatesSchema } from "../types";
 
 
@@ -137,26 +137,26 @@ export async function deleteService(id: Service["id"]) {
 // services/CitasService.ts
 
 
-// export async function getDatesList() {
-//     try {
-//         // Usamos la misma URL del servidor que usaste para registrar
-//         const url = `${import.meta.env.VITE_API_URL}/api/date`;
-//         console.log("Enviando a:", url); 
-//         const { data } = await axios.get(url);
-//         console.log(data, "lista de  cetas recibidas");
+export async function getDatesList() {
+    try {
+        // Usamos la misma URL del servidor que usaste para registrar
+        const url = `${import.meta.env.VITE_API_URL}/api/date`;
+        console.log("Enviando a:", url); 
+        const { data } = await axios.get(url);
+        console.log(data, "lista de  cetas recibidas");
         
-//         const result = safeParse(DatesSchema, data.data)
-//         if(result.success){
-//             return result.output
-//         }else{
-//             throw new Error("Hubo un error al cargar la lista de citas...");
+        const result = safeParse(DatesSchema, data.data)
+        if(result.success){
+            return result.output
+        }else{
+            throw new Error("Hubo un error al cargar la lista de citas...");
             
-//         }      
-//     } catch (error) {
-//         console.log(error);
-//         return [];
-//     }
-// }
+        }      
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}
 // Dateapp
 
 

@@ -72,7 +72,7 @@ export default function NewService() {
 
                 <div className="mb-4">
                     <label className="text-amber-50" htmlFor="phone">Teléfono:</label>
-                    <input id="phone" name="phone" type="text" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Número de contacto" 
+                    <input id="phone" name="phone" type="number" className="mt-2 block w-full p-3 rounded-2xl font-bold text-white bg-zinc-800 border-2 border-amber-400" placeholder="Número de contacto" 
                     defaultValue={clientPhone}/>
 
                 </div>
