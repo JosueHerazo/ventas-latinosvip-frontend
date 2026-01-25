@@ -2,28 +2,14 @@ import { useLoaderData } from "react-router-dom";
 import type { DateList } from "../types";
 import { getDatesList } from "../services/ServiceService";
 import { formatCurrency } from "../utils";
+import { formatFullDate } from "../utils"; // Importa la función de arriba
 
 export async function loader() {
-  const datelist = await getDatesList()
-  return datelist
+    const datelist = await getDatesList();
+    return datelist;
 }
 
-// / 1. Crea una pequeña función de ayuda fuera del componente o impórtala
-// const formatFriendlyDate = (date: any) => {
-//     if (!date) return "Sin fecha"; // Si es null, muestra este texto
-    
-//     const d = new Date(date);
-//     if (isNaN(d.getTime())) return "Fecha inválida"; // Por si el string está mal
-    
-//     return d.toLocaleDateString('es-ES', {
-//         day: '2-digit',
-//         month: 'long',
-//         year: 'numeric'
-//     });
-// }
-
 export default function DateClient() {
-    // Obtenemos los datos del loader
     const datelist = useLoaderData() as DateList[];
 
     return (
@@ -38,9 +24,9 @@ export default function DateClient() {
                         <tr>
                             <th className="p-4">Servicio</th>
                             <th className="p-4">Barbero</th>
-                            <th className="p-4">Fecha</th>
+                            <th className="p-4">Fecha y Hora</th>
                             <th className="p-4">Precio</th>
-                            <th className="p-4">Acciones</th>
+                            <th className="p-4 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-amber-900/30">
@@ -53,13 +39,14 @@ export default function DateClient() {
                                     <td className="p-4 italic">
                                         {cita.barber}
                                     </td>
-                                 <td className="p-4">
-                                {(cita.dateList)}
-                                </td>
+                                    <td className="p-4 text-sm">
+                                        {/* Aquí aplicamos el formato amigable */}
+                                        {formatFullDate(cita.dateList)}
+                                    </td>
                                     <td className="p-4 font-bold text-green-500">
                                         {formatCurrency(cita.price)}
                                     </td>
-                                    <td className="p-4">
+                                    <td className="p-4 text-center">
                                         <button className="bg-amber-500 hover:bg-amber-600 text-black px-3 py-1 rounded font-bold text-xs uppercase transition-all">
                                             Detalles
                                         </button>
@@ -76,15 +63,6 @@ export default function DateClient() {
                     </tbody>
                 </table>
             </div>
-
-            {/* Ejemplo de botón para ir al formulario de registro si lo necesitas */}
-            {/* <div className="mt-8">
-                <Form method="post">
-                    <button className="bg-transparent border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black font-bold py-3 px-6 rounded-lg transition-all duration-300">
-                        Agendar Nueva Cita
-                    </button>
-                </Form>
-            </div> */}
         </div>
     );
 }
