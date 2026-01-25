@@ -26,6 +26,8 @@ export default function DateClient() {
                             <th className="p-4">Barbero</th>
                             <th className="p-4">Fecha y Hora</th>
                             <th className="p-4">Precio</th>
+                            <th className="p-4">Cliente</th>
+                            <th className="p-4">Telefono</th>
                             <th className="p-4 text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -38,6 +40,12 @@ export default function DateClient() {
                                     </td>
                                     <td className="p-4 italic">
                                         {cita.barber}
+                                    </td>
+                                    <td className="p-4 italic">
+                                        {cita.client}
+                                    </td>
+                                    <td className="p-4 italic">
+                                        {cita.phone}
                                     </td>
                                     <td className="p-4 text-sm">
                                         {/* Aquí aplicamos el formato amigable */}

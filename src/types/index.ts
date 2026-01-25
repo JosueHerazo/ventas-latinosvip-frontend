@@ -43,8 +43,9 @@ export const DateSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    dateList: string(), 
-    
+    dateList: nullable(any()),   
+    client: string(),   
+    phone: number(),
     // Cambiamos 'client' a optional porque en tus logs la API no lo envía
      
     
