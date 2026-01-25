@@ -7,7 +7,7 @@ import { action as DeleteServiceAction } from "./componenents/ServiceDetail"
 import BarberSummary, {loader as barberPagoLoader} from "./pages/BarberSummary"
 import BarberServices, {loader as barberServicesLoader} from "./pages/BarberServices"
 import SearchClients, {loader as searchClintsLoader} from "./pages/SearchClients"
-import DatesList, {loader as DateListLoader}from "./pages/DateList"
+import DatesList, {loader as DateListLoader}from "./pages/DateClient"
 
 
 export const router = createBrowserRouter([
