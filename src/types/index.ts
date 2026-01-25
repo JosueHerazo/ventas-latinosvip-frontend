@@ -43,7 +43,10 @@ export const DateSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    dateList: number(), 
+    dateList: string(),
+    clientId: nullable(any()), // Permitimos null o cualquier valor
+    client: nullable(any()), // Permitimos null o cualquier valor
+    createdAt: string(),
 })
 
 
