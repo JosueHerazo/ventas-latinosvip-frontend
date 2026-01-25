@@ -1,4 +1,4 @@
-import {object, string, number, optional,any, nullable, array, type InferOutput,  } from "valibot"
+import {object, string, number, any, nullable, array, type InferOutput,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -43,12 +43,11 @@ export const DateSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    dateList: optional(nullable(any())), 
-    clientId: optional(nullable(number())),
+    dateList: string(), 
+    
     // Cambiamos 'client' a optional porque en tus logs la API no lo envía
-    client: optional(nullable(any())), 
-    createdAt: optional(any()),
-    updatedAt: optional(any())
+     
+    
 })
 
 
