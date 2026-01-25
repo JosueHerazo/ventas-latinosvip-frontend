@@ -8,6 +8,19 @@ export async function loader() {
   return datelist
 }
 
+// / 1. Crea una pequeña función de ayuda fuera del componente o impórtala
+const formatFriendlyDate = (date: any) => {
+    if (!date) return "Sin fecha"; // Si es null, muestra este texto
+    
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "Fecha inválida"; // Por si el string está mal
+    
+    return d.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+}
 
 export default function DateClient() {
     // Obtenemos los datos del loader
@@ -40,9 +53,9 @@ export default function DateClient() {
                                     <td className="p-4 italic">
                                         {cita.barber}
                                     </td>
-                                    <td className="p-4">
-                                        {cita.dateList}
-                                    </td>
+                                 <td className="p-4">
+                                {formatFriendlyDate(cita.dateList)}
+                                </td>
                                     <td className="p-4 font-bold text-green-500">
                                         {formatCurrency(cita.price)}
                                     </td>
