@@ -41,12 +41,7 @@ export default function DateClient() {
                                         {cita.barber}
                                     </td>
                                     <td className="p-4">
-                                        {new Date(cita.dateList).toLocaleDateString('es-ES', {
-                                            day: '2-digit',
-                                            month: 'long',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
+                                        {cita.dateList}
                                     </td>
                                     <td className="p-4 font-bold text-green-500">
                                         ${formatDate(cita.price.toFixed(2))}
