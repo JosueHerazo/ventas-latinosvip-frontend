@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import type { DateList } from "../types";
 import { getDatesList } from "../services/ServiceService";
-import { formatDate } from "../utils";
+import { formatCurrency } from "../utils";
 
 export async function loader() {
   const datelist = await getDatesList()
@@ -44,7 +44,7 @@ export default function DateClient() {
                                         {cita.dateList}
                                     </td>
                                     <td className="p-4 font-bold text-green-500">
-                                        ${formatDate(cita.price.toFixed(2))}
+                                        {formatCurrency(cita.price)}
                                     </td>
                                     <td className="p-4">
                                         <button className="bg-amber-500 hover:bg-amber-600 text-black px-3 py-1 rounded font-bold text-xs uppercase transition-all">
