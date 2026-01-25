@@ -148,7 +148,10 @@ export async function getDatesList() {
         const result = safeParse(DatesSchema, data.data)
         if(result.success){
             return result.output
-        }else{
+        }else{ 
+            // ESTO TE DIRÁ EXACTAMENTE QUÉ CAMPO FALTA O ESTÁ MAL
+            console.error("ERRORES DE VALIDACIÓN:", result.issues);
+            return data.data; // Retorno temporal para que la web no se rompa
             throw new Error("Hubo un error al cargar la lista de citas...");
             
         }      
