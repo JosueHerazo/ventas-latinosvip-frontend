@@ -49,7 +49,7 @@ export default function DateClient() {
                                     </td>
                                     <td className="p-4 text-sm">
                                         {/* Aquí aplicamos el formato amigable */}
-                                        {formatFullDate(cita.date)}
+                                        {formatFullDate(cita.dateList)}
                                     </td>
                                     <td className="p-4 font-bold text-green-500">
                                         {formatCurrency(cita.price)}
