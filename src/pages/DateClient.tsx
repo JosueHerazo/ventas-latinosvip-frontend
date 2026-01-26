@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import type { DateList } from "../types";
 import { getDatesList } from "../services/ServiceService";
 import { formatCurrency } from "../utils";
-import { formatFullDate } from "../utils"; // Importa la función de arriba
+// import { formatFullDate } from "../utils"; // Importa la función de arriba
 
 export async function loader() {
     const datelist = await getDatesList();
@@ -34,6 +34,7 @@ export default function DateClient() {
                     <tbody className="divide-y divide-amber-900/30">
                         {datelist.length > 0 ? (
                             datelist.map((cita) => (
+                                console.log(cita),
                                 <tr key={cita.id} className="hover:bg-amber-500/10 transition-colors">
                                     <td className="p-4 font-semibold text-amber-400">
                                         {cita.service}
@@ -47,16 +48,17 @@ export default function DateClient() {
                                     <td className="p-4 italic">
                                         {cita.phone}
                                     </td>
-                                    <td>
+                                   <td>
                                         {cita.dateList ? 
                                             new Date(cita.dateList).toLocaleString('es-ES', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
                                             }) 
-                                            : "Sin fecha"}
+                                            : (cita.createdAt ? "Recién creada" : "Sin fecha")
+                                        }
                                     </td>
                                     <td className="p-4 font-bold text-green-500">
                                         {formatCurrency(cita.price)}
@@ -76,8 +78,10 @@ export default function DateClient() {
                             </tr>
                         )}
                     </tbody>
+                    
                 </table>
             </div>
         </div>
+        
     );
 }

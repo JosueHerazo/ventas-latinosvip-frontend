@@ -144,19 +144,16 @@ export async function getDatesList() {
         console.log("Enviando a:", url); 
         const { data } = await axios.get(url);
         console.log(data, "lista de  cetas recibidas");
-        
+        console.log(data.data[0].dateList, "fecha de la cita");
         const result = safeParse(DatesSchema, data.data)
+        console.log(cita)
         if(result.success){
             return result.output
         }else{ 
             // ESTO TE DIRÁ EXACTAMENTE QUÉ CAMPO FALTA O ESTÁ MAL
-            result.issues.forEach(issue => {
-                console.error(`❌ Error en campo: ${issue.path?.[0].key}. Mensaje: ${issue.message}`);
-            });
-            console.error("ERRORES DE VALIDACIÓN:", result.issues);
-            return data.data as DateList[]; // Retorno temporal para que la web no se rompa
-            
-            
+           // Si falla la validación, imprimimos por qué, pero DEVOLVEMOS LOS DATOS
+            console.error("Fallo de validación Valibot, pero cargando datos igual");
+            return data.data as DateList[];            
         }      
     } catch (error) {
         console.log(error);
