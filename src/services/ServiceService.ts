@@ -1,6 +1,6 @@
 import { safeParse} from "valibot"
 import axios from "axios"
-import { DatesSchema, DraftServiceSchema, ServiceSchema, ServicesSchema, type Service} from "../types";
+import { DatesSchema, DraftServiceSchema, ServiceSchema, ServicesSchema, type DateList, type Service} from "../types";
 // import { DatesSchema } from "../types";
 
 
@@ -150,9 +150,12 @@ export async function getDatesList() {
             return result.output
         }else{ 
             // ESTO TE DIRÁ EXACTAMENTE QUÉ CAMPO FALTA O ESTÁ MAL
+            result.issues.forEach(issue => {
+                console.error(`❌ Error en campo: ${issue.path?.[0].key}. Mensaje: ${issue.message}`);
+            });
             console.error("ERRORES DE VALIDACIÓN:", result.issues);
-            return data.data; // Retorno temporal para que la web no se rompa
-            throw new Error("Hubo un error al cargar la lista de citas...");
+            return data.data as DateList[]; // Retorno temporal para que la web no se rompa
+            
             
         }      
     } catch (error) {
