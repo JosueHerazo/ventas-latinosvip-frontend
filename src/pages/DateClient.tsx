@@ -47,9 +47,16 @@ export default function DateClient() {
                                     <td className="p-4 italic">
                                         {cita.phone}
                                     </td>
-                                    <td className="p-4 text-sm">
-                                        {/* Aquí aplicamos el formato amigable */}
-                                        {(cita.dateList)}
+                                    <td>
+                                        {cita.dateList ? 
+                                            new Date(cita.dateList).toLocaleString('es-ES', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                            }) 
+                                            : "Sin fecha"}
                                     </td>
                                     <td className="p-4 font-bold text-green-500">
                                         {formatCurrency(cita.price)}
