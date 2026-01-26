@@ -12,7 +12,7 @@ export function formatDate(date: string | Date) {
   }).format(new Date(date))
 }
 
-export function formatFullDate(dateStr: string | null | undefined) {
+export function formatFullDate(dateStr: Date | null | undefined) {
     if (!dateStr) return "Sin fecha";
 
     const date = new Date(dateStr);

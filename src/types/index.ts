@@ -1,4 +1,4 @@
-import {object, string, number, any, nullable, array, type InferOutput, date,  } from "valibot"
+import {object, string, number, any, nullable, pipe, array, type InferOutput, transform,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -43,12 +43,15 @@ export const DateSchema = object({
     service: string(),
     price: number(),
     barber: string(),
-    dateList: string(),   
     client: string(),   
     phone: number(),
-    // Cambiamos 'client' a optional porque en tus logs la API no lo envía
-     
-    
+    createdAt: any(), // IMPORTANTE: Sequelize siempre lo envía
+    updatedAt: any(), // IMPORTANTE: Sequelize siempre lo envía
+    clientId: nullable(any()),     
+    dateList: pipe(
+    string(),                        // acepta "2025-12-24"
+    transform((input) => new Date(input + "T00:00:00")))
+  
 })
 
 
