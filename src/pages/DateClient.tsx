@@ -43,11 +43,6 @@ export default function DateClient() {
                                         {cita.barber}
                                     </td>
                                     <td className="p-4 italic">
-                                        {cita.client}
-                                    </td>
-                                    <td className="p-4 italic">
-                                        {cita.phone}
-                                    </td>
                                    <td>
                                         {cita.dateList ? 
                                             new Date(cita.dateList).toLocaleString('es-ES', {
@@ -62,6 +57,11 @@ export default function DateClient() {
                                     </td>
                                     <td className="p-4 font-bold text-green-500">
                                         {formatCurrency(cita.price)}
+                                    </td>
+                                        {cita.client}
+                                    </td>
+                                    <td className="p-4 italic">
+                                        {cita.phone}
                                     </td>
                                     <td className="p-4 text-center">
                                         <button className="bg-amber-500 hover:bg-amber-600 text-black px-3 py-1 rounded font-bold text-xs uppercase transition-all">
