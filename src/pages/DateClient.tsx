@@ -34,7 +34,7 @@ export default function DateClient() {
                     <tbody className="divide-y divide-amber-900/30">
                         {datelist.length > 0 ? (
                             datelist.map((cita) => (
-                                console.log(cita),
+                               
                                 <tr key={cita.id} className="hover:bg-amber-500/10 transition-colors">
                                     <td className="p-4 font-semibold text-amber-400">
                                         {cita.service}
