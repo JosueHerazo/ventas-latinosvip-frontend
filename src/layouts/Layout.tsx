@@ -1,11 +1,15 @@
-import { Outlet, Link, useLocation } from "react-router-dom"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInstagram } from '@fortawesome/free-brands-svg-icons'
-import { faCut, faCalendarCheck, faChartLine } from '@fortawesome/free-solid-svg-icons'
-import latinosvip from "../assets/latinosvip.jpg"
+import { Outlet, Link, useLocation } from "react-router-dom";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faCut, faCalendarCheck, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import latinosvip from "../assets/latinosvip.jpg";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
+import { useCitaAlert } from "../componenents/DateAlert";
 
 export default function Layout() {
+    const pendientesCount = useCitaAlert(); 
     const { pathname } = useLocation();
     const { scrollY } = useScroll();
     
@@ -13,21 +17,26 @@ export default function Layout() {
     const headerHeight = useTransform(scrollY, [0, 100], ["12rem", "6rem"]);
     const logoScale = useTransform(scrollY, [0, 100], [1, 0.6]);
 
-    const navLinks = [
-        { to: "/", label: "Ventas", icon: faChartLine },
-        { to: "/lista/citas", label: "Citas", icon: faCalendarCheck },
-        { to: "/nuevo/servicio", label: "Cobrar", icon: faCut },
-    ];
+    // Estilo base para los links para no repetir código
+    const linkStyle = "flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all";
+    const activeStyle = "bg-amber-600 text-black shadow-lg shadow-amber-900/40";
+    const inactiveStyle = "text-zinc-500 hover:text-white hover:bg-zinc-900";
 
     return (
         <div className="min-h-screen bg-black text-white selection:bg-amber-500 selection:text-black">
-            
-            {/* HEADER DINÁMICO CON FRAMER MOTION */}
+            {/* Contenedor de Alertas Configurado para no dar error de TS */}
+            <ToastContainer 
+                theme="dark" 
+                position="top-right"
+                toastClassName={() => "relative flex p-1 min-h-10 rounded-xl justify-between overflow-hidden cursor-pointer bg-zinc-900 text-white border border-amber-600 mb-2 shadow-2xl"}
+            />
+
+            {/* HEADER DINÁMICO */}
             <motion.header 
                 style={{ height: headerHeight }}
                 className="sticky top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-amber-600/30 px-6 flex items-center justify-between transition-all"
             >
-                {/* Logo con escalado dinámico */}
+                {/* Logo */}
                 <motion.div style={{ scale: logoScale }} className="flex-1 flex justify-start">
                     <Link to="/" className="relative group">
                         <div className="absolute -inset-1 bg-amber-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition"></div>
@@ -39,7 +48,7 @@ export default function Layout() {
                     </Link>
                 </motion.div>
 
-                {/* Título Central Dinámico */}
+                {/* Título Central */}
                 <div className="flex-1 text-center hidden md:block">
                     <motion.h2 
                         initial={{ y: -20, opacity: 0 }}
@@ -50,7 +59,7 @@ export default function Layout() {
                     </motion.h2>
                 </div>
 
-                {/* Redes Sociales / Instagram */}
+                {/* Redes Sociales */}
                 <div className="flex-1 flex justify-end">
                     <a 
                         href="https://instagram.com" 
@@ -64,27 +73,38 @@ export default function Layout() {
                 </div>
             </motion.header>
 
-            {/* NAV DE ACCESO RÁPIDO (Estilo App) */}
+            {/* NAVEGACIÓN CON BURBUJA DE CITAS */}
             <nav className="flex justify-center gap-2 md:gap-8 py-4 bg-zinc-950/50 sticky top-[6rem] z-40 backdrop-blur-sm border-b border-zinc-900">
-                {navLinks.map((link) => (
-                    <Link 
-                        key={link.to} 
-                        to={link.to}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all ${
-                            pathname === link.to 
-                            ? "bg-amber-600 text-black shadow-lg shadow-amber-900/40" 
-                            : "text-zinc-500 hover:text-white hover:bg-zinc-900"
-                        }`}
-                    >
-                        <FontAwesomeIcon icon={link.icon} />
-                        {link.label}
-                    </Link>
-                ))}
+                <Link 
+                    to="/" 
+                    className={`${linkStyle} ${pathname === "/" ? activeStyle : inactiveStyle}`}
+                >
+                    <FontAwesomeIcon icon={faChartLine} /> Ventas
+                </Link>
+
+                <Link 
+                    to="/lista/citas" 
+                    className={`relative ${linkStyle} ${pathname === "/lista/citas" ? activeStyle : inactiveStyle}`}
+                >
+                    <FontAwesomeIcon icon={faCalendarCheck} />
+                    Citas
+                    {pendientesCount > 0 && (
+                        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] text-white ring-2 ring-black animate-bounce font-bold">
+                            {pendientesCount}
+                        </span>
+                    )}
+                </Link>
+
+                <Link 
+                    to="/nuevo/servicio" 
+                    className={`${linkStyle} ${pathname === "/nuevo/servicio" ? activeStyle : inactiveStyle}`}
+                >
+                    <FontAwesomeIcon icon={faCut} /> Cobrar
+                </Link>
             </nav>
 
-            {/* MAIN CON TRANSICIONES */}
+            {/* CONTENIDO PRINCIPAL */}
             <main className="relative mx-auto max-w-6xl px-4 py-12 min-h-[70vh]">
-                {/* Decoración de fondo */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(217,119,6,0.08),transparent_50%)] pointer-events-none"></div>
                 
                 <motion.div
@@ -97,7 +117,7 @@ export default function Layout() {
                 </motion.div>
             </main>
 
-            {/* FOOTER DINÁMICO */}
+            {/* FOOTER */}
             <footer className="mt-20 border-t border-zinc-900 bg-zinc-950 p-10 text-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="flex items-center gap-2">
@@ -109,11 +129,8 @@ export default function Layout() {
                             Sistema Operativo - LatinosVip v3.0
                         </p>
                     </div>
-                    <p className="text-zinc-700 text-xs">
-                        &copy; {new Date().getFullYear()} Creado para los mejores barberos.
-                    </p>
                 </div>
             </footer>
         </div>
-    )
+    );
 }

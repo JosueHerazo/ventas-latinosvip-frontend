@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
 import { getDatesList, registrarCobro } from "../services/ServiceService";
 import { formatCurrency } from "../utils";
+import { faPrescription } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 export async function loader() {
     return await getDatesList();
@@ -11,29 +13,35 @@ export async function loader() {
 export default function DateClient() {
     const datelist = useLoaderData() as DateList[];
     const navigate = useNavigate();
+    faPrescription
 
-    const liquidarVenta = async (cita: DateList) => {
-        const confirmar = confirm(`¿Confirmar cobro de ${formatCurrency(cita.price)} para el cliente ${cita.client}?`);
+// DateClient.tsx
+
+const liquidarVenta = async (cita: DateList) => {
+    // Usamos una notificación de promesa para que el usuario vea el progreso
+    const idCarga = toast.loading("Procesando cobro...");
+
+    try {
+        await registrarCobro(cita);
         
-        if (!confirmar) return;
+        // Si todo sale bien, actualizamos la alerta a éxito
+        toast.update(idCarga, { 
+            render: `✅ Venta de ${cita.client} liquidada`, 
+            type: "success", 
+            isLoading: false,
+            autoClose: 3000 
+        });
 
-        // Estructuramos la data para que sea idéntica a la que espera tu servicio de Ventas
-        const ventaData = {
-            ...cita, // Pasamos todos los datos (cliente, teléfono, barbero, servicio)
-            isPaid: true,
-            date: new Date().toISOString() // Fecha exacta del cobro
-        };
-
-        try {
-            await registrarCobro(ventaData);
-            // Redirigimos al historial de ventas para ver el cobro reflejado
-            navigate("/"); 
-        } catch (error) {
-            console.error("Error al liquidar:", error);
-            alert("Hubo un error al procesar el pago");
-        }
-    };
-
+        navigate("/"); 
+    } catch (error) {
+        toast.update(idCarga, { 
+            render: "❌ Error al liquidar la venta", 
+            type: "error", 
+            isLoading: false,
+            autoClose: 3000 
+        });
+    }
+};
     // Filtramos las citas que aún no han sido cobradas
     const citasPendientes = datelist.filter(c => !c.isPaid);
 

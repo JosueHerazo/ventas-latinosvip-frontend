@@ -161,14 +161,33 @@ export async function getDatesList() {
     }
 }
 
-export async function registrarCobro(ventaData: any) {
-    const url = `${import.meta.env.VITE_API_URL}/api/ventas`;
-    const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(ventaData),
-        headers: { 'Content-Type': 'application/json' }
-    });
-    return await response.json();
+// Dentro de ServiceService.ts
+export async function registrarCobro(ventaData: DateList) {
+    try {
+        // 1. URL para crear la Venta (donde ya te funciona el POST)
+        const urlVenta = `${import.meta.env.VITE_API_URL}/api/service`;
+        
+        // 2. Registramos el servicio en el historial de ventas
+        await axios.post(urlVenta, {
+            barber: ventaData.barber,
+            service: ventaData.service,
+            client: ventaData.client,
+            phone: Number(ventaData.phone), // Forzamos número para evitar fallos de Valibot
+            price: Number(ventaData.price)
+        });
+
+        // 3. URL para eliminar la cita de la lista de pendientes
+        // Usamos el ID de la cita que recibimos
+        const urlCita = `${import.meta.env.VITE_API_URL}/api/date/${ventaData.id}`;
+        
+        // 4. Borramos la cita original
+        await axios.delete(urlCita);
+
+        return { success: true };
+    } catch (error) {
+        console.error("Error en registrarCobro:", error);
+        throw error; // Re-lanzamos el error para que el componente lo detecte
+    }
 }
 export async function archivarSemana(cierreData: any) {
     const url = `${import.meta.env.VITE_API_URL}/api/cierres`;
