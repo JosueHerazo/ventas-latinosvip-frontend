@@ -199,18 +199,18 @@ export async function archivarSemana(cierreData: any) {
     return await response.json();
 }   
 
+// src/services/ServiceService.ts
+
+// src/services/ServiceService.ts
+
+export async function actualizarEstadoCita(id: number) {
+    try {
+        // Esta es la ruta que cambia el isPaid a true en tu base de datos
+        const url = `${import.meta.env.VITE_API_URL}/api/appointments/${id}`; 
+        await axios.patch(url, { isPaid: true });
+    } catch (error) {
+        console.error("Error al actualizar la cita:", error);
+        throw error; 
+    }
+}
     
-// Dateapp
-
-
-// services/ServiceService.ts
-// export async function searchClients() {
-//     try {
-//         const url = `${import.meta.env.VITE_API_URL}/api/service`
-//         const { data } = await axios(url)
-//         return data.data as Client[]
-//     } catch (error) {
-//         console.log(error)
-//         return []
-//     }
-// }S
