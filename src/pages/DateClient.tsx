@@ -1,6 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
-import { getDatesList, registrarCobro } from "../services/ServiceService"; // Importamos la lógica
+import { getDatesList, registrarCobro } from "../services/ServiceService";
 import { formatCurrency } from "../utils";
 
 export async function loader() {
@@ -11,69 +12,117 @@ export default function DateClient() {
     const datelist = useLoaderData() as DateList[];
     const navigate = useNavigate();
 
-    // AQUÍ VA LA FUNCIÓN
-   // En DateClient.tsx
-const liquidarVenta = async (cita: any) => {
-    const confirmar = confirm(`¿Confirmar cobro de ${formatCurrency(cita.price)}?`);
-    if (!confirmar) return;
+    const liquidarVenta = async (cita: DateList) => {
+        const confirmar = confirm(`¿Confirmar cobro de ${formatCurrency(cita.price)} para el cliente ${cita.client}?`);
+        
+        if (!confirmar) return;
 
-    const ventaData = {
-        citaId: cita.id,
-        barbero: cita.barber,
-        monto: cita.price,
-        // ... otros datos
-        isPaid: true // Indicamos que ya se cobró
+        // Estructuramos la data para que sea idéntica a la que espera tu servicio de Ventas
+        const ventaData = {
+            ...cita, // Pasamos todos los datos (cliente, teléfono, barbero, servicio)
+            isPaid: true,
+            date: new Date().toISOString() // Fecha exacta del cobro
+        };
+
+        try {
+            await registrarCobro(ventaData);
+            // Redirigimos al historial de ventas para ver el cobro reflejado
+            navigate("/"); 
+        } catch (error) {
+            console.error("Error al liquidar:", error);
+            alert("Hubo un error al procesar el pago");
+        }
     };
-    try {
-        await registrarCobro(ventaData);
-        alert("Venta Liquidada");
-        navigate(0); // Recargar para actualizar la tabla
-    } catch (error) {
-        console.error(error);
-    }
-};
+
+    // Filtramos las citas que aún no han sido cobradas
+    const citasPendientes = datelist.filter(c => !c.isPaid);
 
     return (
-        <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-black text-amber-500 mb-6 uppercase tracking-tighter">
-                Control de Citas y <span className="text-white">Cobros</span>
-            </h1>
+        <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }}
+            className="container mx-auto p-4 md:p-6"
+        >
+            <div className="flex justify-between items-end mb-8">
+                <div>
+                    <h1 className="text-4xl font-black text-amber-500 uppercase italic tracking-tighter">
+                        Cobros <span className="text-white">Pendientes</span>
+                    </h1>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
+                        Citas recibidas por liquidar
+                    </p>
+                </div>
+                <div className="bg-zinc-900 px-4 py-2 rounded-2xl border border-zinc-800">
+                    <span className="text-zinc-400 text-[10px] font-black uppercase">Pendientes: </span>
+                    <span className="text-amber-500 font-black">{citasPendientes.length}</span>
+                </div>
+            </div>
 
-            <div className="overflow-x-auto shadow-2xl rounded-3xl border border-zinc-800">
-                <table className="w-full text-left bg-zinc-900 text-gray-200">
-                    <thead className="bg-amber-500 text-black uppercase text-xs font-black">
-                        <tr>
-                            <th className="p-4">Servicio</th>
-                            <th className="p-4">Barbero</th>
-                            <th className="p-4">Precio</th>
-                            <th className="p-4">Fecha</th>
-                            <th className="p-4">Cliente</th>
-                            <th className="p-4 text-center">Acciones</th>
+            <div className="overflow-hidden shadow-2xl rounded-[2.5rem] border border-zinc-900 bg-zinc-950">
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="bg-zinc-900/50 border-b border-zinc-800">
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Servicio</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Barbero</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-center">Precio</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Cliente</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-right">Acción</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-800">
-                        {datelist.filter(c => !c.isPaid).map((cita) => ( // FILTRO PARA NO MOSTRAR PAGADOS
-                            <tr key={cita.id} className="hover:bg-white/5 transition-colors">
-                                <td className="p-4 font-bold text-amber-400">{cita.service}</td>
-                                <td className="p-4 italic">{cita.barber}</td>
-                                <td className="p-4 font-black">{formatCurrency(cita.price)}</td>
-                                <td className="p-4">{cita.client}</td>
-                                <td className="p-4 text-center">
-                                    <button 
-                                        onClick={() => liquidarVenta(cita)}
-                                        className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl font-black text-[10px] uppercase transition-all"
-                                    >
-                                        Liquidar Venta
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                    <tbody className="divide-y divide-zinc-900">
+                        <AnimatePresence>
+                            {citasPendientes.map((cita) => (
+                                <motion.tr 
+                                    key={cita.id}
+                                    layout
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0, x: 50 }}
+                                    className="hover:bg-white/[0.02] transition-colors group"
+                                >
+                                    <td className="p-5">
+                                        <p className="font-black text-white uppercase text-sm">{cita.service}</p>
+                                        <p className="text-zinc-500 text-[10px] font-bold italic">ID: #{cita.id}</p>
+                                    </td>
+                                    <td className="p-5">
+                                        <span className="bg-zinc-900 text-zinc-300 px-3 py-1 rounded-full text-[10px] font-black uppercase border border-zinc-800">
+                                            {cita.barber}
+                                        </span>
+                                    </td>
+                                    <td className="p-5 text-center font-black text-amber-500">
+                                        {formatCurrency(cita.price)}
+                                    </td>
+                                    <td className="p-5">
+                                        <p className="text-white font-bold text-sm">{cita.client}</p>
+                                        <p className="text-zinc-500 text-xs">{cita.phone}</p>
+                                    </td>
+                                    <td className="p-5 text-right">
+                                        <button 
+                                            onClick={() => liquidarVenta(cita)}
+                                            className="bg-amber-600 hover:bg-green-500 text-black hover:text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all shadow-lg active:scale-95"
+                                        >
+                                            Liquidar y Cobrar
+                                        </button>
+                                    </td>
+                                </motion.tr>
+                            ))}
+                        </AnimatePresence>
                     </tbody>
                 </table>
-                {datelist.filter(c => !c.isPaid).length === 0 && (
-                    <p className="text-center p-10 text-zinc-500 uppercase font-bold">No hay cobros pendientes</p>
+
+                {citasPendientes.length === 0 && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }}
+                        className="text-center py-20"
+                    >
+                        <div className="text-5xl mb-4">✨</div>
+                        <p className="text-zinc-500 uppercase font-black text-sm tracking-[0.2em]">
+                            Todo en orden. No hay cobros pendientes.
+                        </p>
+                    </motion.div>
                 )}
             </div>
-        </div>
+        </motion.div>
     );
-}   
+}
