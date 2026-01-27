@@ -1,7 +1,7 @@
 import {  type ActionFunctionArgs, redirect } from "react-router-dom"
 
 import type { Service } from "../types"
-import {formatCurrency, formatDate} from "../utils"
+import {formatCurrency} from "../utils"
 import { deleteService } from "../services/ServiceService"
 
 type ServiceDetailsPro = {
