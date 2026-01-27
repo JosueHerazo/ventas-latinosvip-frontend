@@ -45,6 +45,7 @@ export default function DateClient() {
                             <th className="p-4">Servicio</th>
                             <th className="p-4">Barbero</th>
                             <th className="p-4">Precio</th>
+                            <th className="p-4">Fecha</th>
                             <th className="p-4">Cliente</th>
                             <th className="p-4 text-center">Acciones</th>
                         </tr>
@@ -56,6 +57,9 @@ export default function DateClient() {
                                 <td className="p-4 italic">{cita.barber}</td>
                                 <td className="p-4 font-black">{formatCurrency(cita.price)}</td>
                                 <td className="p-4">{cita.client}</td>
+                                <td className="p-4 font-black">{(cita.dateList)}</td>
+                                <td className="p-4">
+                                    {cita.client}</td>
                                 <td className="p-4 text-center">
                                     {/* EL BOTÓN QUE DISPARA LA FUNCIÓN */}
                                     <button 
