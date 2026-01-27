@@ -1,4 +1,4 @@
-import {object, string, number, any, nullable, array, type InferOutput, boolean, is,  } from "valibot"
+import {object, string, number, any, nullable, array, type InferOutput, boolean,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
