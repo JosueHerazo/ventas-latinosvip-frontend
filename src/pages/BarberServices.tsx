@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { formatCurrency } from "../utils";
-
 export async function loader() {
     // Obtenemos todos los servicios
     const services = await getServices();
@@ -78,10 +77,19 @@ const navigate = useNavigate(); // Inicializa la función
     const startOfWeek = getStartOfWeek();
     // Filtramos: 1. Por Barbero, 2. Por Fecha (Posterior al Lunes 00:00)
     // Lógica de filtrado y totales (mismo código anterior)
-    const servicesbarber = services.filter((service) => {
-        const serviceDate = new Date(service.createdAt);
-        return service.barber === barber && serviceDate >= startOfWeek;
-    });
+  // Dentro de BarberServices
+// Dentro de BarberServices.tsx
+const servicesbarber = services.filter((service) => {
+    const serviceDate = new Date(service.createdAt);
+    
+    // Filtro mejorado:
+    const coincideBarbero = service.barber === barber;
+    const esEstaSemana = serviceDate >= startOfWeek;
+    const estaPagado = service.isPaid === true; // Asegura que sea true
+    const noEstaArchivado = !service.isArchived; // Si es undefined o false, pasa
+
+    return coincideBarbero && esEstaSemana && estaPagado && noEstaArchivado;
+});
     const totalSemana = servicesbarber.reduce((acc, cur) => acc + cur.price, 0);
     const comisionBarbero = totalSemana * 0.50;
 const finalizarSemana = async () => {

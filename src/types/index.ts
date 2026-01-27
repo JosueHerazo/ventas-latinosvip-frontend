@@ -1,4 +1,4 @@
-import {object, string, number, any, nullable, array, type InferOutput,  } from "valibot"
+import {object, string, number, any, nullable, array, type InferOutput, boolean, is,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -21,9 +21,11 @@ export const ServiceSchema = object({
     client: string(), 
     phone: any(),
     createdAt: string(),
-    isPaid: any(), // <--- Añadimos este campo
+    isPaid: boolean(), // <--- Añadimos este campo
     clientId: nullable(any()),
-    clientData: nullable(any())
+    clientData: nullable(any()),
+    updatedAt: string(),
+    isArchived: boolean(),  // <--- Añadir esto
 })
 
 
@@ -50,8 +52,10 @@ export const DateSchema = object({
     createdAt: any(), // IMPORTANTE: Sequelize siempre lo envía
     updatedAt: any(), // IMPORTANTE: Sequelize siempre lo envía
     clientId: nullable(any()),     
-    dateList: string()
-  
+    dateList: string(),
+    isPaid: boolean(),
+    // isArchived: boolean(),  // <--- Añadir esto
+
 })
 // Añade esto a tu archivo de types junto a ServiceSchema
 export const WeeklyClosingSchema = object({
