@@ -1,7 +1,7 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
-import { getDatesList, registrarCobro } from "../services/ServiceService";
+import { getDatesList, registrarCobro, actualizarEstadoCita} from "../services/ServiceService";
 import { formatCurrency } from "../utils";
 import { faPrescription } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -13,36 +13,42 @@ export async function loader() {
 export default function DateClient() {
     const datelist = useLoaderData() as DateList[];
     const navigate = useNavigate();
+    const revalidator = useRevalidator(); 
     faPrescription
+   const liquidarVenta = async (cita: DateList) => {
+        const idCarga = toast.loading("Liquidando cobro...");
 
-// DateClient.tsx
+        try {
+            // 1. Crea la venta en el historial
+            await registrarCobro(cita);
+            
+            // 2. Marca la cita como pagada para que desaparezca de "Pendientes"
+            await actualizarEstadoCita(cita.id);
+            
+            toast.update(idCarga, { 
+                render: `✅ Venta de ${cita.client} registrada`, 
+                type: "success", 
+                isLoading: false,
+                autoClose: 2000 
+            });
 
-const liquidarVenta = async (cita: DateList) => {
-    // Usamos una notificación de promesa para que el usuario vea el progreso
-    const idCarga = toast.loading("Procesando cobro...");
+            // 3. ¡ESTA ES LA CLAVE! 
+            // Esto le dice a React Router: "Los datos cambiaron, vuelve a pedirlos".
+            // Al hacer esto, el Layout vuelve a contar las citas y el globo bajará.
+            await revalidator.revalidate(); 
 
-    try {
-        await registrarCobro(cita);
-        
-        // Si todo sale bien, actualizamos la alerta a éxito
-        toast.update(idCarga, { 
-            render: `✅ Venta de ${cita.client} liquidada`, 
-            type: "success", 
-            isLoading: false,
-            autoClose: 3000 
-        });
+            // 4. Redirigimos al historial de ventas
+            navigate("/"); 
 
-        navigate("/"); 
-    } catch (error) {
-        toast.update(idCarga, { 
-            render: "❌ Error al liquidar la venta", 
-            type: "error", 
-            isLoading: false,
-            autoClose: 3000 
-        });
-    }
-};
-    // Filtramos las citas que aún no han sido cobradas
+        } catch (error) {
+            toast.update(idCarga, { 
+                render: "❌ Error al procesar el pago", 
+                type: "error", 
+                isLoading: false,
+                autoClose: 3000 
+            });
+        }
+    };
     const citasPendientes = datelist.filter(c => !c.isPaid);
 
     return (
