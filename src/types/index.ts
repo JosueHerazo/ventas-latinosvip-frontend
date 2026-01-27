@@ -12,16 +12,18 @@ export const DraftServiceSchema = object({
 
 // En types.ts
 // types.ts
+// En tu archivo de types/schemas
 export const ServiceSchema = object({
     id: number(),
     service: string(),
-    price: any(), // Cambiamos a any porque a veces Sequelize envía strings en FLOAT
+    price: any(),
     barber: string(),
     client: string(), 
-    phone: any(),  // El BIGINT de la DB suele llegar como string al JSON
+    phone: any(),
     createdAt: string(),
-    clientId: nullable(any()), // Permitimos null o cualquier valor
-    clientData: nullable(any()) // Permitimos null o cualquier valor
+    isPaid: any(), // <--- Añadimos este campo
+    clientId: nullable(any()),
+    clientData: nullable(any())
 })
 
 
@@ -51,7 +53,20 @@ export const DateSchema = object({
     dateList: string()
   
 })
+// Añade esto a tu archivo de types junto a ServiceSchema
+export const WeeklyClosingSchema = object({
+    id: number(),
+    barber: string(),
+    totalGross: any(), // any por el FLOAT de Sequelize
+    commission: any(),
+    servicesCount: number(),
+    archivedServiceIds: string(),
+    createdAt: any()
+})
 
+export const WeeklyClosingsSchema = array(WeeklyClosingSchema)
+
+export type WeeklyClosing = InferOutput<typeof WeeklyClosingSchema>
 
 export const DatesSchema = array(DateSchema)
 export const ServicesSchema = array(ServiceSchema)

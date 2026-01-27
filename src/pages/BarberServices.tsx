@@ -1,7 +1,8 @@
-import { useLoaderData, useParams,Link } from "react-router-dom";
-import { getServices } from "../services/ServiceService";
+import { useLoaderData, useParams,Link, Navigate, useNavigate } from "react-router-dom";
+import { archivarSemana, getServices } from "../services/ServiceService";
 import type { Service } from "../types";
 import { formatCurrency, formatDate } from "../utils";
+import { motion } from "framer-motion";
 
 export async function loader() {
     // Obtenemos todos los servicios
@@ -9,15 +10,12 @@ export async function loader() {
     return services;
 }
 
+
 export default function BarberServices() {
     const services = useLoaderData() as Service[];
     const { barber } = useParams(); // Obtenemos el nombre del barbero de la URL
-
-    // // Filtramos los servicios por el barbero seleccionado
-    // const servicesbarber = services.filter(
-    //     (service) => service.barber === barber
-    // );
-    // Lógica para obtener el lunes de la semana actual
+const navigate = useNavigate(); // Inicializa la función
+   
     const getStartOfWeek = () => {
         const now = new Date();
         const day = now.getDay(); // 0 (Dom) a 6 (Sab)
@@ -28,14 +26,45 @@ export default function BarberServices() {
     };
     const startOfWeek = getStartOfWeek();
     // Filtramos: 1. Por Barbero, 2. Por Fecha (Posterior al Lunes 00:00)
+    // Lógica de filtrado y totales (mismo código anterior)
     const servicesbarber = services.filter((service) => {
         const serviceDate = new Date(service.createdAt);
         return service.barber === barber && serviceDate >= startOfWeek;
     });
-    // --- CÁLCULOS DE TOTALES ---
     const totalSemana = servicesbarber.reduce((acc, cur) => acc + cur.price, 0);
-    const comisionBarbero = totalSemana * 0.50; // El 50% solicitado
+    const comisionBarbero = totalSemana * 0.50;
 
+    const finalizarSemana = async () => {
+        const confirmar = confirm(`¿Cerrar semana de ${barber}?`);
+        
+        if (confirmar) {
+            // AHORA SÍ USAMOS CIERREDATA
+            const cierreData = {
+                barbero: barber || "Desconocido",
+                fechaCierre: new Date().toISOString(),
+                totalBruto: totalSemana,
+                comision50: comisionBarbero,
+                serviciosArchivados: servicesbarber.map(s => s.id) 
+            };
+
+            try {
+                await archivarSemana(cierreData); // Envía los datos reales
+                alert("La semana ha sido liquidada y guardada en el historial.");
+                navigate("/admin/ventas-totales"); // Te manda a ver el historial
+            } catch (error) {
+                alert("Error al conectar con el servidor de archivos.");
+            }
+        }
+    };
+// ... en el JSX, debajo de los totales:
+<motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={finalizarSemana}
+    className="w-full mt-10 bg-red-600 hover:bg-red-500 text-white font-black py-6 rounded-[2rem] uppercase tracking-[0.2em] shadow-2xl shadow-red-900/40"
+>
+    Cerrar Semana y Archivar Caja
+</motion.button>
     return (
         <div className="max-w-4xl mx-auto p-4">
             <h2 className="text-3xl font-bold text-amber-600 mb-4">
@@ -71,22 +100,22 @@ export default function BarberServices() {
                 </table>
             </div>
             {/* SECCIÓN DE RESULTADOS FINALES */}
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-700 text-center">
-                    <p className="text-gray-400 uppercase text-xs font-bold tracking-widest">Total Bruto</p>
-                    <p className="text-3xl text-white font-black">
-                        {formatCurrency(totalSemana)}
-                    </p>
-                </div>
+           // En la sección de resultados finales de BarberServices:
+<div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 flex flex-col items-center">
+        <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Total Recaudado</span>
+        <p className="text-4xl text-white font-black">{formatCurrency(totalSemana)}</p>
+    </div>
 
-                <div className="bg-amber-600/20 p-4 rounded-xl border border-amber-600 text-center">
-                    <p className="text-amber-500 uppercase text-xs font-bold tracking-widest">Ganancia (50%)</p>
-                    <p className="text-3xl text-green-400 font-black">
-                        {formatCurrency(comisionBarbero)}
-                    </p>
-                </div>
-            </div>
-            
+    <motion.div 
+        animate={{ scale: [1, 1.02, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="bg-amber-500 p-8 rounded-[2rem] flex flex-col items-center shadow-2xl shadow-amber-500/20"
+    >
+        <span className="text-black text-[10px] font-black uppercase tracking-widest mb-2">Tu Liquidación (50%)</span>
+        <p className="text-4xl text-black font-black italic">{formatCurrency(comisionBarbero)}</p>
+    </motion.div>
+</div>
           <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <Link className="bg-zinc-700 hover:bg-zinc-600 rounded-xl p-3 font-bold text-white transition-colors" to="/pago/barberos">
                     ← Volver al Resumen

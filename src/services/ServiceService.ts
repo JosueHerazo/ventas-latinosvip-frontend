@@ -146,7 +146,7 @@ export async function getDatesList() {
         console.log(data, "lista de  cetas recibidas");
         console.log(data.data[0].dateList, "fecha de la cita");
         const result = safeParse(DatesSchema, data.data)
-        console.log(cita)
+        
         if(result.success){
             return result.output
         }else{ 
@@ -160,6 +160,27 @@ export async function getDatesList() {
         return [];
     }
 }
+
+export async function registrarCobro(ventaData: any) {
+    const url = `${import.meta.env.VITE_API_URL}/api/ventas`;
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(ventaData),
+        headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+}
+export async function archivarSemana(cierreData: any) {
+    const url = `${import.meta.env.VITE_API_URL}/api/cierres`;
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(cierreData),
+        headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+}   
+
+    
 // Dateapp
 
 
