@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, redirect, Form, useNavigate } from "react-router-dom"
+import { type ActionFunctionArgs, redirect, Form, useNavigate, Link } from "react-router-dom"
 import type { Service } from "../types"
 import { formatCurrency } from "../utils"
 import { deleteService } from "../services/ServiceService"
@@ -26,12 +26,17 @@ export default function ServiceDetails({ service }: ServiceDetailsPro) {
             <td className="p-5 text-center font-black text-amber-500">{formatCurrency(service.price)}</td>
             <td className="p-5 text-center">
                 <span className="bg-zinc-900 text-zinc-300 px-3 py-1 rounded-full text-[10px] font-black uppercase border border-zinc-800">
+                    <Link to={`/barberos/${service.barber}`}    >
                     {service.barber}
+                    Detalle Semanal
+                    </Link>
                 </span>
             </td>
             <td className="p-5">
-                <p className="text-white font-bold text-sm uppercase leading-none">{service.client || "Cliente General"}</p>
-                <p className="text-zinc-500 text-[10px] mt-1 font-medium">{service.phone || "---"}</p>
+                <Link to={`/clientes/${service.client}`} className="hover:text-amber-500">
+        <p className="text-white font-bold text-sm">{service.client}</p>
+                 </Link>
+                  <p className="text-zinc-500 text-[10px] mt-1 font-medium">{service.phone || "---"}</p>
             </td>
             <td className="p-5 text-zinc-500 text-[10px] font-bold italic">{new Date().toLocaleDateString()}</td>
 

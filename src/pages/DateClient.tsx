@@ -96,7 +96,7 @@ const enviarRecordatorio = (cita: DateList) => {
                 </div>
             </div>
 
-            <div className="overflow-hidden shadow-2xl rounded-[2.5rem] border border-zinc-900 bg-zinc-950">
+            <div className="overflow-x-auto overflow-y-auto max-h-[600px] shadow-2xl rounded-[2.5rem] border border-zinc-900 bg-zinc-950">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-zinc-900/50 border-b border-zinc-800">
