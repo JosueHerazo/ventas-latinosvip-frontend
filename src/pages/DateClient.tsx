@@ -12,26 +12,26 @@ export default function DateClient() {
     const navigate = useNavigate();
 
     // AQUÍ VA LA FUNCIÓN
-    const liquidarVenta = async (cita: DateList) => {
-        if (cita.isPaid) return alert("Esta cita ya fue cobrada");
-        const ventaData = {
-            fecha: new Date().toISOString(),
-            monto: cita.price,
-            barbero: cita.barber,
-            servicio: cita.service,
-            cliente: cita.client,
-            telefono: cita.phone,
-            metodo: "Efectivo"
-        };
+   // En DateClient.tsx
+const liquidarVenta = async (cita: any) => {
+    const confirmar = confirm(`¿Confirmar cobro de ${formatCurrency(cita.price)}?`);
+    if (!confirmar) return;
 
-        try {
-            await registrarCobro(ventaData); // Enviamos los datos al backend
-            alert("¡Venta registrada con éxito en la lista de ventas!");
-            navigate(0); // Esto refresca la página para actualizar la lista
-        } catch (error) {
-            alert("Hubo un error al procesar el cobro.");
-        }
+    const ventaData = {
+        citaId: cita.id,
+        barbero: cita.barber,
+        monto: cita.price,
+        // ... otros datos
+        isPaid: true // Indicamos que ya se cobró
     };
+    try {
+        await registrarCobro(ventaData);
+        alert("Venta Liquidada");
+        navigate(0); // Recargar para actualizar la tabla
+    } catch (error) {
+        console.error(error);
+    }
+};
 
     return (
         <div className="container mx-auto p-6">

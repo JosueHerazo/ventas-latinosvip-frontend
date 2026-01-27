@@ -1,67 +1,118 @@
-import {  Form, type ActionFunctionArgs, redirect, useActionData, useSearchParams } from "react-router-dom"
+import { Form, type ActionFunctionArgs, redirect, useActionData, useSearchParams, Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { addProduct } from "../services/ServiceService"
-import { useEffect, useState } from "react";
 import ErrorMessaje from "../componenents/ErrorMessaje";
+
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData()
     const data = Object.fromEntries(formData)
-    if (Object.values(data).includes("")) return "Todos los campos son obligatorios"
+    
+    // Validación de campos vacíos
+    if (Object.values(data).includes("")) {
+        return "Todos los campos son obligatorios"
+    }
+
+    // TRANSFORMACIÓN: Convertir a números para que Valibot y Sequelize no den error
+   
+
+    // Aquí addProduct usará parse(DraftServiceSchema, serviceData)
     await addProduct(data)
     return redirect("/")
 }
-// ... (mismos imports)
 
 export default function NewService() {
     const error = useActionData() as string;
     const [searchParams] = useSearchParams();
-    const [clientName, setClientName] = useState("");
-    const [clientPhone, setClientPhone] = useState(""); // <--- AHORA SÍ SE USA
-
-    useEffect(() => {
-        setClientName(searchParams.get("client") || "");
-        setClientPhone(searchParams.get("phone") || "");
-    }, [searchParams]);
+    
+    // Obtenemos datos de la URL si vienen de una cita previa
+    const defaultClient = searchParams.get("client") || "";
+    const defaultPhone = searchParams.get("phone") || "";
+    const defaultService = searchParams.get("service") || "";
 
     return (
         <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="mt-10 max-w-lg mx-auto bg-zinc-950 p-8 rounded-[2.5rem] border border-zinc-800 shadow-2xl"
         >
-            <h2 className="text-3xl font-black text-amber-500 mb-2 uppercase tracking-tighter italic">Registrar <span className="text-white">Pago</span></h2>
-                        {error && <ErrorMessaje>{error}</ErrorMessaje>}
-
+            <h2 className="text-3xl font-black text-amber-500 mb-2 uppercase italic">
+                Pagar <span className="text-white">Servicio</span>
+            </h2>
             
-            <Form method="POST" className="flex flex-col gap-6 mt-6">
-                {/* Selector de Barbero con Foto (Mismo código anterior) */}
+            {error && <ErrorMessaje>{error}</ErrorMessaje>}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Campos de Servicio y Precio */}
+            <Form method="POST" className="flex flex-col gap-5 mt-6">
+                
+                {/* BARBERO */}
+                <div className="space-y-1">
+                    <label className="text-amber-500 text-[10px] font-black uppercase ml-1">Barbero</label>
+                    <select name="barber" className="w-full font-bold text-white rounded-xl p-3 bg-zinc-900 border border-zinc-800 outline-none focus:border-amber-500">
+                        <option value="">Selecciona Barbero...</option>
+                        <option value="Josue">Josue</option>
+                        <option value="Vato">Vato</option>
+                    </select>
                 </div>
 
-                <div className="space-y-4">
+                {/* SERVICIO Y PRECIO */}
+                <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <label className="text-amber-500 text-[10px] font-black uppercase ml-1" htmlFor="client">Cliente</label>
-                        <input id="client" name="client" type="text" className="w-full font-bold text-white rounded-xl p-3 bg-zinc-900 border border-zinc-800 focus:border-amber-500 outline-none" defaultValue={clientName} placeholder="Nombre VIP" />
+                        <label className="text-amber-500 text-[10px] font-black uppercase ml-1">Servicio</label>
+                        <input 
+                            name="service" 
+                            type="text" 
+                            defaultValue={defaultService}
+                            placeholder="Ej: Corte Degradado" 
+                            className="w-full font-bold text-white rounded-xl p-3 bg-zinc-900 border border-zinc-800" 
+                        />
                     </div>
-
-                    {/* USANDO EL TELÉFONO AQUÍ */}
                     <div className="space-y-1">
-                        <label className="text-amber-500 text-[10px] font-black uppercase ml-1" htmlFor="phone">Teléfono de Contacto</label>
-                        <input id="phone" name="phone" type="text" className="w-full font-bold text-white rounded-xl p-3 bg-zinc-900 border border-zinc-800 focus:border-amber-500 outline-none" defaultValue={clientPhone} placeholder="Ej: 600000000" />
+                        <label className="text-amber-500 text-[10px] font-black uppercase ml-1">Precio ($)</label>
+                        <input 
+                            name="price" 
+                            type="number" 
+                            step="0.01"
+                            placeholder="20.00" 
+                            className="w-full font-bold text-white rounded-xl p-3 bg-zinc-900 border border-zinc-800" 
+                        />
                     </div>
                 </div>
 
-                <motion.input 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                {/* DATOS DEL CLIENTE */}
+                <div className="space-y-4 bg-zinc-900/40 p-5 rounded-3xl border border-zinc-800/50">
+                    <div className="space-y-1">
+                        <label className="text-amber-500 text-[10px] font-black uppercase ml-1">Nombre Cliente</label>
+                        <input 
+                            name="client" 
+                            type="text" 
+                            key={defaultClient}
+                            defaultValue={defaultClient}
+                            className="w-full font-bold text-white rounded-xl p-3 bg-zinc-800 border border-zinc-700" 
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <label className="text-amber-500 text-[10px] font-black uppercase ml-1">Teléfono</label>
+                        <input 
+                            name="phone" 
+                            type="number" 
+                            key={defaultPhone}
+                            defaultValue={defaultPhone}
+                            className="w-full font-bold text-white rounded-xl p-3 bg-zinc-800 border border-zinc-700" 
+                        />
+                    </div>
+                </div>
+
+                <button 
                     type="submit" 
-                    className="mt-4 bg-amber-500 p-4 text-black font-black text-sm cursor-pointer rounded-xl hover:bg-white uppercase tracking-widest transition-colors shadow-lg shadow-amber-500/20" 
-                    value="Cerrar Venta ✓" 
-                />
+                    className="mt-4 bg-amber-600 hover:bg-amber-500 p-4 text-black font-black rounded-xl uppercase transition-all shadow-lg shadow-amber-900/20"
+                >
+                    Confirmar y Registrar Pago ✓
+                </button>
+
+                <Link to="/" className="text-center text-zinc-500 text-xs font-bold hover:text-white uppercase mt-2">
+                    Volver al inicio
+                </Link>
             </Form>
-            {/* ... link de volver */}
         </motion.div>
     )
 }
