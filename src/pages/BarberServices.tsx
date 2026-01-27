@@ -1,8 +1,11 @@
-import { useLoaderData, useParams,Link, Navigate, useNavigate } from "react-router-dom";
+import { useLoaderData, useParams,Link, useNavigate } from "react-router-dom";
 import { archivarSemana, getServices } from "../services/ServiceService";
 import type { Service } from "../types";
-import { formatCurrency, formatDate } from "../utils";
+import {  formatDate } from "../utils";
 import { motion } from "framer-motion";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { formatCurrency } from "../utils";
 
 export async function loader() {
     // Obtenemos todos los servicios
@@ -10,6 +13,54 @@ export async function loader() {
     return services;
 }
 
+const generarPDFLiquidacion = (barbero: string, total: number, comision: number, servicios: any[]) => {
+    const doc = new jsPDF();
+
+    // 1. Encabezado con Estilo
+    doc.setFontSize(22);
+    doc.setTextColor(191, 155, 48); // Color Ámbar
+    doc.text("BARBERÍA VIP - RECIBO DE PAGO", 14, 22);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 14, 30);
+    doc.text(`Barbero: ${barbero.toUpperCase()}`, 14, 35);
+
+    // 2. Tabla de Servicios
+    autoTable(doc, {
+        startY: 45,
+        head: [['Servicio', 'Cliente', 'Fecha', 'Precio']],
+        body: servicios.map(s => [
+            s.service, 
+            s.client, 
+            new Date(s.createdAt).toLocaleDateString(), 
+            formatCurrency(s.price)
+        ]),
+        headStyles: { fillColor: [191, 155, 48] }, // Fondo ámbar en cabecera
+        theme: 'striped'
+    });
+
+    // 3. Totales al final de la tabla
+    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Total Bruto Recaudado: ${formatCurrency(total)}`, 14, finalY);
+    
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(34, 197, 94); // Color Verde
+    doc.text(`TOTAL A PAGAR (50%): ${formatCurrency(comision)}`, 14, finalY + 10);
+
+    // 4. Firma
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text("__________________________", 14, finalY + 30);
+    doc.text("Firma del Barbero", 14, finalY + 35);
+
+    // Guardar el PDF
+    doc.save(`Liquidacion_${barbero}_${new Date().toLocaleDateString()}.pdf`);
+};
 
 export default function BarberServices() {
     const services = useLoaderData() as Service[];
@@ -33,29 +84,36 @@ const navigate = useNavigate(); // Inicializa la función
     });
     const totalSemana = servicesbarber.reduce((acc, cur) => acc + cur.price, 0);
     const comisionBarbero = totalSemana * 0.50;
+const finalizarSemana = async () => {
+    const confirmar = confirm(`¿Cerrar semana de ${barber}?`);
+    
+    if (confirmar) {
+        const cierreData = {
+            barbero: barber || "Desconocido",
+            fechaCierre: new Date().toISOString(),
+            totalBruto: totalSemana,
+            comision50: comisionBarbero,
+            serviciosArchivados: servicesbarber.map(s => s.id) 
+        };
 
-    const finalizarSemana = async () => {
-        const confirmar = confirm(`¿Cerrar semana de ${barber}?`);
-        
-        if (confirmar) {
-            // AHORA SÍ USAMOS CIERREDATA
-            const cierreData = {
-                barbero: barber || "Desconocido",
-                fechaCierre: new Date().toISOString(),
-                totalBruto: totalSemana,
-                comision50: comisionBarbero,
-                serviciosArchivados: servicesbarber.map(s => s.id) 
-            };
+        try {
+            await archivarSemana(cierreData); 
 
-            try {
-                await archivarSemana(cierreData); // Envía los datos reales
-                alert("La semana ha sido liquidada y guardada en el historial.");
-                navigate("/admin/ventas-totales"); // Te manda a ver el historial
-            } catch (error) {
-                alert("Error al conectar con el servidor de archivos.");
-            }
+            // --- AQUÍ LLAMAMOS A LA FUNCIÓN QUE DICES QUE NO SE LEE ---
+            generarPDFLiquidacion(
+                barber || "Sin Nombre", 
+                totalSemana, 
+                comisionBarbero, 
+                servicesbarber
+            );
+
+            alert("La semana ha sido liquidada. Se ha descargado el comprobante de pago.");
+            navigate("/admin/ventas-totales"); 
+        } catch (error) {
+            alert("Error al conectar con el servidor de archivos.");
         }
-    };
+    }
+};
 // ... en el JSX, debajo de los totales:
 <motion.button
     whileHover={{ scale: 1.05 }}
