@@ -166,7 +166,6 @@ const finalizarSemana = async () => {
                 </table>
             </div>
             {/* SECCIÓN DE RESULTADOS FINALES */}
-           // En la sección de resultados finales de BarberServices:
 <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
     <div className="bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 flex flex-col items-center">
         <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Total Recaudado</span>
