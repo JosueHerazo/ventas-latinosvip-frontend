@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
+import { useLoaderData, useRevalidator } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
 import { getDatesList, registrarCobro, actualizarEstadoCita} from "../services/ServiceService";

@@ -6,11 +6,9 @@ import { faCut, faCalendarCheck, faChartLine } from '@fortawesome/free-solid-svg
 import latinosvip from "../assets/latinosvip.jpg";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
-import { useCitaAlert } from "../componenents/DateAlert";
 import type { DateList } from "../types";
 
 export default function Layout() {
-    const pendientesCount = useCitaAlert(); 
     const { pathname } = useLocation();
     const { scrollY } = useScroll();
     const data = useLoaderData() as DateList[]; // Si el layout tiene loader
