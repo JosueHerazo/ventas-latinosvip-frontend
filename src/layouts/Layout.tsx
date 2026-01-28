@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useLoaderData } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
@@ -7,12 +7,14 @@ import latinosvip from "../assets/latinosvip.jpg";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import { useCitaAlert } from "../componenents/DateAlert";
+import type { DateList } from "../types";
 
 export default function Layout() {
     const pendientesCount = useCitaAlert(); 
     const { pathname } = useLocation();
     const { scrollY } = useScroll();
-    
+    const data = useLoaderData() as DateList[]; // Si el layout tiene loader
+    const pendientes = data.filter(c => !c.isPaid).length;
     // Efecto de encogimiento para el header al hacer scroll
     const headerHeight = useTransform(scrollY, [0, 100], ["12rem", "6rem"]);
     const logoScale = useTransform(scrollY, [0, 100], [1, 0.6]);
@@ -88,11 +90,11 @@ export default function Layout() {
                 >
                     <FontAwesomeIcon icon={faCalendarCheck} />
                     Citas
-                    {pendientesCount > 0 && (
-                        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] text-white ring-2 ring-black animate-bounce font-bold">
-                            {pendientesCount}
-                        </span>
-                    )}
+                  {pendientes > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-2 rounded-full animate-bounce">
+                        {pendientes}
+                    </span>
+                )}
                 </Link>
 
                 <Link 

@@ -12,9 +12,7 @@ export async function loader() {
 }
 
 export default function DateClient() {
-    // DateClient.tsx
-
-// 1. Estado para la plantilla (puedes editarlo en pantalla)
+   const revalidator = useRevalidator();
 const [template, setTemplate] = useState(
   localStorage.getItem("wsp_template") || 
   "Hola {cliente}, te recordamos tu cita en LatinosVip para el {fecha} a las {hora}. ¡Te esperamos!"
@@ -36,43 +34,25 @@ const enviarRecordatorio = (cita: DateList) => {
 };
     
     const datelist = useLoaderData() as DateList[];
-    const navigate = useNavigate();
-    const revalidator = useRevalidator(); 
     faPrescription
    const liquidarVenta = async (cita: DateList) => {
-        const idCarga = toast.loading("Liquidando cobro...");
+    const idCarga = toast.loading("Liquidando cobro...");
+    try {
+        // 1. Registra en el historial de ventas
+        await registrarCobro(cita);
+        
+        // 2. Cambia isPaid a true en la DB
+        await actualizarEstadoCita(cita.id); 
+        
+        toast.update(idCarga, { render: "✅ Pagado", type: "success", isLoading: false, autoClose: 2000 });
 
-        try {
-            // 1. Crea la venta en el historial
-            await registrarCobro(cita);
-            
-            // 2. Marca la cita como pagada para que desaparezca de "Pendientes"
-            await actualizarEstadoCita(cita.id);
-            
-            toast.update(idCarga, { 
-                render: `✅ Venta de ${cita.client} registrada`, 
-                type: "success", 
-                isLoading: false,
-                autoClose: 2000 
-            });
-
-            // 3. ¡ESTA ES LA CLAVE! 
-            // Esto le dice a React Router: "Los datos cambiaron, vuelve a pedirlos".
-            // Al hacer esto, el Layout vuelve a contar las citas y el globo bajará.
-            await revalidator.revalidate(); 
-
-            // 4. Redirigimos al historial de ventas
-            navigate("/"); 
-
-        } catch (error) {
-            toast.update(idCarga, { 
-                render: "❌ Error al procesar el pago", 
-                type: "error", 
-                isLoading: false,
-                autoClose: 3000 
-            });
-        }
-    };
+        // 3. ¡IMPORTANTE! Refresca los datos de la ruta actual y del Layout
+        await revalidator.revalidate(); 
+        
+    } catch (error) {
+        toast.update(idCarga, { render: "❌ Error", type: "error", isLoading: false });
+    }
+};
     const citasPendientes = datelist.filter(c => !c.isPaid);
 
     return (
@@ -101,10 +81,13 @@ const enviarRecordatorio = (cita: DateList) => {
                     <thead>
                         <tr className="bg-zinc-900/50 border-b border-zinc-800">
                             <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Servicio</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-center">Precio                        
+                            </th>
                             <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Barbero</th>
-                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-center">Precio</th>
                             <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Cliente</th>
-                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-right">Acción</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase">Fecha</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-right">Confirmar</th>
+                            <th className="p-5 text-amber-500 text-[10px] font-black uppercase text-right">Pagar</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-900">
@@ -133,6 +116,10 @@ const enviarRecordatorio = (cita: DateList) => {
                                     <td className="p-5">
                                         <p className="text-white font-bold text-sm">{cita.client}</p>
                                         <p className="text-zinc-500 text-xs">{cita.phone}</p>
+                                    </td>
+                                    <td className="p-5">
+                                        <p className="text-white font-bold text-sm">{cita.dateList}</p>
+                                        <p className="text-zinc-500 text-xs">{cita.createdAt}</p>
                                     </td>
                                     <td className="p-5 text-right">
     <div className="flex justify-end items-center gap-3">

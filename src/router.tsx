@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
                 loader: editServiceLoader
             },
             {
-                path: "servicios/:id/eliminar",
+                path: "/servicios/:id/eliminar",
                 action: DeleteServiceAction
             },
             {
