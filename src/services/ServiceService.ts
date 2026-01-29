@@ -203,11 +203,8 @@ export async function archivarSemana(cierreData: any) {
 
 // src/services/ServiceService.ts
 export async function actualizarEstadoCita(id: number) {
-    try {
-        const url = `${import.meta.env.VITE_API_URL}/api/dates/status/${id}`; // Verifica que tu prefijo sea /api/dates
-        await axios.patch(url);
-    } catch (error) {
-        console.log(error);
-    }
+    // Si tu router de citas está en /api/dates, la URL debe ser esa
+    const url = `${import.meta.env.VITE_API_URL}/api/dates/${id}`; 
+    await axios.patch(url);
 }
     

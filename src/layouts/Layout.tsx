@@ -7,13 +7,30 @@ import latinosvip from "../assets/latinosvip.jpg";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import type { DateList } from "../types";
+import { useEffect, useRef } from "react";
 
 export default function Layout() {
     const { pathname } = useLocation();
     const { scrollY } = useScroll();
 const data = useLoaderData() as DateList[] || []; // Asegura que sea un array    
-
-const pendientes = Array.isArray(data) ? data.filter(c => !c.isPaid).length : 0;    // Efecto de encogimiento para el header al hacer scroll
+    const prevCountRef = useRef(data.length);
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+    useEffect(() => {
+        const currentCount = data.length;
+        // Si hay más citas que antes, ¡suena!
+        if (currentCount > prevCountRef.current) {
+            audio.play().catch(e => console.log("Interacción requerida para audio"));
+            prevCountRef.current = currentCount;
+        }
+    }, [data]);
+const pendientes = Array.isArray(data) ? data.filter(c => !c.isPaid).length : 0;
+    useEffect(() => {
+        if (pendientes > 0) {
+            const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+            audio.play().catch(() => {}); // El catch evita errores si el usuario no ha interactuado
+        }
+    }, [pendientes]); // Solo suena si el número de pendientes cambia
+    // Efecto de encogimiento para el header al hacer scroll
     const headerHeight = useTransform(scrollY, [0, 100], ["12rem", "6rem"]);
     const logoScale = useTransform(scrollY, [0, 100], [1, 0.6]);
 
