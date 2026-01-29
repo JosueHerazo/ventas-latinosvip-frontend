@@ -52,7 +52,7 @@ export default function BarberSummary() {
                 <h3 className="text-4xl font-black text-white uppercase tracking-tighter italic">{barber}</h3>
             </div>
             <Link 
-                to={`/barberos/${encodeURIComponent(barber)}`}
+              to={`/admin/historial/${encodeURIComponent(barber)}`}
                 className="bg-white text-black text-[10px] font-black py-2 px-5 rounded-full uppercase hover:bg-amber-500 transition-colors"
             >
                 Detalle Semanal

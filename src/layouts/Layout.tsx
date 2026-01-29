@@ -15,17 +15,11 @@ export default function Layout() {
 const data = useLoaderData() as DateList[] || []; // Asegura que sea un array    
     const prevCountRef = useRef(data.length);
     const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-    useEffect(() => {
-        const currentCount = data.length;
-        // Si hay más citas que antes, ¡suena!
-        if (currentCount > prevCountRef.current) {
-            audio.play().catch(e => console.log("Interacción requerida para audio"));
-            prevCountRef.current = currentCount;
-        }
-    }, [data]);
-const pendientes = Array.isArray(data) ? data.filter(c => !c.isPaid).length : 0;
-    useEffect(() => {
-        if (pendientes > 0) {
+  
+const pendientes = data.filter(c => c.isPaid === false || c.isPaid === null);  
+const totalPendientes = pendientes.length;
+  useEffect(() => {
+        if (totalPendientes > prevCountRef.current) {
             const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
             audio.play().catch(() => {}); // El catch evita errores si el usuario no ha interactuado
         }
@@ -40,8 +34,14 @@ const pendientes = Array.isArray(data) ? data.filter(c => !c.isPaid).length : 0;
     const inactiveStyle = "text-zinc-500 hover:text-white hover:bg-zinc-900";
 
     return (
+        
         <div className="min-h-screen bg-black text-white selection:bg-amber-500 selection:text-black">
             {/* Contenedor de Alertas Configurado para no dar error de TS */}
+            {totalPendientes > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full animate-bounce shadow-lg border border-black">
+                        {totalPendientes}
+                    </span>
+                )}
             <ToastContainer 
                 theme="dark" 
                 position="top-right"
@@ -105,9 +105,9 @@ const pendientes = Array.isArray(data) ? data.filter(c => !c.isPaid).length : 0;
                 >
                     <FontAwesomeIcon icon={faCalendarCheck} />
                     Citas
-                  {pendientes > 0 && (
+                  {totalPendientes > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-2 rounded-full animate-bounce">
-                        {pendientes}
+                        {totalPendientes}
                     </span>
                 )}
                 </Link>

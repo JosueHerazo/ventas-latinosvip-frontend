@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { formatCurrency } from "../utils";
+import { faChartLine } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export async function loader() {
     // Obtenemos todos los servicios
     const services = await getServices();
@@ -133,9 +135,21 @@ const finalizarSemana = async () => {
 </motion.button>
     return (
         <div className="max-w-4xl mx-auto p-4">
-            <h2 className="text-3xl font-bold text-amber-600 mb-4">
-                Servicios de: <span className="text-white">{barber}</span>
-            </h2>
+           // Añade esto en el JSX de BarberServices.tsx, arriba de la tabla
+<div className="flex justify-between items-end mb-8">
+    <div>
+        <h2 className="text-3xl font-black text-white uppercase italic">
+            Semana Actual: <span className="text-amber-500">{barber}</span>
+        </h2>
+    </div>
+    
+    <Link 
+        to={`/admin/historial/${barber}`}
+        className="bg-zinc-800 hover:bg-zinc-700 text-amber-500 px-6 py-3 rounded-2xl font-black uppercase text-xs tracking-widest border border-zinc-700 transition-all flex items-center gap-2"
+    >
+        <FontAwesomeIcon icon={faChartLine} /> Ver Historial Completo
+    </Link>
+</div>
             
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-zinc-900 text-white rounded-lg overflow-hidden border border-amber-600/30">

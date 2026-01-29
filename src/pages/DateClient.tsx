@@ -13,6 +13,9 @@ export async function loader() {
 
 export default function DateClient() {
 const datelist = (useLoaderData() as DateList[]) || [];
+const citasVisibles = datelist.filter(cita => 
+        !cita.isPaid && !cita.isPaid); // Filtra solo las citas no pagadas
+    
 const citasPendientes = Array.isArray(datelist) ? datelist.filter(c => !c.isPaid) : [];    const revalidator = useRevalidator();
     const [template, setTemplate] = useState(   
   localStorage.getItem("wsp_template") || 
@@ -91,7 +94,7 @@ const enviarRecordatorio = (cita: DateList) => {
                     </thead>
                     <tbody className="divide-y divide-zinc-900">
                         <AnimatePresence>
-                            {citasPendientes.map((cita) => (
+                            {citasVisibles.map((cita) => (
                                 <motion.tr 
                                     key={cita.id}
                                     layout

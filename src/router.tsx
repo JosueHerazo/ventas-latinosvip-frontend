@@ -10,6 +10,7 @@ import SearchClients, { loader as searchClintsLoader } from "./pages/SearchClien
 import DatesList, { loader as DateListLoader } from "./pages/DateClient"
 // 1. Importa tu nueva página de historial
 import VentasTotales from "./pages/VentasTotales" 
+import BarberHistory from "./componenents/BarberHistory"
 
 export const router = createBrowserRouter([
     {
@@ -52,6 +53,20 @@ export const router = createBrowserRouter([
                 path: "lista/citas",
                 element: <DatesList />,
                 loader: DateListLoader,
+            },// Rutas sugeridas
+            {   
+            path: "barbero/:barber",
+            element: <BarberServices />, // La que ya tienes (Semana actual)
+            },
+            {
+            path: "historial/:barber",
+            element: <BarberHistory />, // La nueva (Meses/Años)
+            },
+            // Ejemplo de configuración de rutas
+            {
+            path: "/admin/historial/:barber", // El :barber es la clave
+            element: <BarberHistory />,
+            loader: servicesLoader, // El loader que ya tienes
             },
             // 2. AÑADIMOS LA RUTA DE VENTAS TOTALES (HISTORIAL)
             {
