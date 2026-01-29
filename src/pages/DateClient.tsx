@@ -136,11 +136,16 @@ const enviarRecordatorio = (cita: DateList) => {
                              <td>
 
                             {/* BOTÓN LIQUIDAR (tu botón original) */}
-                            <button 
+                           <button 
                                 onClick={() => liquidarVenta(cita)}
-                                className="..."
+                                className="relative group overflow-hidden bg-zinc-900 hover:bg-zinc-800 text-amber-500 font-black text-[10px] uppercase px-4 py-2 rounded-lg border border-amber-500/20 transition-all duration-300 active:scale-95"
                             >
-                                Pagar
+                                <span className="relative z-10 flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                                    Pagar
+                                </span>
+                                {/* Efecto de brillo al pasar el mouse */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500"></div>
                             </button>
                         </td>
                                 </motion.tr>
