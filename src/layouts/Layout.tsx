@@ -14,8 +14,6 @@ export default function Layout() {
     const { scrollY } = useScroll();
 const data = useLoaderData() as DateList[] || []; // Asegura que sea un array    
     const prevCountRef = useRef(data.length);
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-  
 const pendientes = data.filter(c => c.isPaid === false || c.isPaid === null);  
 const totalPendientes = pendientes.length;
   useEffect(() => {
