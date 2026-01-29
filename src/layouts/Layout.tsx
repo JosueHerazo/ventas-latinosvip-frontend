@@ -7,21 +7,21 @@ import latinosvip from "../assets/latinosvip.jpg";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import type { DateList } from "../types";
-import { useEffect, useRef } from "react";
+// import { useEffect, useRef } from "react";
 
 export default function Layout() {
     const { pathname } = useLocation();
     const { scrollY } = useScroll();
 const data = useLoaderData() as DateList[] || []; // Asegura que sea un array    
-    const prevCountRef = useRef(data.length);
-const pendientes = data.filter(c => c.isPaid === false || c.isPaid === null);  
-const totalPendientes = pendientes.length;
-  useEffect(() => {
-        if (totalPendientes > prevCountRef.current) {
-            const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-            audio.play().catch(() => {}); // El catch evita errores si el usuario no ha interactuado
-        }
-    }, [pendientes]); // Solo suena si el número de pendientes cambia
+    // const prevCountRef = useRef(data.length);
+// const pendientes = data.filter(c => c.isPaid === false || c.isPaid === null);  
+// const totalPendientes = pendientes.length;
+//   useEffect(() => {
+//         if (totalPendientes > prevCountRef.current) {
+//             const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+//             audio.play().catch(() => {}); // El catch evita errores si el usuario no ha interactuado
+//         }
+//     }, [pendientes]); // Solo suena si el número de pendientes cambia
     // Efecto de encogimiento para el header al hacer scroll
     const headerHeight = useTransform(scrollY, [0, 100], ["12rem", "6rem"]);
     const logoScale = useTransform(scrollY, [0, 100], [1, 0.6]);
@@ -31,15 +31,15 @@ const totalPendientes = pendientes.length;
     const activeStyle = "bg-amber-600 text-black shadow-lg shadow-amber-900/40";
     const inactiveStyle = "text-zinc-500 hover:text-white hover:bg-zinc-900";
 
+    // {totalPendientes > 0 && (
+    //         <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full animate-bounce shadow-lg border border-black">
+    //             {totalPendientes}
+    //         </span>
+    //     )}
     return (
         
         <div className="min-h-screen bg-black text-white selection:bg-amber-500 selection:text-black">
             {/* Contenedor de Alertas Configurado para no dar error de TS */}
-            {totalPendientes > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full animate-bounce shadow-lg border border-black">
-                        {totalPendientes}
-                    </span>
-                )}
             <ToastContainer 
                 theme="dark" 
                 position="top-right"
@@ -103,17 +103,12 @@ const totalPendientes = pendientes.length;
                 >
                     <FontAwesomeIcon icon={faCalendarCheck} />
                     Citas
-                  {totalPendientes > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-2 rounded-full animate-bounce">
-                        {totalPendientes}
-                    </span>
-                )}
                 </Link>
 
                 <Link 
                     to="/nuevo/servicio" 
                     className={`${linkStyle} ${pathname === "/nuevo/servicio" ? activeStyle : inactiveStyle}`}
-                >
+                    >
                     <FontAwesomeIcon icon={faCut} /> Cobrar
                 </Link>
             </nav>
@@ -149,3 +144,8 @@ const totalPendientes = pendientes.length;
         </div>
     );
 }
+                //     {totalPendientes > 0 && (
+                //       <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-2 rounded-full animate-bounce">
+                //           {totalPendientes}
+                //       </span>
+                //   )}
