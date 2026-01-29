@@ -12,8 +12,8 @@ export async function loader() {
 }
 
 export default function DateClient() {
-   const revalidator = useRevalidator();
-const [template, setTemplate] = useState(
+const datelist = (useLoaderData() as DateList[]) || [];const citasPendientes = Array.isArray(datelist) ? datelist.filter(c => !c.isPaid) : [];    const revalidator = useRevalidator();
+    const [template, setTemplate] = useState(   
   localStorage.getItem("wsp_template") || 
   "Hola {cliente}, te recordamos tu cita en LatinosVip para el {fecha} a las {hora}. ¡Te esperamos!"
 );
@@ -33,7 +33,6 @@ const enviarRecordatorio = (cita: DateList) => {
     window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
 };
     
-    const datelist = useLoaderData() as DateList[];
     faPrescription
    const liquidarVenta = async (cita: DateList) => {
     const idCarga = toast.loading("Liquidando cobro...");
@@ -53,7 +52,6 @@ const enviarRecordatorio = (cita: DateList) => {
         toast.update(idCarga, { render: "❌ Error", type: "error", isLoading: false });
     }
 };
-    const citasPendientes = datelist.filter(c => !c.isPaid);
 
     return (
         <motion.div 
