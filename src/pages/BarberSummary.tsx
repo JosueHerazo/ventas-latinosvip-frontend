@@ -55,7 +55,7 @@ export default function BarberSummary() {
               to={`/admin/historial/${encodeURIComponent(barber)}`}
                 className="bg-white text-black text-[10px] font-black py-2 px-5 rounded-full uppercase hover:bg-amber-500 transition-colors"
             >
-                Detalle Semanal
+                Ver Historial Completo  
             </Link>
         </div>
 

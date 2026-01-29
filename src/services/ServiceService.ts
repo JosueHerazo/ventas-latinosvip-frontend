@@ -164,29 +164,25 @@ export async function getDatesList() {
 // Dentro de ServiceService.ts
 export async function registrarCobro(ventaData: DateList) {
     try {
-        // 1. URL para crear la Venta (donde ya te funciona el POST)
         const urlVenta = `${import.meta.env.VITE_API_URL}/api/service`;
         
-        // 2. Registramos el servicio en el historial de ventas
+        // 1. Crea la venta en el historial
         await axios.post(urlVenta, {
             barber: ventaData.barber,
             service: ventaData.service,
             client: ventaData.client,
-            phone: Number(ventaData.phone), // Forzamos número para evitar fallos de Valibot
+            phone: Number(ventaData.phone),
             price: Number(ventaData.price)
         });
 
-        // 3. URL para eliminar la cita de la lista de pendientes
-        // Usamos el ID de la cita que recibimos
-        const urlCita = `${import.meta.env.VITE_API_URL}/api/date/${ventaData.id}`;
-        
-        // 4. Borramos la cita original
-        await axios.delete(urlCita);
+        // 2. En lugar de borrar, actualizamos el estado a pagado
+        // Esto hará que 'citasPendientes.filter' la saque de la lista
+        await actualizarEstadoCita(ventaData.id);
 
         return { success: true };
     } catch (error) {
         console.error("Error en registrarCobro:", error);
-        throw error; // Re-lanzamos el error para que el componente lo detecte
+        throw error;
     }
 }
 export async function archivarSemana(cierreData: any) {
@@ -204,7 +200,7 @@ export async function archivarSemana(cierreData: any) {
 // src/services/ServiceService.ts
 export async function actualizarEstadoCita(id: number) {
     // Si tu router de citas está en /api/dates, la URL debe ser esa
-    const url = `${import.meta.env.VITE_API_URL}/api/dates/${id}`; 
+    const url = `${import.meta.env.VITE_API_URL}/api/date/${id}`; 
     await axios.patch(url);
 }
     
