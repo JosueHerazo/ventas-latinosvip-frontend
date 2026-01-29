@@ -13,8 +13,7 @@ export default function Layout() {
     const { scrollY } = useScroll();
 const data = useLoaderData() as DateList[] || []; // Asegura que sea un array    
 
-const pendientes = data.filter(c => !c.isPaid).length;
-    // Efecto de encogimiento para el header al hacer scroll
+const pendientes = Array.isArray(data) ? data.filter(c => !c.isPaid).length : 0;    // Efecto de encogimiento para el header al hacer scroll
     const headerHeight = useTransform(scrollY, [0, 100], ["12rem", "6rem"]);
     const logoScale = useTransform(scrollY, [0, 100], [1, 0.6]);
 
