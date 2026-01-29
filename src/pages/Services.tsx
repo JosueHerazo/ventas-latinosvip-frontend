@@ -52,18 +52,17 @@ export default function Services() {
       >
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-zinc-900/50 border-b border-zinc-800">
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">ID</th>
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Servicio</th>
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Precio</th>
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Barbero</th>
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Cliente / Tel.</th>
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Fecha</th>
-                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Acciones</th>
-              </tr>
-            </thead>
-            
+         <thead>
+  <tr className="bg-zinc-900/50 border-b border-zinc-800">
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">ID</th>
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Servicio</th>
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Precio</th>
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Barbero</th>
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Cliente / Tel.</th>
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Fecha</th>
+    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Acciones</th>
+  </tr>
+</thead>
             <tbody className="divide-y divide-zinc-900">
               {services.length > 0 ? (
                 services.map((service, index) => (
