@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getDatesList } from "../services/ServiceService";
+import { getDatesList } from "../services/serviceDate";
 import { toast } from "react-toastify";
 
 export function useCitaAlert() {
