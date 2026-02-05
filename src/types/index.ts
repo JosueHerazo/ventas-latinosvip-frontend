@@ -13,6 +13,7 @@ export const DraftServiceSchema = object({
 // En types.ts
 // types.ts
 // En tu archivo de types/schemas
+// types.ts
 export const ServiceSchema = object({
     id: number(),
     service: string(),
@@ -21,11 +22,9 @@ export const ServiceSchema = object({
     client: string(), 
     phone: any(),
     createdAt: string(),
-    isPaid: boolean(), // <--- Añadimos este campo
-    clientId: nullable(any()),
-    clientData: nullable(any()),
+    isPaid: any(), // Cambiado a any para evitar errores de booleano estricto
+    isArchived: nullable(boolean()), // Permitir null
     updatedAt: string(),
-    isArchived: boolean(),  // <--- Añadir esto
 })
 
 

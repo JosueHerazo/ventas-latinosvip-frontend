@@ -1,7 +1,8 @@
-import { useLoaderData, useRevalidator } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
-import { getDatesList, registrarCobro, actualizarEstadoCita} from "../services/ServiceService";
+import { registrarCobro, actualizarEstadoCita, deleteDate} from "../services/ServiceService";
+import { getDatesList } from "../services/serviceDate";
 import { formatCurrency } from "../utils";
 import { faPrescription } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -12,16 +13,22 @@ export async function loader() {
 }
 
 export default function DateClient() {
+const navigate = useNavigate();
 const datelist = (useLoaderData() as DateList[]) || [];
 const citasVisibles = datelist.filter(cita => 
-        !cita.isPaid && !cita.isPaid); // Filtra solo las citas no pagadas
-    
+!cita.isPaid && !cita.isPaid); // Filtra solo las citas no pagadas
 const citasPendientes = Array.isArray(datelist) ? datelist.filter(c => !c.isPaid) : [];    const revalidator = useRevalidator();
     const [template, setTemplate] = useState(   
   localStorage.getItem("wsp_template") || 
   "Hola {cliente}, te recordamos tu cita en LatinosVip para el {fecha} a las {hora}. ¡Te esperamos!"
 );
-
+const handleEliminarCita = async (id: number) => {
+    if(confirm('¿Estás seguro de cancelar esta cita?')) {
+        await deleteDate(id);
+        revalidator.revalidate();
+        toast.success("Cita eliminada");
+    }
+}
 const enviarRecordatorio = (cita: DateList) => {
     const fecha = new Date(cita.dateList).toLocaleDateString();
     const hora = new Date(cita.dateList).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -151,6 +158,29 @@ const enviarRecordatorio = (cita: DateList) => {
                                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500"></div>
                             </button>
                         </td>
+                        <td className="p-5 text-right">
+                <div className="flex justify-end gap-2">
+                    {/* BOTÓN EDITAR */}
+                    <button 
+                        onClick={() => navigate(`/admin/citas/editar/${cita.id}`)}
+                        className="text-blue-500 hover:text-blue-400 p-2 bg-blue-500/10 rounded-lg border border-blue-500/20"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+
+                    {/* BOTÓN ELIMINAR */}
+                    <button 
+                        onClick={() => handleEliminarCita(cita.id)}
+                        className="text-red-500 hover:text-red-400 p-2 bg-red-500/10 rounded-lg border border-red-500/20"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+            </td>
                                 </motion.tr>
                             ))}
                         </AnimatePresence>

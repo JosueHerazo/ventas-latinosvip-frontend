@@ -137,29 +137,6 @@ export async function deleteService(id: Service["id"]) {
 // services/CitasService.ts
 
 
-export async function getDatesList() {
-    try {
-        // Usamos la misma URL del servidor que usaste para registrar
-        const url = `${import.meta.env.VITE_API_URL}/api/date`;
-        console.log("Enviando a:", url); 
-        const { data } = await axios.get(url);
-        console.log(data, "lista de  cetas recibidas");
-        console.log(data.data[0].dateList, "fecha de la cita");
-        const result = safeParse(DatesSchema, data.data)
-        
-        if(result.success){
-            return result.output
-        }else{ 
-            // ESTO TE DIRÁ EXACTAMENTE QUÉ CAMPO FALTA O ESTÁ MAL
-           // Si falla la validación, imprimimos por qué, pero DEVOLVEMOS LOS DATOS
-            console.error("Fallo de validación Valibot, pero cargando datos igual");
-            return data.data as DateList[];            
-        }      
-    } catch (error) {
-        console.log(error);
-        return [];
-    }
-}
 
 // Dentro de ServiceService.ts
 export async function registrarCobro(ventaData: DateList) {
@@ -204,3 +181,25 @@ export async function actualizarEstadoCita(id: number) {
     await axios.patch(url);
 }
     
+// En ../services/ServiceService.ts
+export async function deleteDate(id: number) {
+    try {
+        const url = `${import.meta.env.VITE_API_URL}/api/date/${id}`;
+        await axios.delete(url);
+    } catch (error) {
+        console.error("Error al eliminar cita:", error);
+    }
+}
+
+//  actualizar citas existentes
+export async function updateDate(data: any, id: number) {
+    try {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/dates/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
