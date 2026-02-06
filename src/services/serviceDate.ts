@@ -24,18 +24,19 @@ export async function deleteDate(id: number) {
         console.error("Error al eliminar cita:", error);
     }
 }
-export async function updateDate(id: number) {
+export async function updateDate(id: number, data: any) { // <-- Agregamos 'data'
     try {
         const url = `${import.meta.env.VITE_API_URL}/api/date/${id}`;
-        await axios.patch(url);
+        // Usamos PUT porque estamos enviando el objeto completo para actualizar
+        await axios.put(url, data); 
     } catch (error) {
-        console.error("Error al actualizar estado:", error);
+        console.error("Error al actualizar la cita:", error);
     }
 }
 
 export async function registrarCobro(ventaData: DateList) {
     try {
-        const urlVenta = `${import.meta.env.VITE_API_URL}/api/service`;
+        const urlVenta = `${import.meta.env.VITE_API_URL}/api/date`;
         await axios.post(urlVenta, {
             barber: ventaData.barber,
             service: ventaData.service,
@@ -43,7 +44,7 @@ export async function registrarCobro(ventaData: DateList) {
             phone: Number(ventaData.phone),
             price: Number(ventaData.price)
         });
-        await updateDate(ventaData.id);
+        await updateDate(ventaData.id, { isPaid: true });
         return { success: true };
     } catch (error) {
         throw error;
