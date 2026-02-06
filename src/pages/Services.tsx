@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from "react-router-dom"
 import { motion } from "framer-motion"
 import { getServices } from "../services/ServiceService";
-import ServiceDetails from "../componenents/ServiceDetail";
+import ServiceDetails from "../componentes/ServiceDetail";
 import { type Service } from "../types"
 
 export async function loader() {

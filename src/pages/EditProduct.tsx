@@ -1,5 +1,5 @@
 import { Link, Form, useActionData, type ActionFunctionArgs, redirect, type LoaderFunctionArgs, useLoaderData } from "react-router-dom"
-import ErrorMessaje from "../componenents/ErrorMessaje"
+import ErrorMessaje from "../componentes/ErrorMessaje"
 import {  updateService } from "../services/ServiceService"
 import { getServiceById } from "../services/ServiceService";
 import type { Service } from "../types";
