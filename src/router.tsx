@@ -11,7 +11,7 @@ import DatesList, { loader as DateListLoader } from "./pages/DateClient"
 // 1. Importa tu nueva página de historial
 import VentasTotales from "./pages/VentasTotales" 
 import BarberHistory from "./componenents/BarberHistory"
-
+import EditDate, { loader as editDateLoader, action as editDateAction } from "./componenents/EditDate"
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -72,7 +72,14 @@ export const router = createBrowserRouter([
             {
                 path: "/admin/ventas-totales",
                 element: <VentasTotales />
-            }
+            },
+            // En tu router.tsx, dentro de children: [ ... ]
+{
+    path: "admin/citas/editar/:id", // Nota: Sin el "/" inicial si es hijo del Layout
+    element: <EditDate/>, // Asegúrate de crear este componente
+    loader: editDateLoader, // Y su loader
+    action: editDateAction  // Y su acción
+},
         ]
     }
 ])

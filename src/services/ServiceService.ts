@@ -112,7 +112,7 @@ export async function updateService (data : serviceData, id : Service["id"]){
 
 
         })
-        if(result){
+        if(result.success){
 
             const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
             await axios.put(url, result.output)

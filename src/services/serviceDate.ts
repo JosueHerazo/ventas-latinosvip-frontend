@@ -24,7 +24,6 @@ export async function deleteDate(id: number) {
         console.error("Error al eliminar cita:", error);
     }
 }
-
 export async function updateDate(id: number) {
     try {
         const url = `${import.meta.env.VITE_API_URL}/api/date/${id}`;
