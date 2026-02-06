@@ -1,5 +1,5 @@
 import { Form, useActionData, type ActionFunctionArgs, redirect, type LoaderFunctionArgs, useLoaderData } from "react-router-dom"
-import ErrorMessaje from "../componentes/ErrorMessaje"
+import ErrorMessaje from "../componenents/ErrorMessaje"
 // Importamos updateDate para usarlo en el action
 import { getDatesList, updateDate } from "../services/serviceDate" 
 import type { DateList } from "../types"

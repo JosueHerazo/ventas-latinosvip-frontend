@@ -3,14 +3,14 @@ import Layout from "./layouts/Layout"
 import NewService, { action as newServiceAction } from "./pages/NewService"
 import Service, { loader as servicesLoader } from "./pages/Services"
 import EditService, { loader as editServiceLoader, action as editServiceAction } from "./pages/EditProduct"
-import { action as DeleteServiceAction } from "./componentes/ServiceDetail"
+import { action as DeleteServiceAction } from "./componenents/ServiceDetail"
 import BarberSummary, { loader as barberPagoLoader } from "./pages/BarberSummary"
 import BarberServices, { loader as barberServicesLoader } from "./pages/BarberServices"
 import SearchClients, { loader as searchClintsLoader } from "./pages/SearchClients"
 import DatesList, { loader as DateListLoader } from "./pages/DateClient"
 // 1. Importa tu nueva página de historial
 import VentasTotales from "./pages/VentasTotales" 
-import BarberHistory from "./componentes/BarberHistory"
+import BarberHistory from "./componenents/BarberHistory"
 import EditDate, { loader as editDateLoader, action as editDateAction } from "./pages/EditDate"
 export const router = createBrowserRouter([
     {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Form, type ActionFunctionArgs, redirect, useActionData, useSearchParams, Link } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { addProduct } from "../services/ServiceService"
-import ErrorMessaje from "../componentes/ErrorMessaje";
+import ErrorMessaje from "../componenents/ErrorMessaje";
 
 // --- DATOS INICIALES ---
 const INITIAL_SERVICES = [
