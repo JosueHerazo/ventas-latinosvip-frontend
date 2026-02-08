@@ -35,17 +35,17 @@ export const router = createBrowserRouter([
                 action: DeleteServiceAction
             },
             {
-                path: "/pago/barberos",
+                path: "pago/barberos",
                 element: <BarberSummary />,
                 loader: barberPagoLoader
             },
             {
-                path: "/barberos/:barber",
+                path: "barberos/:barber",
                 element: <BarberServices />,
                 loader: barberServicesLoader,
             },
             {
-                path: "/buscar/clientes",
+                path: "buscar/clientes",
                 element: <SearchClients />,
                 loader: searchClintsLoader,
             },

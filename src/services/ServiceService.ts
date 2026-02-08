@@ -1,6 +1,6 @@
 import { safeParse} from "valibot"
 import axios from "axios"
-import {  DraftServiceSchema, ServiceSchema, ServicesSchema, type DateList, type Service} from "../types";
+import {  DraftServiceSchema, ServiceSchema, ServicesSchema, type DateList, type Service, type ServiceEdit} from "../types";
 // import { DatesSchema } from "../types";
 
 
@@ -77,7 +77,7 @@ export async function getServices() {
 }
 
 
-export async function getServiceById(id : Service["id"]) {
+export async function getServiceById(id : ServiceEdit["id"]) {
     try {
             const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
             const {data} = await axios(url)
@@ -131,8 +131,7 @@ export async function deleteService(id: Service["id"]) {
         const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
         await axios.delete(url)
     } catch (error) {
-        console.log(error);
-        
+        console.log(error);   
     }
     
 }

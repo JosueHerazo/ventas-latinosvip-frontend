@@ -45,7 +45,7 @@ export default function ServiceDetails({ service }: ServiceDetailsPro) {
                 <div className="flex justify-center gap-3">
                     {/* BOTÓN EDITAR */}
                         <button
-                        onClick={() => navigate(`servicios/${service.id}/editar`)} 
+                        onClick={() => navigate(`/servicios/${service.id}/editar`)} 
                         // Asegúrate de que no haya espacios en el string
                         className="text-zinc-600 hover:text-amber-500 transition-colors"
                         title="Editar registro"
