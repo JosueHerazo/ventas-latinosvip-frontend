@@ -206,3 +206,28 @@ export async function updateDate(data: any, id: number) {
         console.log(error)
     }
 }
+
+// En tu archivo ../services/ServiceService.ts
+
+export async function createClientFromContact(contactData: { client: string, phone: string }) {
+    try {
+        // Aquí usas la lógica de tu API actual, por ejemplo:
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/service`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client: contactData.client,
+                phone: contactData.phone,
+                // Añade campos por defecto si tu base de datos los requiere
+                date: new Date(), 
+                service: "Nuevo Cliente (Importado)",
+                price: 0
+            })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Error al guardar contacto:", error);
+    }
+}
