@@ -20,7 +20,7 @@ const citasVisibles = datelist.filter(cita =>
 const citasPendientes = Array.isArray(datelist) ? datelist.filter(c => !c.isPaid) : [];    const revalidator = useRevalidator();
     const [template, setTemplate] = useState(   
   localStorage.getItem("wsp_template") || 
-  "Hola {cliente}, te recordamos tu cita en LatinosVip para el {fecha} a las {hora}. ¡Te esperamos!"
+  "Hola {cliente}, te recordamos tu cita en LatinosVip para el {fecha} a las {hora}. ¡Te esperamos! recuerdate reservar tu proxima cita https://cita-corte.netlify.app/ "
 );
 const handleEliminarCita = async (id: number) => {
     if(confirm('¿Estás seguro de cancelar esta cita?')) {
@@ -76,7 +76,7 @@ const enviarRecordatorio = (cita: DateList) => {
                         Cobros <span className="text-white">Pendientes</span>
                     </h1>
                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
-                        Citas recibidas por liquidar
+                        Citas pendientes para Pagar
                     </p>
                 </div>
                 <div className="bg-zinc-900 px-4 py-2 rounded-2xl border border-zinc-800">
