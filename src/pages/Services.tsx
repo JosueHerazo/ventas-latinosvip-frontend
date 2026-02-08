@@ -1,16 +1,20 @@
-import { Link, useLoaderData } from "react-router-dom"
-import { motion } from "framer-motion"
-import { getServices } from "../services/ServiceService";
+import { useMemo } from "react";
+import { Link, useLoaderData } from "react-router-dom";
+import type { Service } from "../types";
+import { motion } from "framer-motion";
 import ServiceDetails from "../componenents/ServiceDetail";
-import { type Service } from "../types"
-
-export async function loader() {
-  const services = await getServices()
-  return services
-}
-
 export default function Services() {
   const services = useLoaderData() as Service[]
+
+  // 1. FILTRO: Solo servicios que NO sean la marca de cliente importado
+  const ventasReales = useMemo(() => {
+      return services.filter(s => s.service !== "CLIENTE_REGISTRADO");
+  }, [services]);
+
+  // 2. CÁLCULO: Sumar solo los precios de las ventas reales
+  const total = useMemo(() => {
+      return ventasReales.reduce((acc, s) => acc + Number(s.price), 0);
+  }, [ventasReales]);
 
   return (
     <motion.div 
@@ -43,7 +47,7 @@ export default function Services() {
         </div>
       </div>
 
-      {/* CONTENEDOR DE TABLA DINÁMICA */}
+      {/* CONTENEDOR DE TABLA */}
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -52,20 +56,21 @@ export default function Services() {
       >
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-         <thead>
-  <tr className="bg-zinc-900/50 border-b border-zinc-800">
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">ID</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Servicio</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Precio</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Barbero</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Cliente / Tel.</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Fecha</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Acciones</th>
-  </tr>
-</thead>
+            <thead>
+              <tr className="bg-zinc-900/50 border-b border-zinc-800">
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">ID</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Servicio</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Precio</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Barbero</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Cliente / Tel.</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Fecha</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Acciones</th>
+              </tr>
+            </thead>
             <tbody className="divide-y divide-zinc-900">
-              {services.length > 0 ? (
-                services.map((service, index) => (
+              {/* CAMBIO: Usamos ventasReales en lugar de services */}
+              {ventasReales.length > 0 ? (
+                ventasReales.map((service, index) => (
                   <motion.tr 
                     key={service.id}
                     initial={{ opacity: 0, x: -10 }}
@@ -88,12 +93,13 @@ export default function Services() {
         </div>
       </motion.div>
 
-      {/* RESUMEN RÁPIDO (Opcional) */}
+      {/* RESUMEN RÁPIDO */}
       <div className="mt-6 flex justify-end">
         <div className="bg-zinc-900/50 border border-zinc-800 px-6 py-3 rounded-2xl">
           <p className="text-zinc-500 text-[10px] font-black uppercase">Total del día</p>
           <p className="text-2xl font-black text-white">
-            ${services.reduce((acc, curr) => acc + Number(curr.price), 0).toFixed(2)}
+            {/* CAMBIO: Usamos la variable total ya calculada */}
+            ${total.toFixed(2)}
           </p>
         </div>
       </div>
