@@ -33,7 +33,6 @@ export default function BarberSummary() {
             Volver a Inicio
         </Link>
       </div>
-// Solo el cambio visual clave en el map:
 {Object.entries(grouped).map(([barber, dates]) => (
     <motion.div
 
