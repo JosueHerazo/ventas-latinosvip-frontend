@@ -48,11 +48,10 @@ export const DateSchema = object({
     barber: string(),
     client: string(),   
     phone: number(),
-    createdAt: any(), // IMPORTANTE: Sequelize siempre lo envía
-    updatedAt: any(), // IMPORTANTE: Sequelize siempre lo envía
-    clientId: nullable(any()),     
-    dateList: string(),
-    isPaid: boolean(),
+    createdAt: any(), // Cambiado de string() a any() porque Sequelize envía objetos de fecha
+    isPaid: nullable(any()), // Acepta null
+    isArchived: nullable(boolean()), 
+    updatedAt: any()
     // isArchived: boolean(),  // <--- Añadir esto
 
 })
@@ -79,5 +78,5 @@ export const ServicesSchema = array(ServiceSchema)
 
 
 export type Client = InferOutput<typeof ClientSchema>
-export type Service = InferOutput<typeof ServiceSchema>
 export type DateList = InferOutput<typeof DateSchema>
+export type Service = InferOutput<typeof ServiceSchema>

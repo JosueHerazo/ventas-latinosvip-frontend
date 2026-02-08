@@ -85,7 +85,8 @@ export async function getServiceById(id : Service["id"]) {
             if(result.success){
                return result.output
             }else{
-                throw new Error("Hubo un error...")
+                console.error("VALIBOT FALLÓ EN getServiceById:", result.issues);          
+                return data.data as Service
             }
 
             
@@ -109,15 +110,17 @@ export async function updateService (data : serviceData, id : Service["id"]){
             client: data.client,
             phone: Number(data.phone),
             // createdAt:  parse(DateSchema,data.createdAt)
-
-
         })
         if(result.success){
 
             const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
             await axios.put(url, result.output)
+        }else{
+
+            console.error("Error validando datos antes de actualizar:", )
         }
     } catch (error) {
+        console.log(error);
         
     }
     
