@@ -21,10 +21,10 @@ export const ServiceSchema = object({
     barber: string(),
     client: string(), 
     phone: any(),
-    createdAt: string(),
-    isPaid: any(), // Cambiado a any para evitar errores de booleano estricto
-    isArchived: nullable(boolean()), // Permitir null
-    updatedAt: string(),
+    createdAt: any(), // Cambiado de string() a any() porque Sequelize envía objetos de fecha
+    isPaid: nullable(any()), // Acepta null
+    isArchived: nullable(boolean()), 
+    updatedAt: any(),
 })
 
 
