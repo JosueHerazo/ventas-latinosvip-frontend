@@ -72,6 +72,7 @@ export async function getServices() {
             }
 
     } catch (error) {
+        console.error("Error al obtener servicios", error);
         return[]
     }
 }

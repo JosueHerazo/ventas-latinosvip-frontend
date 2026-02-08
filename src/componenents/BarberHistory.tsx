@@ -2,6 +2,7 @@ import { Link, useLoaderData, useParams } from "react-router-dom";
 import { getServices } from "../services/ServiceService";
 import { formatCurrency } from "../utils";
 import {type  Service } from "../types";
+import { useMemo } from "react";
 
 export async function loader() {
     return await getServices();
@@ -11,22 +12,31 @@ export default function BarberHistory() {
     const { barber } = useParams();
 
     // 1. Filtrar por barbero y estado pagado
-   const barberServices = services.filter(s => {
-    const matchName = s.barber.trim().toLowerCase() === barber?.trim().toLowerCase();
-    const isPaid = Boolean(s.isPaid); // Convierte 1 o true a booleano real
-    return matchName && isPaid;
-});
+ const barberServices = useMemo(() => {
+        return services.filter(s => {
+            // Normalizamos nombres para evitar errores por espacios o mayúsculas
+            const matchName = s.barber.trim().toLowerCase() === barber?.trim().toLowerCase();
+            // Forzamos a booleano: acepta true, 1, o "1"
+            const isPaid = s.isPaid === true || s.isPaid === 1 || s.isPaid === "1"; 
+            return matchName && isPaid;
+        });
+    }, [services, barber]);
 
     // 2. Agrupar por Año y luego por Mes
-    const statsPorAnio = barberServices.reduce((acc, curr) => {
-        const date = new Date(curr.createdAt);
-        const anio = date.getFullYear();
-        const mes = date.toLocaleString('es-ES', { month: 'long' });
+    const statsPorAnio = useMemo(() => {
+        return barberServices.reduce((acc, curr) => {
+            const date = new Date(curr.createdAt);
+            if (isNaN(date.getTime())) return acc; // Evita fechas inválidas
 
-        if (!acc[anio]) acc[anio] = {};
-        acc[anio][mes] = (acc[anio][mes] || 0) + Number(curr.price);
-        return acc;
-    }, {} as Record<number, Record<string, number>>);
+            const anio = date.getFullYear();
+            const mes = date.toLocaleString('es-ES', { month: 'long' });
+
+            if (!acc[anio]) acc[anio] = {};
+            // Aseguramos que el precio sea número
+            acc[anio][mes] = (acc[anio][mes] || 0) + Number(curr.price);
+            return acc;
+        }, {} as Record<number, Record<string, number>>);
+    }, [barberServices]);
 
     return (
         <div className="max-w-4xl mx-auto p-6 text-white">

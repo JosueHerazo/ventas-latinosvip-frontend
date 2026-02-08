@@ -1,8 +1,15 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { formatCurrency } from "../utils";
+import { getServices } from "../services/ServiceService";
+import { useLoaderData } from "react-router-dom";
+import type { Service } from "../types";
 
+export async function loader() {
+    return await getServices();
+}
 export default function VentasTotales() {
+    const services = useLoaderData() as Service[]; // ¡Importante usar los datos reales!
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
@@ -13,18 +20,18 @@ export default function VentasTotales() {
         window.open(`https://wa.me/${telefono.replace(/\D/g, '')}?text=${encodeURIComponent(msj)}`, '_blank');
     };
 
-    const cierresArchivados = [
-        { id: 1, barbero: "Josue", fecha: "2026-01-05", total: 1500, client: "Carlos Perez", phone: "123456789" },
-        { id: 2, barbero: "Vato", fecha: "2026-01-20", total: 1200, client: "Juan M.", phone: "987654321" },
-        { id: 3, barbero: "Josue", fecha: "2025-11-10", total: 900, client: "Luis T.", phone: "555666777" },
-    ];
+    
 
-    const filteredData = useMemo(() => {
-        return cierresArchivados.filter(c => {
-            const d = new Date(c.fecha);
-            return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+   const filteredData = useMemo(() => {
+        return services.filter(s => {
+            const d = new Date(s.createdAt);
+            // Filtramos solo los que están pagados
+            const isPaid = s.isPaid === true || s.isPaid === 1 || s.isPaid === "1";
+            return d.getMonth() === selectedMonth && 
+                   d.getFullYear() === selectedYear && 
+                   isPaid;
         });
-    }, [selectedMonth, selectedYear]);
+    }, [services, selectedMonth, selectedYear]);
 
     const esAusente = (fechaCierre: string) => {
         const fecha = new Date(fechaCierre);
@@ -35,7 +42,7 @@ export default function VentasTotales() {
 
     // AHORA SÍ USAMOS TOTALMES
     const totalMes = useMemo(() => 
-        filteredData.reduce((acc, cur) => acc + cur.total, 0), 
+        filteredData.reduce((acc, cur) => acc + cur.price, 0), 
     [filteredData]);
 
     return (
@@ -96,7 +103,7 @@ export default function VentasTotales() {
                     <p className="text-zinc-600 text-center py-20 font-bold uppercase italic">No hay registros para esta fecha</p>
                 ) : (
                     filteredData.map(c => {
-                        const ausente = esAusente(c.fecha);
+                        const ausente = esAusente(c.createdAt);
                         return (
                             <div key={c.id} className={`bg-zinc-900 p-6 rounded-3xl border ${ausente ? 'border-red-900/40 bg-red-950/10' : 'border-zinc-800'} flex flex-wrap justify-between items-center gap-4 transition-all hover:border-zinc-700`}>
                                 <div className="flex items-center gap-4">
@@ -108,14 +115,14 @@ export default function VentasTotales() {
                                             {c.client}
                                             {ausente && <span className="text-[8px] bg-red-600 px-2 py-0.5 rounded text-white italic tracking-tighter">Ausente +20 días</span>}
                                         </h4>
-                                        <p className="text-zinc-500 text-[10px] font-bold uppercase">Atendido por: {c.barbero}</p>
+                                        <p className="text-zinc-500 text-[10px] font-bold uppercase">Atendido por: {c.barber}</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-4">
                                     <div className="text-right mr-4">
-                                        <p className="text-white font-black text-lg">{formatCurrency(c.total)}</p>
-                                        <p className="text-zinc-600 text-[9px] font-bold uppercase">{c.fecha}</p>
+                                        <p className="text-white font-black text-lg">{formatCurrency(c.price)}</p>
+                                        <p className="text-zinc-600 text-[9px] font-bold uppercase">{c.createdAt}</p>
                                     </div>
                                     <button
                                         onClick={() => enviarRecordatorioWhatsApp(c.phone, c.client)}
