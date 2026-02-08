@@ -3,22 +3,31 @@ import { motion } from "framer-motion"
 import { getServices } from "../services/ServiceService";
 import ServiceDetails from "../componenents/ServiceDetail";
 import { type Service } from "../types"
+import { useMemo } from "react";
 
 export async function loader() {
   const services = await getServices()
   return services
 }
-
 export default function Services() {
   const services = useLoaderData() as Service[]
-  
+
+  // 1. FILTRO: Separamos las ventas reales de los contactos importados
+  const ventasReales = useMemo(() => {
+    return services.filter(s => s.service !== "CLIENTE_REGISTRADO" && s.price > 0);
+  }, [services]);
+
+  // 2. CÁLCULO: El total ahora solo suma ventas de verdad
+  const total = useMemo(() => {
+    return ventasReales.reduce((acc, s) => acc + Number(s.price), 0);
+  }, [ventasReales]);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
       className="p-4 lg:p-8"
     >
-      {/* HEADER DINÁMICO */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
         <div>
           <h2 className="text-5xl font-black text-white italic uppercase tracking-tighter">
@@ -29,13 +38,13 @@ export default function Services() {
 
         <div className="flex gap-3">
           <Link 
-            className="rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-4 font-black text-zinc-300 shadow-xl transition-all uppercase text-xs flex items-center gap-2" 
+            className="rounded-2xl bg-zinc-900 border border-zinc-800 p-4 font-black text-zinc-300 uppercase text-xs flex items-center gap-2" 
             to={"lista/citas"}
           >
             📅 Citas
           </Link>
           <Link 
-            className="rounded-2xl bg-amber-600 hover:bg-amber-500 p-4 font-black text-black shadow-lg shadow-amber-900/20 transition-all uppercase text-xs flex items-center gap-2" 
+            className="rounded-2xl bg-amber-600 p-4 font-black text-black uppercase text-xs flex items-center gap-2" 
             to="nuevo/servicio"
           >
             <span>+</span> Pagar Servicio
@@ -43,35 +52,34 @@ export default function Services() {
         </div>
       </div>
 
-      {/* CONTENEDOR DE TABLA DINÁMICA */}
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
         className="bg-zinc-950 rounded-[2.5rem] border border-zinc-900 overflow-hidden shadow-2xl"
       >
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-         <thead>
-  <tr className="bg-zinc-900/50 border-b border-zinc-800">
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">ID</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Servicio</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Precio</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Barbero</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Cliente / Tel.</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Fecha</th>
-    <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Acciones</th>
-  </tr>
-</thead>
+            <thead>
+              <tr className="bg-zinc-900/50 border-b border-zinc-800">
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">ID</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Servicio</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Precio</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Barbero</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Cliente / Tel.</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic">Fecha</th>
+                <th className="p-5 text-amber-500 text-[10px] font-black uppercase italic text-center">Acciones</th>
+              </tr>
+            </thead>
             <tbody className="divide-y divide-zinc-900">
-              {services.length > 0 ? (
-                services.map((service, index) => (
+              {/* USAMOS ventasReales PARA EL MAP */}
+              {ventasReales.length > 0 ? (
+                ventasReales.map((service, index) => (
                   <motion.tr 
                     key={service.id}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="hover:bg-zinc-900/30 transition-colors group"
+                    className="hover:bg-zinc-900/30 transition-colors"
                   >
                     <ServiceDetails service={service} />
                   </motion.tr>
@@ -88,12 +96,11 @@ export default function Services() {
         </div>
       </motion.div>
 
-      {/* RESUMEN RÁPIDO (Opcional) */}
       <div className="mt-6 flex justify-end">
         <div className="bg-zinc-900/50 border border-zinc-800 px-6 py-3 rounded-2xl">
           <p className="text-zinc-500 text-[10px] font-black uppercase">Total del día</p>
           <p className="text-2xl font-black text-white">
-            ${services.reduce((acc, curr) => acc + Number(curr.price), 0).toFixed(2)}
+            ${total.toFixed(2)}
           </p>
         </div>
       </div>

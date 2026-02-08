@@ -17,8 +17,11 @@ export async function action({ params }: ActionFunctionArgs) {
 }
 
 export default function ServiceDetails({ service }: ServiceDetailsPro) {
-    const navigate = useNavigate();
+    const  navigate = useNavigate();
 
+    if (service.service === "CLIENTE_REGISTRADO"){
+        return null; 
+    }
     return (
         <>
             <td className="p-5 text-zinc-500 text-[10px] font-bold">#{service.id}</td>

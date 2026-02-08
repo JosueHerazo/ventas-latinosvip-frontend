@@ -17,7 +17,7 @@ export default function SearchClients() {
 
     // REPARACIÓN: Definimos la función que faltaba
     const enviarWhatsApp = (cliente: string, telefono: string) => {
-        const msj = `¡Hola ${cliente}! 💈 Te escribimos de la barbería. ¿Deseas agendar una nueva cita? Reserva aquí: ${baseUrl}`;
+        const msj = `¡Hola ${cliente}! 💈 Te escribimos de la barbería LatinosVIP. ¿Deseas agendar una nueva cita? Reserva aquí: ${baseUrl}`;
         // Limpiamos el teléfono de espacios o símbolos
         const telLimpio = String(telefono).replace(/\D/g, '');
         window.open(`https://wa.me/${telLimpio}?text=${encodeURIComponent(msj)}`, '_blank');
