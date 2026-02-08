@@ -25,13 +25,13 @@ export const router = createBrowserRouter([
                 action: newServiceAction 
             },
             {
-                path: "/servicios/:id/editar",
+                path: "servicios/:id/editar",
                 element: <EditService />,
                 action: editServiceAction,
                 loader: editServiceLoader
             },
             {
-                path: "/servicios/:id/eliminar",
+                path: "servicios/:id/eliminar",
                 action: DeleteServiceAction
             },
             {
