@@ -83,13 +83,10 @@ const navigate = useNavigate(); // Inicializa la función
 // Dentro de BarberServices.tsx
 const servicesbarber = services.filter((service) => {
     const serviceDate = new Date(service.createdAt);
-    
-    // Filtro mejorado:
     const coincideBarbero = service.barber.toLowerCase() === barber?.toLowerCase();    
     const esEstaSemana = serviceDate >= startOfWeek;
     const estaPagado = Boolean(service.isPaid); 
-    const noEstaArchivado = !service.isArchived; // Si es undefined o false, pasa
-
+    const noEstaArchivado = !service.isArchived; 
     return coincideBarbero && esEstaSemana && estaPagado && noEstaArchivado;
 });
     const totalSemana = servicesbarber.reduce((acc, cur) => acc + cur.price, 0);

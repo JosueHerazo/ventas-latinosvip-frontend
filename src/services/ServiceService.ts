@@ -211,23 +211,19 @@ export async function updateDate(data: any, id: number) {
 
 export async function createClientFromContact(contactData: { client: string, phone: string }) {
     try {
-        // Aquí usas la lógica de tu API actual, por ejemplo:
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/service`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                client: contactData.client,
-                phone: contactData.phone,
-                // Añade campos por defecto si tu base de datos los requiere
-                date: new Date(), 
-                service: "Nuevo Cliente (Importado)",
-                price: 0
-            })
+        const url = `${import.meta.env.VITE_API_URL}/api/service/`
+        
+        const response = await axios.post(url, {
+            client: contactData.client,
+            phone: Number(String(contactData.phone).replace(/\D/g, '')),
+            barber: "SISTEMA", // Identificador genérico
+            service: "CLIENTE_REGISTRADO", // <--- ESTA ES LA MARCA CLAVE
+            price: 0 // Usamos -1 para que no sume en tus totales de ventas
         });
-        return await response.json();
+        
+        return response.data;
     } catch (error) {
         console.error("Error al guardar contacto:", error);
+        return null;
     }
 }
