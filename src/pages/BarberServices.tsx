@@ -85,9 +85,9 @@ const servicesbarber = services.filter((service) => {
     const serviceDate = new Date(service.createdAt);
     
     // Filtro mejorado:
-    const coincideBarbero = service.barber === barber;
+    const coincideBarbero = service.barber.toLowerCase() === barber?.toLowerCase();    
     const esEstaSemana = serviceDate >= startOfWeek;
-    const estaPagado = service.isPaid === true; // Asegura que sea true
+    const estaPagado = Boolean(service.isPaid); 
     const noEstaArchivado = !service.isArchived; // Si es undefined o false, pasa
 
     return coincideBarbero && esEstaSemana && estaPagado && noEstaArchivado;

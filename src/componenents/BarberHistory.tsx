@@ -11,9 +11,11 @@ export default function BarberHistory() {
     const { barber } = useParams();
 
     // 1. Filtrar por barbero y estado pagado
-    const barberServices = services.filter(s => 
-        s.barber.toLowerCase() === barber?.toLowerCase() && s.isPaid
-    );
+   const barberServices = services.filter(s => {
+    const matchName = s.barber.trim().toLowerCase() === barber?.trim().toLowerCase();
+    const isPaid = Boolean(s.isPaid); // Convierte 1 o true a booleano real
+    return matchName && isPaid;
+});
 
     // 2. Agrupar por Año y luego por Mes
     const statsPorAnio = barberServices.reduce((acc, curr) => {
