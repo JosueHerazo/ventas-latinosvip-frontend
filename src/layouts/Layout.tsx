@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation, useLoaderData } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { faCut, faCalendarCheck, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faCut, faCalendarCheck, faChartLine, faUser } from '@fortawesome/free-solid-svg-icons';
 import latinosvip from "../assets/latinosvip.jpg";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
@@ -47,11 +47,7 @@ export default function Layout() {
             const activeStyle = "bg-amber-600 text-black shadow-lg shadow-amber-900/40";
             const inactiveStyle = "text-zinc-500 hover:text-white hover:bg-zinc-900";
             
-            // {totalPendientes > 0 && (
-                //         <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full animate-bounce shadow-lg border border-black">
-                //             {totalPendientes}
-                //         </span>
-    //     )}
+          
     const limpiarNotificacion = () => {
         setNotificacion(false);
         // Actualizamos el contador para que sepa que ya las vimos
@@ -79,7 +75,7 @@ export default function Layout() {
                 className={`relative ${linkStyle} ${pathname === "/lista/citas" ? activeStyle : inactiveStyle}`}
             >
                 <FontAwesomeIcon icon={faCalendarCheck} />
-                Citas
+                
                 {notificacion && (
                     <span className="absolute -top-1 -right-1 flex h-3 w-3">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -147,6 +143,13 @@ export default function Layout() {
                     className={`${linkStyle} ${pathname === "/nuevo/servicio" ? activeStyle : inactiveStyle}`}
                     >
                     <FontAwesomeIcon icon={faCut} /> Cobrar
+                </Link>
+                <Link 
+                    to={"buscar/clientes"}  
+                    className={`${linkStyle} ${pathname === "/nuevo/servicio" ? activeStyle : inactiveStyle}`}
+                    >
+                        
+                    <FontAwesomeIcon icon={faUser} /> Clientes
                 </Link>
             </nav>
 

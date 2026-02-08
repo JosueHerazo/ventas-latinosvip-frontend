@@ -24,7 +24,7 @@ export default function ServiceDetails({ service }: ServiceDetailsPro) {
     }
     return (
         <>
-            <td className="p-5 text-zinc-500 text-[10px] font-bold">#{service.id}</td>
+            <td className="p-5 text-zinc-500 text-[10px] font-bold">{service.id}</td>
             <td className="p-5 font-black text-white uppercase text-sm">{service.service}</td>
             <td className="p-5 text-center font-black text-amber-500">{formatCurrency(service.price)}</td>
             <td className="p-5 text-center">
