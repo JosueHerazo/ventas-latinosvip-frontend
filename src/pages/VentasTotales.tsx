@@ -9,7 +9,7 @@ export async function loader() {
     return await getServices();
 }
 export default function VentasTotales() {
-    const services = useLoaderData() as Service[]; // ¡Importante usar los datos reales!
+    const services = useLoaderData() as Service[] ; 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
@@ -23,14 +23,15 @@ export default function VentasTotales() {
     
 
    const filteredData = useMemo(() => {
+    if (!services) return []; // Seguridad extra
         return services.filter(s => {
             const d = new Date(s.createdAt);
-            // Filtramos solo los que están pagados
-            const isPaid = s.isPaid === true || s.isPaid === 1 || s.isPaid === "1";
-            return d.getMonth() === selectedMonth && 
-                   d.getFullYear() === selectedYear && 
-                   isPaid;
-        });
+        if (isNaN(d.getTime())) return false; 
+        const isPaid = s.isPaid === true || s.isPaid === 1 || s.isPaid === "1";
+        return d.getMonth() === selectedMonth && 
+               d.getFullYear() === selectedYear && 
+               isPaid;
+    });
     }, [services, selectedMonth, selectedYear]);
 
     const esAusente = (fechaCierre: string) => {
