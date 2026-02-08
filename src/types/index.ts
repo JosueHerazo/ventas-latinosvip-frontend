@@ -22,9 +22,9 @@ export const ServiceSchema = object({
     client: string(), 
     phone: any(),
     createdAt: string(),
-    isPaid: optional(any()), 
-    isArchived: optional(any()), 
-    updatedAt: optional(any()),
+    isPaid: optional(nullable(any())), 
+    isArchived: optional(nullable(any())), 
+    updatedAt: optional(nullable(any())),
 })
 
 

@@ -7,8 +7,7 @@ import type { Service } from "../types";
 
 
 export async function loader({params} : LoaderFunctionArgs) {
-    console.log(params.id);
-    if(params.id !== undefined){
+    if(params.id){
         const service = await getServiceById(+params.id)
         if(!service){
             return redirect("/")
@@ -82,7 +81,7 @@ export default function EditService() {
             id="service"
             className="mt-2 block w-full font-bold text-white hover: rounded-2xl  p-3 bg-amber-400 "
             name="service"
-            defaultValue={service.service}
+            defaultValue={service.service ?? ""}
             >
             <option>
                 Seleciona un Servicio
@@ -110,7 +109,7 @@ export default function EditService() {
             className="mt-2 font-bold text-white block w-full rounded-2xl  p-3 bg-amber-400"
             placeholder="Precio Producto. ej. 200, 300"
             name="price"
-            defaultValue={service.price}
+            defaultValue={service.price ?? ""}
             />
     </div>
     {/* <div className="mb-4">
@@ -136,7 +135,7 @@ export default function EditService() {
             id="barber"
             className="mt-2 block w-full font-bold text-white rounded-2xl  p-3 bg-amber-400"
             name="barber"
-            defaultValue={service.barber}
+            defaultValue={service.barber ?? ""}
             >
             <option value="">Seleciona Barbero</option>
                 {barberos.map((barbero)=>(
@@ -157,7 +156,7 @@ export default function EditService() {
             className="mt-2 block w-full p-3  rounded-2xl font-extrabold text-white bg-amber-400"
             placeholder="Nombre del cliente"
             name="client"
-            defaultValue={service.client}
+            defaultValue={service.client ?? ""}
         />
     </div>
      <div className="mb-4">
@@ -171,7 +170,7 @@ export default function EditService() {
             className="mt-2 block w-full p-3 rounded-2xl  font-bold text-white bg-amber-400"
             placeholder="movil del cliente"
             name="phone"
-            defaultValue={service.phone}
+            defaultValue={service.phone ?? ""}
         />
     </div>
      {/* <div className="mb-4">

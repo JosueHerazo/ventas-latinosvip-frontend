@@ -1,6 +1,6 @@
 import { safeParse} from "valibot"
 import axios from "axios"
-import {  DraftServiceSchema, ServiceSchema, ServicesSchema, type DateList, type Service, type ServiceEdit} from "../types";
+import {  DraftServiceSchema, ServiceSchema, ServicesSchema, type DateList, type Service} from "../types";
 // import { DatesSchema } from "../types";
 
 
@@ -77,7 +77,7 @@ export async function getServices() {
 }
 
 
-export async function getServiceById(id : ServiceEdit["id"]) {
+export async function getServiceById(id : Service["id"]) {
     try {
             const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`
             const {data} = await axios(url)
@@ -85,7 +85,7 @@ export async function getServiceById(id : ServiceEdit["id"]) {
             if(result.success){
                return result.output
             }else{
-                console.error("VALIBOT FALLÓ EN getServiceById:", result.issues);          
+                console.warn("VALIBOT FALLÓ EN getServiceById:", result.issues);          
                 return data.data as Service
             }
 
