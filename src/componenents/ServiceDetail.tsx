@@ -33,7 +33,7 @@ export default function ServiceDetails({ service }: ServiceDetailsPro) {
                 </span>
             </td>
             <td className="p-5">
-              <Link to="/buscar/clientes" className="hover:text-amber-500">
+              <Link to={`/buscar/${service.id}/editar `}  className="hover:text-amber-500">
                  <p className="text-white font-bold text-sm">{service.client}</p>
             </Link>
                   <p className="text-zinc-500 text-[10px] mt-1 font-medium">{service.phone || "---"}</p>
