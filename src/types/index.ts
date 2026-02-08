@@ -1,4 +1,4 @@
-import {object, string, number, any, nullable, array, type InferOutput, boolean,  } from "valibot"
+import {object, string, number, any, nullable, array, type InferOutput, boolean, optional,  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -9,31 +9,22 @@ export const DraftServiceSchema = object({
     phone: number(),
     // createdAt: string()
 })
-export const DraftEditServiceSchema = object({
-    service: string(),
-    price: number(),
-    barber: string(),
-    client: string(),
-    phone: number(),
-    id: number(),                     
-    // createdAt: string()
-})
 
 // En types.ts
 // types.ts
 // En tu archivo de types/schemas
 // types.ts
 export const ServiceSchema = object({
-    id: number(),                     
+    id: number(),
     service: string(),
     price: any(),
     barber: string(),
     client: string(), 
     phone: any(),
-    createdAt: any(), // Cambiado de string() a any() porque Sequelize envía objetos de fecha
-    isPaid: nullable(any()), // Acepta null
-    isArchived: nullable(boolean()), 
-    updatedAt: any(),
+    createdAt: string(),
+    isPaid: optional(any()), 
+    isArchived: optional(any()), 
+    updatedAt: optional(any()),
 })
 
 
@@ -57,10 +48,11 @@ export const DateSchema = object({
     barber: string(),
     client: string(),   
     phone: number(),
-    createdAt: any(), // Cambiado de string() a any() porque Sequelize envía objetos de fecha
-    isPaid: nullable(any()), // Acepta null
-    isArchived: nullable(boolean()), 
-    updatedAt: any()
+    createdAt: any(), // IMPORTANTE: Sequelize siempre lo envía
+    updatedAt: any(), // IMPORTANTE: Sequelize siempre lo envía
+    clientId: nullable(any()),     
+    dateList: string(),
+    isPaid: boolean(),
     // isArchived: boolean(),  // <--- Añadir esto
 
 })
@@ -87,6 +79,5 @@ export const ServicesSchema = array(ServiceSchema)
 
 
 export type Client = InferOutput<typeof ClientSchema>
-export type DateList = InferOutput<typeof DateSchema>
 export type Service = InferOutput<typeof ServiceSchema>
-export type ServiceEdit = InferOutput<typeof DraftEditServiceSchema>
+export type DateList = InferOutput<typeof DateSchema>
