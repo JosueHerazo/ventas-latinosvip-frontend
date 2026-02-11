@@ -6,7 +6,7 @@ export const DraftServiceSchema = object({
     price: number(),
     barber: string(),
     client: string(),
-    phone: number(),
+    phone: string(),
     // createdAt: string()
 })
 
@@ -20,7 +20,7 @@ export const ServiceSchema = object({
     price: any(),
     barber: string(),
     client: string(), 
-    phone: any(),
+    phone: string(),
     createdAt: string(),
     isPaid: optional(nullable(any())), 
     isArchived: optional(nullable(any())), 
@@ -38,7 +38,7 @@ export const BarberSchema  = object({
 export const ClientSchema = object({
     clientId: number(),
     name: string(),
-    phone: number(),
+    phone: string(),
 })
 // schema de citas
 export const DateSchema = object({
@@ -47,7 +47,7 @@ export const DateSchema = object({
     price: number(),
     barber: string(),
     client: string(),   
-    phone: number(),
+    phone: string(),
     createdAt: any(), // IMPORTANTE: Sequelize siempre lo envía
     updatedAt: any(), // IMPORTANTE: Sequelize siempre lo envía
     clientId: nullable(any()),     
