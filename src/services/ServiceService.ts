@@ -151,7 +151,7 @@ export async function registrarCobro(ventaData: DateList) {
             barber: ventaData.barber,
             service: ventaData.service,
             client: ventaData.client,
-            phone: ventaData.phone,
+            phone: ventaData.phone || "",
             price: Number(ventaData.price)
         });
 
@@ -180,14 +180,14 @@ export async function archivarSemana(cierreData: any) {
 // src/services/ServiceService.ts
 export async function actualizarEstadoCita(id: number) {
     // Si tu router de citas está en /api/dates, la URL debe ser esa
-    const url = `${import.meta.env.VITE_API_URL}/api/date/${id}`; 
+    const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`; 
     await axios.patch(url);
 }
     
 // En ../services/ServiceService.ts
 export async function deleteDate(id: number) {
     try {
-        const url = `${import.meta.env.VITE_API_URL}/api/date/${id}`;
+        const url = `${import.meta.env.VITE_API_URL}/api/service/${id}`;
         await axios.delete(url);
     } catch (error) {
         console.error("Error al eliminar cita:", error);

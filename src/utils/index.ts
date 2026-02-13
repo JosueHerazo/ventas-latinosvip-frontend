@@ -12,18 +12,18 @@ export function formatDate(date: string | Date) {
   }).format(new Date(date))
 }
 
-export function formatFullDate(dateStr: Date | null | undefined) {
+export function formatFullDate(dateStr: string | Date | null | undefined) {
     if (!dateStr) return "Sin fecha";
 
     const date = new Date(dateStr);
     
-    // Validar si la fecha es válida
     if (isNaN(date.getTime())) return "Fecha inválida";
 
     return new Intl.DateTimeFormat('es-ES', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
+        weekday: 'long', // "viernes"
+        day: '2-digit',  // "12"
+        month: 'long',   // "diciembre"
+        // year: 'numeric', // Opcional: quítalo si no quieres el año
         hour: '2-digit',
         minute: '2-digit',
         hour12: true

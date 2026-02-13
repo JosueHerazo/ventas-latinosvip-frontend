@@ -41,7 +41,7 @@ export default function ServiceDetails({ service }: ServiceDetailsPro) {
             </Link>
                   <p className="text-zinc-500 text-[10px] mt-1 font-medium">{service.phone || "---"}</p>
             </td>
-            <td className="p-5 text-zinc-500 text-[10px] font-bold italic">{new Date().toLocaleDateString()}</td>
+            <td className="p-5 text-zinc-500 text-[10px] font-bold italic">{service.createdAt}</td>
 
             {/* 7. Acciones Corregidas */}
             <td className="p-5 text-center">

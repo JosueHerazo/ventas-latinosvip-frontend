@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
 import { registrarCobro, actualizarEstadoCita, deleteDate} from "../services/ServiceService";
 import { getDatesList } from "../services/serviceDate";
-import { formatCurrency } from "../utils";
+import { formatCurrency, formatFullDate } from "../utils";
 import { faPrescription } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -45,22 +45,24 @@ const enviarRecordatorio = (cita: DateList) => {
 };
     
     faPrescription
-   const liquidarVenta = async (cita: DateList) => {
+  const liquidarVenta = async (date: DateList) => {
     const idCarga = toast.loading("Liquidando cobro...");
     try {
-        // 1. Registra en el historial de ventas
-        await registrarCobro(cita);
+        // Esta única llamada ahora hace las dos cosas: registra venta y marca como pagada
+        await registrarCobro(date);
         
-        // 2. Cambia isPaid a true en la DB
-        await actualizarEstadoCita(cita.id); 
-        
-        toast.update(idCarga, { render: "✅ Pagado", type: "success", isLoading: false, autoClose: 2000 });
+        toast.update(idCarga, { 
+            render: "✅ Pagado y Registrado", 
+            type: "success", 
+            isLoading: false, 
+            autoClose: 2000 
+        });
 
-        // 3. ¡IMPORTANTE! Refresca los datos de la ruta actual y del Layout
+        // Esto dispara el loader de nuevo y filtrará la cita porque ya es isPaid: true
         await revalidator.revalidate(); 
         
     } catch (error) {
-        toast.update(idCarga, { render: "❌ Error", type: "error", isLoading: false });
+        toast.update(idCarga, { render: "❌ Error al procesar", type: "error", isLoading: false });
     }
 };
 
@@ -127,7 +129,7 @@ const enviarRecordatorio = (cita: DateList) => {
                                         <p className="text-zinc-500 text-xs">{cita.phone}</p>
                                     </td>
                                     <td className="p-5">
-                                        <p className="text-white font-bold text-sm">{cita.dateList}</p>
+                                        <p className="text-white font-bold text-sm">{formatFullDate(cita.dateList)}</p>
                                         <p className="text-zinc-500 text-xs">{cita.createdAt}</p>
                                     </td>
                                     <td className="p-5 text-right">

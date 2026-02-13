@@ -36,7 +36,7 @@ export async function updateDate(id: number, data: any) { // <-- Agregamos 'data
 
 export async function registrarCobro(ventaData: DateList) {
     try {
-        const urlVenta = `${import.meta.env.VITE_API_URL}/api/date`;
+        const urlVenta = `${import.meta.env.VITE_API_URL}/api/service`;
         await axios.post(urlVenta, {
             barber: ventaData.barber,
             service: ventaData.service,
