@@ -41,7 +41,7 @@ export async function registrarCobro(ventaData: DateList) {
             barber: ventaData.barber,
             service: ventaData.service,
             client: ventaData.client,
-            phone: Number(ventaData.phone),
+            phone: ventaData.phone,
             price: Number(ventaData.price)
         });
         await updateDate(ventaData.id, { isPaid: true });

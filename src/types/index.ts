@@ -1,4 +1,4 @@
-import {object, string, number, any, nullable, array, type InferOutput, boolean, optional,  } from "valibot"
+import {object, string, number, any, nullable, array, type InferOutput, boolean, optional  } from "valibot"
 
 // draft de sales
 export const DraftServiceSchema = object({
@@ -6,7 +6,7 @@ export const DraftServiceSchema = object({
     price: number(),
     barber: string(),
     client: string(),
-    phone: string(),
+    phone: nullable(string()),
     // createdAt: string()
 })
 
@@ -20,7 +20,7 @@ export const ServiceSchema = object({
     price: any(),
     barber: string(),
     client: string(), 
-    phone: string(),
+    phone: nullable(string()),
     createdAt: string(),
     isPaid: optional(nullable(any())), 
     isArchived: optional(nullable(any())), 
@@ -47,7 +47,7 @@ export const DateSchema = object({
     price: number(),
     barber: string(),
     client: string(),   
-    phone: string(),
+    phone: nullable(string()),   
     createdAt: any(), // IMPORTANTE: Sequelize siempre lo envía
     updatedAt: any(), // IMPORTANTE: Sequelize siempre lo envía
     clientId: nullable(any()),     

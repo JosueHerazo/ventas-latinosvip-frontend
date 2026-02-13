@@ -18,7 +18,7 @@ export async function addProduct(data : serviceData) {
             barber: data.barber,
             service: data.service,
             client: data.client,
-            phone: Number(data.phone),
+            phone: data.phone,
             price: Number(data.price),
             // createdAt: data.createdAt
             
@@ -35,7 +35,7 @@ if (result.success) {
             barber: result.output.barber,
             service: result.output.service,
             client: result.output.client,
-            phone: +result.output.phone,
+            phone: result.output.phone,
             price: +result.output.price,
             
             
@@ -109,7 +109,7 @@ export async function updateService (data : serviceData, id : Service["id"]){
             price:  Number(data.price),
             barber: data.barber,
             client: data.client,
-            phone: Number(data.phone),
+            phone: data.phone,
             // createdAt:  parse(DateSchema,data.createdAt)
         })
         if(result.success){
@@ -151,7 +151,7 @@ export async function registrarCobro(ventaData: DateList) {
             barber: ventaData.barber,
             service: ventaData.service,
             client: ventaData.client,
-            phone: Number(ventaData.phone),
+            phone: ventaData.phone,
             price: Number(ventaData.price)
         });
 
@@ -215,7 +215,7 @@ export async function createClientFromContact(contactData: { client: string, pho
         
         const response = await axios.post(url, {
             client: contactData.client,
-            phone: Number(String(contactData.phone).replace(/\D/g, '')),
+            phone: String(contactData.phone).replace(/\D/g, ''),
             barber: "SISTEMA", // Identificador genérico
             service: "CLIENTE_REGISTRADO", // <--- ESTA ES LA MARCA CLAVE
             price: 0 // Usamos -1 para que no sume en tus totales de ventas
