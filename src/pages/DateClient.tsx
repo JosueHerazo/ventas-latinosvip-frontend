@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { DateList } from "../types";
-import { registrarCobro, actualizarEstadoCita, deleteDate} from "../services/ServiceService";
+import { registrarCobro, deleteDate} from "../services/ServiceService";
 import { getDatesList } from "../services/serviceDate";
 import { formatCurrency, formatFullDate } from "../utils";
 import { faPrescription } from "@fortawesome/free-solid-svg-icons";
