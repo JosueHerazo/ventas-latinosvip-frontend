@@ -126,7 +126,7 @@ export default function VentasTotales() {
                                         <p className="text-zinc-600 text-[9px] font-bold uppercase">{c.createdAt}</p>
                                     </div>
                                     <button
-                                        onClick={() => enviarRecordatorioWhatsApp(c.phone, c.client)}
+                                        onClick={() => enviarRecordatorioWhatsApp(c.phone ?? "", c.client ?? "")}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all shadow-lg ${
                                             ausente 
                                             ? 'bg-red-600 text-white hover:bg-white hover:text-red-600' 
