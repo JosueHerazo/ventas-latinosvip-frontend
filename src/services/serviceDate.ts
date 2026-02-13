@@ -34,19 +34,28 @@ export async function updateDate(id: number, data: any) { // <-- Agregamos 'data
     }
 }
 
+// En ../services/ServiceService.ts
+
 export async function registrarCobro(ventaData: DateList) {
     try {
+        // 1. CREAR LA VENTA: Enviamos a la tabla de historial de ventas
         const urlVenta = `${import.meta.env.VITE_API_URL}/api/service`;
         await axios.post(urlVenta, {
             barber: ventaData.barber,
             service: ventaData.service,
             client: ventaData.client,
-            phone: ventaData.phone,
+            phone: String(ventaData.phone),
             price: Number(ventaData.price)
         });
-        await updateDate(ventaData.id, { isPaid: true });
+
+        // 2. MARCAR CITA COMO PAGADA: Enviamos a la tabla de citas
+        // Tu router tiene PATCH /:id para updateAvailability/updateAppointmentStatus
+        const urlCita = `${import.meta.env.VITE_API_URL}/api/date/${ventaData.id}`;
+        await axios.patch(urlCita); 
+
         return { success: true };
     } catch (error) {
+        console.error("Error en registrarCobro:", error);
         throw error;
     }
 }

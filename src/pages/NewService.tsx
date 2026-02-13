@@ -31,7 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (Object.values(data).includes("")) return "Todos los campos son obligatorios"
 
     // Convertimos el precio a número para la API/DB
-    await addProduct({ ...data, price: String(data.price) })
+    await addProduct({ ...data, phone: String(data.phone) })
     return redirect("/")
 }
 
