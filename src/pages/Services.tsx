@@ -49,6 +49,12 @@ export default function Services() {
           >
             <span>+</span> Pagar Servicio
           </Link>
+          <Link 
+            to="admin/monitor" 
+            className="bg-zinc-900 text-amber-500 p-3 rounded-xl font-black uppercase text-[10px] border border-zinc-800"
+          >
+            📊 Ver Monitor
+          </Link>
         </div>
       </div>
 
@@ -81,7 +87,9 @@ export default function Services() {
                     transition={{ delay: index * 0.05 }}
                     className="hover:bg-zinc-900/30 transition-colors"
                   >
-                    <ServiceDetails service={service} />
+                    <ServiceDetails service={service} 
+                    allServices={services}
+                    />
                   </motion.tr>
                 ))
               ) : (

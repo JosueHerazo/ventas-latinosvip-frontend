@@ -52,31 +52,34 @@ if (result.success) {
     
     
 }
-
 export async function getServices() {
     try {
-            const url = `${import.meta.env.VITE_API_URL}/api/service`
-            const {data} = await axios(url)
-            console.log("DATOS RECIBIDOS:", data);
-            const result = safeParse(ServicesSchema, data.data)
-            if(result.success){
-               return result.output
-            }else{
-               
-              // SI FALLA, MIRA POR QUÉ FALLA
-            console.error("DETALLES DEL ERROR VALIBOT:", result.issues);
-            
-            // RETORNA LOS DATOS DIRECTAMENTE (ignora la validación temporalmente)
-            // Esto hará que tu tabla se llene por fin.
-            return data.data as Service[]
-            }
+        const url = `${import.meta.env.VITE_API_URL}/api/service`
+        const { data } = await axios(url)
+        
+        // --- PROCESAMIENTO DE DATOS ---
+        // Si el backend envía el objeto Client, extraemos solo el nombre
+        const cleanData = data.data.map((s: any) => ({
+            ...s,
+            // Si client es un objeto (por el include), sacamos el nombre, si no, lo dejamos igual
+            client: typeof s.client === 'object' && s.client !== null ? s.client.name : s.client,
+            price: Number(s.price) // Aseguramos que sea número
+        }));
 
+        const result = safeParse(ServicesSchema, cleanData)
+        
+        if(result.success){
+            return result.output
+        } else {
+            console.error("VALIBOT FALLÓ:", result.issues);
+            // Fallback: Retornamos cleanData para que la UI no muera
+            return cleanData as Service[]
+        }
     } catch (error) {
         console.error("Error al obtener servicios", error);
-        return[]
+        return []
     }
 }
-
 
 export async function getServiceById(id : Service["id"]) {
     try {
@@ -142,26 +145,18 @@ export async function deleteService(id: Service["id"]) {
 
 
 // Dentro de ServiceService.ts
-export async function registrarCobro(ventaData: DateList) {
+// Optimización de tu función existente
+export async function registrarCobro(ventaData: Service) {
     try {
-        const urlVenta = `${import.meta.env.VITE_API_URL}/api/service`;
+        const url = `${import.meta.env.VITE_API_URL}/api/service/${ventaData.id}`;
         
-        // 1. Crea la venta en el historial
-        await axios.post(urlVenta, {
-            barber: ventaData.barber,
-            service: ventaData.service,
-            client: ventaData.client,
-            phone: ventaData.phone || "",
-            price: Number(ventaData.price)
-        });
-
-        // 2. En lugar de borrar, actualizamos el estado a pagado
-        // Esto hará que 'citasPendientes.filter' la saque de la lista
-        await actualizarEstadoCita(ventaData.id);
+        // Enviamos el cambio al backend
+        // Según tu controlador markAsPaid, esto debería ser un PATCH o PUT
+        await axios.patch(url, { isPaid: true });
 
         return { success: true };
     } catch (error) {
-        console.error("Error en registrarCobro:", error);
+        console.error("Error al liquidar:", error);
         throw error;
     }
 }

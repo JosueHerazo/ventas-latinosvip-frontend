@@ -42,9 +42,9 @@ export default function VentasTotales() {
     };
 
     // AHORA SÍ USAMOS TOTALMES
-    const totalMes = useMemo(() => 
-        filteredData.reduce((acc, cur) => acc + cur.price, 0), 
-    [filteredData]);
+   const totalMes = useMemo(() => 
+    filteredData.reduce((acc, cur) => acc + (Number(cur.price) || 0), 0), 
+[filteredData]);
 
     return (
         <div className="max-w-6xl mx-auto p-4">

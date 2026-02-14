@@ -125,8 +125,8 @@ const enviarRecordatorio = (cita: DateList) => {
                                         {formatCurrency(cita.price)}
                                     </td>
                                     <td className="p-5">
-                                        <p className="text-white font-bold text-sm">{cita.client}</p>
-                                        <p className="text-zinc-500 text-xs">{cita.phone}</p>
+                                        <p className="text-white font-bold text-sm">{cita.client ?? ""}</p>
+                                        <p className="text-zinc-500 text-xs">{cita.phone ?? ""}</p>
                                     </td>
                                     <td className="p-5">
                                         <p className="text-white font-bold text-sm">{formatFullDate(cita.dateList)}</p>

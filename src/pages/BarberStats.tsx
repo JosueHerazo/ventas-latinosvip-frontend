@@ -11,7 +11,7 @@ export default function BarberStats() {
         acc[mes] = (acc[mes] || 0) + Number(curr.price);
         return acc;
     }, {} as Record<string, number>);
-
+    
     return (
         <div className="grid gap-6 md:grid-cols-2">
             <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800">
