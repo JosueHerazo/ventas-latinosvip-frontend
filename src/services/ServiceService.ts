@@ -1,6 +1,6 @@
 import { safeParse} from "valibot"
 import axios from "axios"
-import {  DraftServiceSchema, ServiceSchema, ServicesSchema, type DateList, type Service} from "../types";
+import {  DraftServiceSchema, ServiceSchema, ServicesSchema, type Service} from "../types";
 // import { DatesSchema } from "../types";
 
 
